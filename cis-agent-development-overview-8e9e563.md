@@ -1,30 +1,54 @@
 <!-- loio8e9e563d0eba4abf82d247a95b6422b3 -->
 
-# CIS Agent Development: Industry AI Overview
+# CIS Agent Development — Industry AI Concept
 
-This document provides the reference architecture and design pattern collection for building, monitoring, and governing AI agents within SAP's Industry AI and Forward Deployed Engineering (FDE) context. It is produced by the CIS (Customer Industry Solutions) Technology and Operations team and is grounded in SAP's AI-Native North Star Architecture, the BAIP managed agent runtime, Joule Studio as the mandatory development foundation, and FDE delivery constraints.
+This document set provides the reference architecture and design pattern collection for building, monitoring, and governing AI agents within SAP's Industry AI and Forward Deployed Engineering (FDE) context. It covers all aspects of the agent lifecycle, from quality frameworks and security design to production operations and customer enablement.
 
 
-<a name="loio8e9e563d0eba4abf82d247a95b6422b3__section_purpose"/>
+<a name="loio8e9e563d0eba4abf82d247a95b6422b3__section_overview"/>
 
-## Purpose and Audiences
+## Overview
 
-This reference architecture is designed for use in three contexts:
+This documentation is created by the CIS (Customer Industry Solutions) Technology and Operations team. The content is a **reference architecture and design pattern collection** — not production code — usable for:
 
 -   **FDE engagements**: as a design reference during Discovery and Execute phases
 -   **Customer conversations**: as a framework for discussing agent governance with enterprise architects and process owners
 -   **Internal enablement**: as a shared language for CIS practitioners designing Industry AI solutions
 
-The concept answers thirteen core design questions that arise in every high-stakes agent deployment. It is not production code.
+The concept is grounded in SAP's AI-Native North Star Architecture, the BAIP (Business AI Platform) managed agent runtime, Joule Studio as the mandatory development foundation, and FDE delivery constraints (90-day sprints, 300 Person Days, productization to standard SAP product).
+
+
+<a name="loio8e9e563d0eba4abf82d247a95b6422b3__section_architecture"/>
+
+## Architecture Overview
+
+The following diagram shows the principal components of the CIS Industry AI agent architecture and their relationships.
+
+```mermaid
+graph TB
+  User[End User] --> JouleWork[Joule Work UI]
+  JouleWork --> SMJ[SAP-Managed Joule Runtime SMJ]
+  SMJ --> Supervisor[Supervisor Agent]
+  SMJ --> Worker[Worker Agent]
+  Supervisor --> Worker
+  Supervisor --> TaskCenter[SAP Task Center HITL]
+  Worker --> AICore[SAP AI Core sapOrchestration]
+  Worker --> MCPClient[sapMcpClient Agent Gateway]
+  Supervisor --> AgentHub[SAP AI Agent Hub Observability]
+  AICore --> LLM[LLM Generative AI Hub]
+  Worker --> HANA[SAP HANA Cloud Audit Trail]
+  MCPClient --> SAPSystems[SAP Backend Systems S4HANA etc]
+  AgentHub --> CloudALM[SAP Cloud ALM Telemetry]
+```
 
 
 <a name="loio8e9e563d0eba4abf82d247a95b6422b3__section_two_documents"/>
 
 ## Two Complementary Documents
 
-This project contains two documents serving different audiences. They share the same design patterns and are optimized for different readers and contexts.
+This documentation set contains two documents serving different audiences. They share the same design patterns and are optimized for different readers and contexts.
 
-**Table: Document Comparison**
+**Audience and Purpose Comparison**
 
 
 <table>
@@ -36,12 +60,12 @@ Attribute
 </th>
 <th valign="top">
 
-Concept
+Concept (`concept/`)
 
 </th>
 <th valign="top">
 
-FDE Agent Engagement Playbook — SAP CIS Edition
+Playbook SAP/CIS Edition (`documents/`)
 
 </th>
 </tr>
@@ -135,317 +159,20 @@ Operational checklists, engagement timeline, exit criteria
 The concept is the design rationale; the playbook operationalizes it.
 
 
-<a name="loio8e9e563d0eba4abf82d247a95b6422b3__section_architecture_overview"/>
-
-## Architecture Overview
-
-The following diagram shows the principal components and their relationships in the CIS Industry AI agent architecture.
-
-```mermaid
-graph TD
-    JW["Joule Work\n(User Experience Layer)"]
-    SMJ["SAP-Managed Joule / SMJ\n(Orchestrator)"]
-    JS["Joule Studio\n(Build Layer — mandatory)"]
-    BAIP["BAIP Managed Agent Runtime\n(Platform Layer)"]
-    HUB["SAP AI Agent Hub\n(Governance Layer)"]
-    CORE["SAP AI Core\n(Model Services + aeval)"]
-    KG["SAP Knowledge Graph\n(Context Layer — 7M+ fields)"]
-    SUP["Supervisor Agent\n(Quality Relay + Escalation)"]
-    WRK["Worker Agent(s)\n(Domain-Specific Execution)"]
-    TC["SAP Task Center\n(Human-in-the-Loop)"]
-    CALM["SAP Cloud ALM\n(Telemetry + OTel)"]
-
-    JW -->|"user intent"| SMJ
-    SMJ -->|"A2A registration"| BAIP
-    JS -->|"builds / deploys"| BAIP
-    BAIP -->|"hosts"| SUP
-    BAIP -->|"hosts"| WRK
-    SUP -->|"orchestrates"| WRK
-    SUP -->|"escalates"| TC
-    WRK -->|"tool calls"| KG
-    BAIP -->|"governed by"| HUB
-    BAIP -->|"OTel telemetry"| CALM
-    CORE -->|"aeval + model services"| BAIP
-    HUB -->|"observability + lifecycle"| BAIP
-```
-
-**Component roles:**
-
--   **BAIP (Business AI Platform)** — Three-layer platform: Context (Knowledge Graph), Build (Joule Studio), Governance (SAP AI Agent Hub). All agents run on the BAIP managed runtime.
--   **Joule Studio** — Mandatory development foundation for all Industry AI agents. Provides low-code n8n canvas with SAP-specific nodes.
--   **SAP AI Agent Hub** — Governance layer: agent lifecycle management, observability, evaluation, security policy enforcement.
--   **SAP AI Core** — Model services and the `aeval` evaluation framework (TR9 mandatory for all production agents).
--   **Supervisor Agent** — Performs quality relay, telemetry monitoring, and support relay functions on behalf of worker agents.
--   **Worker Agent(s)** — Domain-specific execution agents scoped to a single Actor or business process.
--   **SAP Task Center** — Human-in-the-loop implementation mechanism; agents pause at judgment points until a human decision is received.
--   **SAP Cloud ALM** — Receives operational telemetry (OpenTelemetry traces, metrics) within the customer's data-residency region.
-
-
-<a name="loio8e9e563d0eba4abf82d247a95b6422b3__section_thirteen_questions"/>
-
-## Thirteen Core Design Questions
-
-The concept addresses one design question per topic area. All questions apply to every high-stakes agent deployment.
-
-**Table: Core Design Questions and Concept Chapters**
-
-
-<table>
-<tr>
-<th valign="top">
-
-\#
-
-</th>
-<th valign="top">
-
-Design Question
-
-</th>
-<th valign="top">
-
-Chapter
-
-</th>
-</tr>
-<tr>
-<td valign="top">
-
-1
-
-</td>
-<td valign="top">
-
-How do you ensure an agent works correctly — at build time and at runtime?
-
-</td>
-<td valign="top">
-
-[Agent Quality Framework](agent-quality-framework-58e930e.md)
-
-</td>
-</tr>
-<tr>
-<td valign="top">
-
-2
-
-</td>
-<td valign="top">
-
-How do you handle failures autonomously: self-correct vs. escalate?
-
-</td>
-<td valign="top">
-
-[Agent Quality Framework](agent-quality-framework-58e930e.md), [Supervisor Agent Pattern](supervisor-agent-pattern-fa25f56.md)
-
-</td>
-</tr>
-<tr>
-<td valign="top">
-
-3
-
-</td>
-<td valign="top">
-
-Does a supervisor agent pattern make sense within SAP's architecture?
-
-</td>
-<td valign="top">
-
-[Supervisor Agent Pattern](supervisor-agent-pattern-fa25f56.md)
-
-</td>
-</tr>
-<tr>
-<td valign="top">
-
-4
-
-</td>
-<td valign="top">
-
-How do you protect customer data while still enabling operational monitoring?
-
-</td>
-<td valign="top">
-
-[Supervisor Agent Pattern](supervisor-agent-pattern-fa25f56.md), [Security and Data Protection](security-and-data-protection-bb66956.md)
-
-</td>
-</tr>
-<tr>
-<td valign="top">
-
-5
-
-</td>
-<td valign="top">
-
-How do you address security at development time AND at runtime?
-
-</td>
-<td valign="top">
-
-[Security and Data Protection](security-and-data-protection-bb66956.md)
-
-</td>
-</tr>
-<tr>
-<td valign="top">
-
-6
-
-</td>
-<td valign="top">
-
-How do you enforce precision guardrails for business-critical numerical outputs?
-
-</td>
-<td valign="top">
-
-[Precision Guardrails](precision-guardrails-331971d.md)
-
-</td>
-</tr>
-<tr>
-<td valign="top">
-
-7
-
-</td>
-<td valign="top">
-
-How do you manage agent lifecycle after productization: monitor, maintain, and continuously improve?
-
-</td>
-<td valign="top">
-
-[CIS CoE Operations Model](cis-coe-operations-model-b68bf4b.md)
-
-</td>
-</tr>
-<tr>
-<td valign="top">
-
-8
-
-</td>
-<td valign="top">
-
-When does an Industry AI use case require multiple specialist agents, and how do you orchestrate and govern them safely?
-
-</td>
-<td valign="top">
-
-[Multi-Agent Orchestration](multi-agent-orchestration-fc4a3a9.md)
-
-</td>
-</tr>
-<tr>
-<td valign="top">
-
-9
-
-</td>
-<td valign="top">
-
-How do you version, roll back, and migrate agents across environments without service disruption?
-
-</td>
-<td valign="top">
-
-[Production Operations](production-operations-79a39ed.md)
-
-</td>
-</tr>
-<tr>
-<td valign="top">
-
-10
-
-</td>
-<td valign="top">
-
-Which design components can be reused across engagements, and what constitutes a CIS Starter Kit for efficient delivery at scale?
-
-</td>
-<td valign="top">
-
-[CIS Delivery Efficiency and Reusable Components](reusable-components-62438fe.md)
-
-</td>
-</tr>
-<tr>
-<td valign="top">
-
-11
-
-</td>
-<td valign="top">
-
-How do you manage token efficiency across FDE build-time and Industry AI runtime to maintain a sustainable cost per correct outcome?
-
-</td>
-<td valign="top">
-
-[Token Efficiency](token-efficiency-ab4fe53.md)
-
-</td>
-</tr>
-<tr>
-<td valign="top">
-
-12
-
-</td>
-<td valign="top">
-
-How do you evaluate agent quality systematically across an FDE sprint — from first prototype through to production monitoring?
-
-</td>
-<td valign="top">
-
-[Agent Evaluation in FDE Sprints](agent-evaluation-1004889.md)
-
-</td>
-</tr>
-<tr>
-<td valign="top">
-
-13
-
-</td>
-<td valign="top">
-
-How do you ensure customer organizations are actually able to adopt and sustain the agent after the FDE team departs?
-
-</td>
-<td valign="top">
-
-[Customer Enablement and Adoption](customer-enablement-adoption-7648ba1.md)
-
-</td>
-</tr>
-</table>
-
-
-<a name="loio8e9e563d0eba4abf82d247a95b6422b3__section_concept_chapters"/>
+<a name="loio8e9e563d0eba4abf82d247a95b6422b3__section_chapters"/>
 
 ## Concept Chapters
 
-The concept is structured as twelve chapters plus an introduction. Start with [Introduction to AI Agent Governance](introduction-2248330.md) for an oriented overview, or jump directly to the chapter most relevant to your role.
+The concept is structured as twelve chapters plus an introduction.
 
-**Table: Concept Chapter Summary**
+**Concept Document Structure**
 
 
 <table>
 <tr>
 <th valign="top">
 
-Chapter
+Topic
 
 </th>
 <th valign="top">
@@ -462,12 +189,12 @@ What It Covers
 <tr>
 <td valign="top">
 
-00
+[Introduction to AI Agent Governance](introduction-d5b45b3.md)
 
 </td>
 <td valign="top">
 
-[Introduction to AI Agent Governance](introduction-2248330.md)
+Introduction
 
 </td>
 <td valign="top">
@@ -479,12 +206,12 @@ Project context, 13 design questions, chapter guide, role-based starting points,
 <tr>
 <td valign="top">
 
-01
+[Agent Quality Framework](agent-quality-framework-b8b5eb8.md)
 
 </td>
 <td valign="top">
 
-[Agent Quality Framework](agent-quality-framework-58e930e.md)
+Agent Quality Framework
 
 </td>
 <td valign="top">
@@ -496,12 +223,12 @@ Three-dimensional quality measurement (technical, process KPI, business outcomes
 <tr>
 <td valign="top">
 
-02
+[Supervisor Agent Pattern](supervisor-agent-pattern-9d3924d.md)
 
 </td>
 <td valign="top">
 
-[Supervisor Agent Pattern](supervisor-agent-pattern-fa25f56.md)
+Supervisor Agent Pattern
 
 </td>
 <td valign="top">
@@ -513,12 +240,12 @@ Supervisor vs. worker design; nine alternatives evaluated; three supervisor work
 <tr>
 <td valign="top">
 
-03
+[Security and Data Protection](security-and-data-protection-0fadcd8.md)
 
 </td>
 <td valign="top">
 
-[Security and Data Protection](security-and-data-protection-bb66956.md)
+Security and Data Protection
 
 </td>
 <td valign="top">
@@ -530,12 +257,12 @@ Agent-specific threats; three-tier AI defense model; agent identity and least-pr
 <tr>
 <td valign="top">
 
-04
+[Precision Guardrails](precision-guardrails-ed7c517.md)
 
 </td>
 <td valign="top">
 
-[Precision Guardrails](precision-guardrails-331971d.md)
+Precision Guardrails
 
 </td>
 <td valign="top">
@@ -547,29 +274,29 @@ Four-layer guardrail stack for numerical outputs; domain examples; human approva
 <tr>
 <td valign="top">
 
-05
+[Joule Studio Build Map](joule-studio-build-map-29946d5.md)
 
 </td>
 <td valign="top">
 
-[Joule Studio Build Map](joule-studio-build-map-1ad1f56.md)
+Joule Studio Build Map
 
 </td>
 <td valign="top">
 
-Concrete implementation using Joule Studio n8n nodes; master build map table; TR1–TR14 mandatory production readiness checklist (including TR13 Agent Action Metering); FDE build sequence
+Concrete implementation using Joule Studio n8n nodes; master build map table; TR1–TR14 mandatory production readiness checklist; FDE build sequence
 
 </td>
 </tr>
 <tr>
 <td valign="top">
 
-06
+[CIS CoE Operations Model](cis-coe-operations-model-5b71a67.md)
 
 </td>
 <td valign="top">
 
-[CIS CoE Operations Model](cis-coe-operations-model-b68bf4b.md)
+CIS CoE Operations Model
 
 </td>
 <td valign="top">
@@ -581,12 +308,12 @@ Post-productization lifecycle management; supervisor as CIS proxy; Adoption Stra
 <tr>
 <td valign="top">
 
-07
+[Multi-Agent Orchestration](multi-agent-orchestration-2a50a7c.md)
 
 </td>
 <td valign="top">
 
-[Multi-Agent Orchestration](multi-agent-orchestration-fc4a3a9.md)
+Multi-Agent Orchestration
 
 </td>
 <td valign="top">
@@ -598,107 +325,110 @@ When and how to compose specialist agents; three topologies (flat, per-worker su
 <tr>
 <td valign="top">
 
-08
+[Production Operations](production-operations-6a2ed30.md)
 
 </td>
 <td valign="top">
 
-[Production Operations](production-operations-79a39ed.md)
+Production Operations
 
 </td>
 <td valign="top">
 
-Agent versioning (five-component version stack); rollback mechanics; AI Units billing; cost/token monitoring; dev → test → prod migration; productization triggered at RTC EAC; TR1–TR14 shipping checklist
-
-</td>
-</tr>
-<tr>
-<td valign="top">
-
-09
-
-</td>
-<td valign="top">
-
-[CIS Delivery Efficiency and Reusable Components](reusable-components-62438fe.md)
-
-</td>
-<td valign="top">
-
-Three-layer reusability stack (deploy as-is / parameterize / engagement-specific); CIS Starter Kit definition; RAG ingest pattern; context transfer schema; cross-engagement improvement loop
+Agent versioning; rollback mechanics; AI Units billing; cost/token monitoring; dev → test → prod migration; TR1–TR14 shipping checklist
 
 </td>
 </tr>
 <tr>
 <td valign="top">
 
-10
+[CIS Delivery Efficiency and Reusable Components](reusable-components-b03a699.md)
 
 </td>
 <td valign="top">
 
-[Token Efficiency](token-efficiency-ab4fe53.md)
+Reusable Components and Reference Implementations
 
 </td>
 <td valign="top">
 
-Two cost pools (build-time vs. runtime); SAP L0–L6 optimization framework; FDE engineer guidelines (APM, caching, tool gating, session handoff); runtime efficiency; quality–efficiency connection
-
-</td>
-</tr>
-<tr>
-<td valign="top">
-
-11
-
-</td>
-<td valign="top">
-
-[Agent Evaluation in FDE Sprints](agent-evaluation-1004889.md)
-
-</td>
-<td valign="top">
-
-Testing vs. evaluation; four-phase evaluation lifecycle; aeval framework (offline + online, TR9 mandatory); spec quality evaluation; test case DSL; Quality Flywheel mapped to sprint weeks; success rate as primary release gate
+Three-layer reusability stack; CIS Starter Kit definition; RAG ingest pattern; context transfer schema; cross-engagement improvement loop
 
 </td>
 </tr>
 <tr>
 <td valign="top">
 
-12
+[Token Efficiency](token-efficiency-a49034e.md)
 
 </td>
 <td valign="top">
 
-[Customer Enablement and Adoption](customer-enablement-adoption-7648ba1.md)
+Token Efficiency in Industry AI Delivery
 
 </td>
 <td valign="top">
 
-Enable track as mandatory parallel workstream; Adoption Strategy lifecycle (7 sections, 9 governance roles); 4-stage gradual release; 7-audience role-based training matrix; enablement readiness checklist; CoE support tiers
+Two cost pools (build-time vs. runtime); SAP L0–L6 optimization framework; FDE engineer guidelines; runtime efficiency; quality–efficiency connection
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+[Agent Evaluation in FDE Sprints](agent-evaluation-80dcfa4.md)
+
+</td>
+<td valign="top">
+
+Agent Evaluation in FDE Sprints
+
+</td>
+<td valign="top">
+
+Testing vs. evaluation; four-phase evaluation lifecycle; aeval framework (offline + online); spec quality evaluation; test case DSL; Quality Flywheel mapped to sprint weeks
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+[Customer Enablement and Adoption](customer-enablement-adoption-0f138c6.md)
+
+</td>
+<td valign="top">
+
+Customer Enablement and Adoption
+
+</td>
+<td valign="top">
+
+Enable track as mandatory parallel workstream; Adoption Strategy lifecycle (7 sections, 9 governance roles); 4-stage gradual release; role-based training matrix
 
 </td>
 </tr>
 </table>
 
 
-<a name="loio8e9e563d0eba4abf82d247a95b6422b3__section_playbook"/>
+<a name="loio8e9e563d0eba4abf82d247a95b6422b3__section_design_questions"/>
 
-## FDE Agent Engagement Playbook — SAP CIS Edition
+## Thirteen Core Design Questions
 
-The playbook is a practitioner-facing operational guide for FDE delivery squads. It is structured around three delivery tracks that run in parallel throughout the engagement:
+This documentation addresses thirteen fundamental design questions for Industry AI agent development:
 
--   **Build track** — agent architecture, observability, evaluation harness, versioning, guardrails, dependencies
--   **Operate track** — observability setup, evaluation harness in CI, versioning and deployment, controls, runbook library
--   **Enable track** — customer capability assessment, role-based training, 4-stage gradual release, learning-by-doing exercises
-
-The SAP CIS Edition integrates BAIP-specific implementation details — OTel harness built into the BAIP managed runtime, generative AI hub model pinning, `joule deploy` for CMJ/BYOA delivery, Adoption Strategy as the FDE handover artifact — as flowing text within the standard playbook structure.
-
-Quick-reference assets:
-
--   [Agent Delivery Paths Cheat Sheet](agent-delivery-paths-cheat-sheet-08d66d1.md) — two-dimension model for FDE BYOA agent delivery
--   [FDE Overview](fde-overview-9140b6a.md) — FDE within SAP Industry AI; process, squad roles, CIS fit, FDE vs. CAIA
+1.  How do we ensure an agent works correctly — at build time and at runtime?
+2.  How do we handle failures autonomously: self-correct vs. escalate?
+3.  Does a supervisor agent pattern make sense within SAP's architecture?
+4.  How do we protect customer data while still enabling operational monitoring?
+5.  How do we address security at development time AND at runtime?
+6.  How do we enforce precision guardrails for business-critical numerical outputs?
+7.  How do we manage agent lifecycle after productization: monitor, maintain, and continuously improve?
+8.  When does an Industry AI use case require multiple specialist agents, and how do we orchestrate and govern them safely?
+9.  How do we version, roll back, and migrate agents across environments without service disruption?
+10.  Which design components can be reused across engagements, and what constitutes a CIS starter kit for efficient delivery at scale?
+11.  How do we manage token efficiency across FDE build-time and Industry AI runtime to maintain a sustainable cost per correct outcome?
+12.  How do we evaluate agent quality systematically across an FDE sprint — from first prototype through to production monitoring?
+13.  How do we ensure customer organizations are actually able to adopt and sustain the agent after the FDE team departs?
 
 
 <a name="loio8e9e563d0eba4abf82d247a95b6422b3__section_sap_alignment"/>
@@ -708,33 +438,29 @@ Quick-reference assets:
 This work sits at the intersection of three SAP strategic pillars:
 
 -   **Autonomous Enterprise** — SAP's vision: AI agents execute end-to-end business processes across apps, data, and organizations. The Autonomous Suite ships with 224 specialized agents and 51 Joule Assistants across five domains (Finance, Spend, SCM, HCM, CX). Industry AI adds vertical depth for the most complex, sector-specific challenges.
--   **AI-Native North Star Architecture** — four layers: User Experience (Joule Work), Process (apps as capability providers), Foundation (Knowledge Graph + BDC + model services), Platform (BAIP managed agent runtime).
--   **BAIP (Business AI Platform)** — three sub-layers: Context (Knowledge Graph, 7M+ fields), Build (Joule Studio), Governance (SAP AI Agent Hub).
+-   **AI-Native North Star Architecture** — four layers: User Experience (Joule Work), Process (apps as capability providers), Foundation (Knowledge Graph + BDC + model services), Platform (BAIP managed agent runtime)
+-   **BAIP (Business AI Platform)** — three sub-layers: Context (Knowledge Graph, 7M+ fields), Build (Joule Studio), Governance (SAP AI Agent Hub)
 
 
-<a name="loio8e9e563d0eba4abf82d247a95b6422b3__section_key_constraints"/>
+<a name="loio8e9e563d0eba4abf82d247a95b6422b3__section_constraints"/>
 
 ## Key Constraints
 
--   All development uses **Joule Studio** as the primary and mandatory foundation.
--   Every agent runs on the **BAIP managed agent runtime** — security, observability, tenant isolation, and OpenTelemetry telemetry are provided by the harness, not built custom.
--   **Human-in-the-loop** is the default — agents automate repeatable tasks; humans intervene at judgment points via `sapTaskCenter`.
--   **FDE delivery constraint**: approximately 90 calendar days, 300 Person Days hard cap; the concept is designed to be deliverable within these bounds.
+-   All development uses **Joule Studio** as the primary and mandatory foundation
+-   Every agent runs on the **BAIP managed agent runtime** — security, observability, tenant isolation, and OpenTelemetry telemetry are provided by the harness, not built custom
+-   **Human-in-the-loop** is the default — agents automate repeatable tasks; humans intervene at judgment points via `sapTaskCenter`
+-   **FDE delivery constraint**: approximately 90 calendar days, 300 Person Days hard cap; the concept is designed to be deliverable within these bounds
 
-
-<a name="loio8e9e563d0eba4abf82d247a95b6422b3__section_additional_resources"/>
-
-## Additional Resources
-
-Open design questions and platform verification items are tracked in [Open Questions](open-questions-9d98d9f.md). A structured proof-of-concept build specification is in [Proof of Concept Plan](proof-of-concept-plan-0393c62.md). The CIS Context Layer and Knowledge Graph initiative is described in [CIS Context Layer Overview](cis-context-layer-overview-bd1e371.md).
+> ### Note:  
+> All documentation in this set covers internal SAP delivery patterns. Content is intended for SAP CIS teams and external parties operating under NDA only.
 
 **Related Information**  
 
 
-[SAP AI Agent Hub](https://help.sap.com/docs/AI_AGENT_HUB/225000cc2ce44a228b9534a0f1098a9b/8ebd704d35a746c180af003db1f5acb0.html "SAP AI Agent Hub product documentation") :arrow_upper_right:
+[SAP AI Agent Hub](https://help.sap.com/docs/AI_AGENT_HUB/225000cc2ce44a228b9534a0f1098a9b/8ebd704d35a746c180af003db1f5acb0.html "SAP AI Agent Hub is a single entry point for the discovery and governance of AI agents, LLMs, and MCP servers across your enterprise.") :arrow_upper_right:
 
-[Observe and Analyze](https://help.sap.com/docs/AI_AGENT_HUB/225000cc2ce44a228b9534a0f1098a9b/1fdc1df35d414cd6bf2ed15ec8a164f4.html "Agent observability in SAP AI Agent Hub") :arrow_upper_right:
+[Joule Studio](https://help.sap.com/docs/JOULESTUDIO/7e496fe6f81f4975aec07d9c1cbd2aef/36d3e974446844a1b0ffb7af8fa9446c.html "Joule Studio is SAP's AI-first environment to create enterprise solutions from intent to deployment.") :arrow_upper_right:
 
-[Joule Studio](https://help.sap.com/docs/JOULESTUDIO/7e496fe6f81f4975aec07d9c1cbd2aef/36d3e974446844a1b0ffb7af8fa9446c.html "Joule Studio product documentation") :arrow_upper_right:
+[Introduction to AI Agent Governance](introduction-d5b45b3.md)
 
-[Agent Evaluation (SAP AI Core)](https://help.sap.com/docs/AI_CORE/d5d03749687449ad9768e46ea9e32b1e/233428eb4fca44c9a5ab3a7de7e5f552.html "Agent evaluation framework in SAP AI Core") :arrow_upper_right:
+[FDE Agent Engagement Playbook](fde-agent-engagement-playbook-8e52459.md)
