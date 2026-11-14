@@ -274,6 +274,225 @@ Adoption Strategy lifecycle; gradual release (4 stages); role-based training (7 
 </table>
 
 
+<a name="loiocc824ede03f04c40a2de1624834cb769__section_north_star_architecture"/>
+
+## North Star Architecture
+
+The **North Star Architecture** defines the standard component stack for CIS Industry AI agent deployments on SAP BTP. It establishes the governance and runtime boundaries that every FDE engagement inherits — from the Joule Studio build environment through the BAIP Managed Runtime, down to the MCP-connected systems of record.
+
+```mermaid
+graph TB
+    FDE["FDE Engineer (Joule Work)"] --> JouleStudio["Joule Studio\n(Intent → Deploy)"]
+    JouleStudio --> BAIP["BAIP Managed Runtime\n(SAP BTP)"]
+    BAIP --> Supervisor["Supervisor Agent\n(Governance Layer)"]
+    Supervisor --> WorkerA["Worker Agent A\n(Domain Specialist)"]
+    Supervisor --> WorkerB["Worker Agent B\n(Domain Specialist)"]
+    Supervisor --> WorkerC["Worker Agent C\n(Domain Specialist)"]
+    WorkerA --> AICore["SAP AI Core\nGenAI Hub"]
+    WorkerB --> AICore
+    WorkerC --> AICore
+    WorkerA --> MCP["MCP Servers\n(SAP Integration Suite)"]
+    WorkerB --> MCP
+    MCP --> SoR["Systems of Record\n(S/4HANA, ECC, ...)"]
+    Supervisor --> EKX["SAP Knowledge Graph\n(EKX)"]
+    Supervisor --> CISEKN["CIS Context Layer\n(CISEKN)"]
+    Supervisor --> TaskCenter["SAP Task Center\n(Human Escalation)"]
+    BAIP --> MLflow["MLflow\n(Observability)"]
+```
+
+**Table: North Star Architecture — Key Components**
+
+<table>
+<tr>
+<th valign="top">
+
+Component
+
+</th>
+<th valign="top">
+
+Role in the Architecture
+
+</th>
+<th valign="top">
+
+SAP Product or Service
+
+</th>
+</tr>
+<tr>
+<td valign="top">
+
+Joule Studio
+
+</td>
+<td valign="top">
+
+Intent-based development environment — translates a business requirement into a deployed agent solution without requiring low-level infrastructure work.
+
+</td>
+<td valign="top">
+
+[Joule Studio](https://help.sap.com/docs/JOULESTUDIO/7e496fe6f81f4975aec07d9c1cbd2aef/36d3e974446844a1b0ffb7af8fa9446c.html "Joule Studio is SAP's AI-first environment to create enterprise solutions from intent to deployment.") :arrow_upper_right:
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+BAIP Managed Runtime
+
+</td>
+<td valign="top">
+
+The governed cloud execution environment on SAP BTP where deployed agents run. Enforces deployment boundaries, access policies, and observability.
+
+</td>
+<td valign="top">
+
+SAP Business AI Platform (BAIP) on SAP BTP
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+Supervisor Agent
+
+</td>
+<td valign="top">
+
+Orchestration and governance tier. Routes tasks to worker agents, validates outputs before committing to systems of record, and escalates to humans when confidence thresholds are not met.
+
+</td>
+<td valign="top">
+
+[Supervisor Agent Pattern](supervisor-agent-pattern-67417bb.md)
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+Worker Agents
+
+</td>
+<td valign="top">
+
+Domain-specialist agents that execute specific reasoning or data-retrieval tasks. Each holds minimal scope — only the MCP tools required for its function.
+
+</td>
+<td valign="top">
+
+[Multi-Agent Orchestration](multi-agent-orchestration-a7957a5.md)
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+SAP AI Core / GenAI Hub
+
+</td>
+<td valign="top">
+
+Foundation model runtime. Provides governed access to LLMs and embedding models within enterprise data-residency and compliance constraints.
+
+</td>
+<td valign="top">
+
+[SAP AI Core](https://help.sap.com/docs/AI_CORE/2d6c5984063c40a59eda62f4a9135bee/d029a32c22fb45fbb607e6a2c48c8a0e.html "SAP AI Core is the runtime and lifecycle management foundation for AI scenarios on SAP BTP.") :arrow_upper_right:
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+MCP Servers (SAP Integration Suite)
+
+</td>
+<td valign="top">
+
+Expose enterprise APIs and data sources to agents in a structured, governed way. Workers call MCP tools rather than hitting systems of record directly.
+
+</td>
+<td valign="top">
+
+[SAP Integration Suite — MCP Server Artifacts](https://help.sap.com/docs/SAP_INTEGRATION_SUITE/9519789d5664487f8b9cd89eba514477/94957bc87247462ebdfd65e72512122a.html "SAP Integration Suite enables you to design and manage API artifacts and MCP Server artifacts as part of your integration landscape.") :arrow_upper_right:
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+SAP Knowledge Graph (EKX)
+
+</td>
+<td valign="top">
+
+SAP's enterprise knowledge graph — 7M+ fields covering SAP products, processes, and business objects. Used for L1 context loading in agent sessions.
+
+</td>
+<td valign="top">
+
+SAP Enterprise Knowledge Network (EKN / EKX) on SAP BTP
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+CIS Context Layer (CISEKN)
+
+</td>
+<td valign="top">
+
+CIS-specific knowledge graph endpoint — queryable index of CIS delivery knowledge (96+ projects, capability patterns, reuse candidates). Access-controlled and separate from the shared EKX graph.
+
+</td>
+<td valign="top">
+
+[Context Layer Overview](context-layer-overview-cb821e5.md)
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+MLflow Observability
+
+</td>
+<td valign="top">
+
+Production trace store. Every agent run writes structured traces; the online evaluation pipeline (`aeval`) reads these traces to compute quality metrics and trigger alerts.
+
+</td>
+<td valign="top">
+
+[Agent Evaluation](agent-evaluation-bb08bc0.md)
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+SAP Task Center
+
+</td>
+<td valign="top">
+
+Human escalation endpoint. When a supervisor agent cannot meet confidence thresholds, it creates a structured task in SAP Task Center for a human decision-maker.
+
+</td>
+<td valign="top">
+
+SAP Task Center on SAP BTP
+
+</td>
+</tr>
+</table>
+
+
 <a name="loiocc824ede03f04c40a2de1624834cb769__section_how_to_read"/>
 
 ## How to Read This Document
