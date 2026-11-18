@@ -1,11 +1,11 @@
-<!-- loio09082f84cef94da5826757f3ae63b5e2 -->
+<!-- loio5ec914bdff9343389482e456839c8f88 -->
 
 # Agent Quality Framework
 
-Agent quality for Industry AI must be measured at multiple levels simultaneously: how the agent reasons, how it uses tools, and what it ultimately does to the business. This topic defines the three evaluation dimensions, build-time and runtime quality practices, and the escalation path that connects runtime signals to human action.
+AI agents operating in high-stakes Industry AI scenarios require quality measurement across multiple concurrent dimensions — not just technical correctness, but process impact and business outcomes. This topic defines the three-dimensional evaluation framework, build-time and runtime quality mechanisms, the escalation path from automated detection to human intervention, and the implications for FDE delivery.
 
 
-<a name="loio09082f84cef94da5826757f3ae63b5e2__section_why_different"/>
+<a name="loio5ec914bdff9343389482e456839c8f88__section_why_agent_quality_different"/>
 
 ## Why Agent Quality Is Different
 
@@ -13,10 +13,10 @@ Traditional software quality asks: does the code produce the correct output for 
 
 The difference matters for Industry AI because agents operate in a reason-act-observe loop. They decompose goals, select tools, interpret outputs, and decide next steps. Each of these decisions introduces uncertainty. A deterministic function either works or it doesn't; an agent can appear to work — completing each individual step correctly — while still failing to achieve the business goal, or achieving it via an unsafe path.
 
-Quality must therefore be measured at multiple levels simultaneously: how the agent reasons, how it uses tools, and what it ultimately does to the business.
+This means quality must be measured at multiple levels simultaneously: how the agent reasons, how it uses tools, and what it ultimately does to the business.
 
 
-<a name="loio09082f84cef94da5826757f3ae63b5e2__section_three_dimensions"/>
+<a name="loio5ec914bdff9343389482e456839c8f88__section_three_evaluation_dimensions"/>
 
 ## The Three Evaluation Dimensions
 
@@ -26,10 +26,9 @@ SAP's AI-Native North Star Architecture defines agent quality across three dimen
 
 Measures how the agent performs as a reasoning and tool-use system.
 
-**Technical Quality Metrics**
+**Table: Technical Evaluation Metrics**
 
 <table>
-<thead>
 <tr>
 <th valign="top">
 
@@ -47,8 +46,6 @@ Why It Can Mislead in Isolation
 
 </th>
 </tr>
-</thead>
-<tbody>
 <tr>
 <td valign="top">
 
@@ -74,12 +71,12 @@ Tool call efficiency
 </td>
 <td valign="top">
 
-Did the agent reach the goal with the minimum necessary tool calls? Token cost (LLM spend per successful outcome) is the measurable financial sub-dimension — see [Token Efficiency in Industry AI Delivery](token-efficiency-2cc8da2.md)
+Did the agent reach the goal with the minimum necessary tool calls? Token cost (LLM spend per successful outcome) is the measurable financial sub-dimension of this metric — see [Token Efficiency](token-efficiency-54fe998.md)
 
 </td>
 <td valign="top">
 
-Efficient agents that cut corners may skip validation steps; minimizing token count at the expense of accuracy inverts the metric
+Efficient agents that cut corners may skip validation steps; conversely, minimizing token count at the expense of accuracy inverts the metric
 
 </td>
 </tr>
@@ -134,19 +131,19 @@ High recovery rate may mask systemic data quality issues
 
 </td>
 </tr>
-</tbody>
 </table>
 
-**Self-verification** deserves special attention. SAP's architecture builds self-verification into the agent loop as an internal feedback mechanism during execution — not as a post-hoc check. Agents should be designed to validate their own intermediate outputs before proceeding to the next tool call, particularly before any write-back to a system of record. This is not the same as a separate supervisor agent; it is the agent checking its own work inline.
+**Self-verification** deserves special attention. SAP's architecture builds self-verification into the agent loop as an internal feedback mechanism during execution — not as a post-hoc check. In practice this means agents should be designed to validate their own intermediate outputs before proceeding to the next tool call, particularly before any write-back to a system of record. This is not the same as a separate supervisor agent; it is the agent checking its own work inline.
 
 ### Dimension 2 — Process KPIs
 
-Measures how the agent affects the business process it automates. These metrics are specific to the use case and must be defined during the FDE Discovery phase as part of the TO-BE process flow.
+Measures how the agent affects the business process it automates.
 
-**Representative Process KPIs by Industry AI Domain**
+These metrics are specific to the use case and must be defined during the FDE Discovery phase as part of the TO-BE process flow. Examples:
+
+**Table: Representative Process KPIs by Industry AI Domain**
 
 <table>
-<thead>
 <tr>
 <th valign="top">
 
@@ -159,8 +156,6 @@ Representative Process KPI
 
 </th>
 </tr>
-</thead>
-<tbody>
 <tr>
 <td valign="top">
 
@@ -221,14 +216,15 @@ Schedule adherence rate; production order exception volume
 
 </td>
 </tr>
-</tbody>
 </table>
 
 Process KPIs are the bridge between what the agent does and whether it is actually useful. They are also the primary evidence for value realization in the FDE value case.
 
 ### Dimension 3 — Business Outcomes
 
-Measures the financial and operational results that the agent contributes to. This is the most lagging indicator — results appear weeks or months after deployment — but it is the dimension that justifies the value-based contract (10–30% of yearly customer benefit). Examples: consumed ACV per agent workflow, cost reduction in manual processing, reduction in exceptions requiring human intervention, throughput improvement.
+Measures the financial and operational results that the agent contributes to.
+
+This is the most lagging indicator — results appear weeks or months after deployment — but it is the dimension that justifies the value-based contract (10–30% of yearly customer benefit). Examples: consumed ACV per agent workflow, cost reduction in manual processing, reduction in exceptions requiring human intervention, throughput improvement.
 
 The relationship between Dimension 1 metrics and Dimension 3 outcomes is not linear. An agent with a 95% goal completion rate may still fail to generate business value if it completes goals that were poorly specified, or if it generates outputs that humans override most of the time. Tracking all three dimensions in parallel is the only way to detect this disconnect early.
 
@@ -239,16 +235,15 @@ Across all three evaluation dimensions, **success rate** is the primary release 
 All other metrics (tool call correctness, latency, token cost, human override rate) are diagnostic indicators. They explain *why* success rate may be below target, but they do not substitute for it. The SAP aeval framework (TR9 — mandatory offline and online evaluation for all production agents) uses success rate as its primary aggregation metric and leading indicator for release decisions.
 
 
-<a name="loio09082f84cef94da5826757f3ae63b5e2__section_eval_timeline"/>
+<a name="loio5ec914bdff9343389482e456839c8f88__section_evaluation_timeline"/>
 
-## Evaluation Timeline
+## Evaluation Timeline — Full Sequence from Discovery to Production
 
-The evaluation activities span the full FDE lifecycle.
+The evaluation activities in this topic span the full FDE lifecycle. The table below shows where each quality mechanism fits in the engagement timeline:
 
-**Full Evaluation Sequence from Discovery to Production**
+**Table: Evaluation Timeline**
 
 <table>
-<thead>
 <tr>
 <th valign="top">
 
@@ -262,12 +257,15 @@ Evaluation Activity
 </th>
 <th valign="top">
 
+Topic Reference
+
+</th>
+<th valign="top">
+
 Gate or Milestone
 
 </th>
 </tr>
-</thead>
-<tbody>
 <tr>
 <td valign="top">
 
@@ -277,6 +275,11 @@ Gate or Milestone
 <td valign="top">
 
 G1–G4 readiness gates (entity completeness, goal coverage, actor-process binding, integration readiness)
+
+</td>
+<td valign="top">
+
+Pre-Build Readiness Gates (G1–G4)
 
 </td>
 <td valign="top">
@@ -298,6 +301,11 @@ RPT-1 approach-first assessment (tabular ML vs. LLM/agent)
 </td>
 <td valign="top">
 
+[Introduction](introduction-c495d02.md)
+
+</td>
+<td valign="top">
+
 Part of scope decision; not a scored gate
 
 </td>
@@ -311,6 +319,11 @@ Part of scope decision; not a scored gate
 <td valign="top">
 
 aeval offline in traceless mode (output correctness + rule compliance from day 1)
+
+</td>
+<td valign="top">
+
+[Agent Evaluation](agent-evaluation-65fd098.md)
 
 </td>
 <td valign="top">
@@ -332,6 +345,11 @@ No gate; establishes baseline
 </td>
 <td valign="top">
 
+[Agent Evaluation](agent-evaluation-65fd098.md)
+
+</td>
+<td valign="top">
+
 Iterative; category B (generation drift) is a blocking failure
 
 </td>
@@ -349,6 +367,11 @@ aeval offline with full trace-enabled metrics; eval suite ≥ 3 iterations; succ
 </td>
 <td valign="top">
 
+[Agent Evaluation](agent-evaluation-65fd098.md)
+
+</td>
+<td valign="top">
+
 **Week 6 milestone gate**: required for FDE Gate evidence package
 
 </td>
@@ -361,7 +384,12 @@ aeval offline with full trace-enabled metrics; eval suite ≥ 3 iterations; succ
 </td>
 <td valign="top">
 
-Full aeval offline suite passes in CI; online eval active in EAC; TR9 offline compliance satisfied
+Full aeval offline suite passes in CI; online eval active in EAC (Early Adopter Care); TR9 offline compliance satisfied
+
+</td>
+<td valign="top">
+
+[Agent Evaluation](agent-evaluation-65fd098.md)
 
 </td>
 <td valign="top">
@@ -383,6 +411,11 @@ Online eval active (aeval-online); anomaly detection baselines calibrated; super
 </td>
 <td valign="top">
 
+[Agent Evaluation](agent-evaluation-65fd098.md) / [Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)
+
+</td>
+<td valign="top">
+
 EAC operating condition
 
 </td>
@@ -396,6 +429,11 @@ EAC operating condition
 <td valign="top">
 
 Scale gate criteria met: Stage 3 independence + override rate + process KPI + quality stability + zero Critical incidents
+
+</td>
+<td valign="top">
+
+[Customer Enablement and Adoption](customer-enablement-and-adoption-ce2e74a.md) Scale Gate
 
 </td>
 <td valign="top">
@@ -417,6 +455,11 @@ aeval online eval: statistical trend monitoring via CronJob; Workflow B anomaly 
 </td>
 <td valign="top">
 
+[Agent Evaluation](agent-evaluation-65fd098.md) / [Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)
+
+</td>
+<td valign="top">
+
 Continuous; no single gate
 
 </td>
@@ -434,28 +477,31 @@ Eval suite review; model suitability review; iteration pattern analysis
 </td>
 <td valign="top">
 
+[Production Operations](production-operations-f963579.md) / [CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md)
+
+</td>
+<td valign="top">
+
 Periodic governance review
 
 </td>
 </tr>
-</tbody>
 </table>
 
 
-<a name="loio09082f84cef94da5826757f3ae63b5e2__section_build_time_quality"/>
+<a name="loio5ec914bdff9343389482e456839c8f88__section_build_time_quality"/>
 
-## Build-Time Quality
+## Build-Time Quality (Pre-Deployment)
 
 Build-time quality covers the practices and tooling applied before an agent is released to a productive or even a test environment. It happens during the FDE Development phase.
 
 ### Pre-Build Readiness Gates (G1–G4)
 
-Before committing to agent spec generation, the extracted knowledge from the discovery phase must satisfy four readiness gates. These gates run once, before sprint execution begins.
+Before committing to agent spec generation, the extracted knowledge from the discovery phase must satisfy four readiness gates. These gates run once, before sprint execution begins — they are distinct from the Quality Flywheel ([Agent Evaluation](agent-evaluation-65fd098.md)), which governs quality progression throughout development. Scores are 0–1.
 
-**Pre-Build Readiness Gates**
+**Table: Pre-Build Readiness Gates**
 
 <table>
-<thead>
 <tr>
 <th valign="top">
 
@@ -473,8 +519,6 @@ Threshold
 
 </th>
 </tr>
-</thead>
-<tbody>
 <tr>
 <td valign="top">
 
@@ -543,26 +587,27 @@ Every Integration has an API binding
 
 </td>
 </tr>
-</tbody>
 </table>
 
 **Scoring interpretation:**
 
 -   ≥ 0.8 — proceed to spec generation
--   0.5–0.8 — proceed with documented gaps; auto-generate coaching questions to bring back to the customer
+-   0.5–0.8 — proceed with documented gaps; auto-generate "coaching questions" to bring back to the customer
 -   < 0.5 — return to discovery; insufficient grounding for reliable agent design
 
-When a gate scores 0.5–0.8, the framework generates targeted gap-filling queries — structured follow-up questions for the customer that address the specific missing elements. This turns discovery gaps into actionable items rather than sprint blockers.
+When a gate scores 0.5–0.8, the framework generates targeted gap-filling queries — structured follow-up questions for the customer that address the specific missing elements. This turns discovery gaps into actionable items rather than sprint blockers. The coaching questions become an input to the next Discovery sub-phase before execution begins.
+
+The G1–G4 readiness gates are implemented in Project LightSpeed's discovery pipeline (Stages 1–8) and represent the earliest measurable quality checkpoint in the FDE delivery lifecycle. They complement the "Done Enough" threshold guidance in the following section: the readiness gates confirm sufficient grounding before design begins; the "Done Enough" thresholds govern when a built agent is ready to proceed to the next sprint milestone.
 
 ### Eval Design in Joule Studio
 
-Every agent built in Joule Studio has an associated evaluation configuration. The eval design must answer four questions:
+Every agent built in [Joule Studio](https://help.sap.com/docs/joule-studio "Joule Studio documentation hub covering agent development, intent-based development, and enterprise deployment.") :arrow_upper_right: has an associated evaluation configuration. The eval design should answer:
 
-1.  **What is the agent supposed to achieve?** — Define the goal state as a machine-checkable condition. "Generate a purchase order recommendation" is vague; "generate a PO recommendation with a valid vendor, quantity within ±5% of historical baseline, and price within approved supplier price list" is checkable.
+1.  **What is the agent supposed to achieve?** — Define the goal state as a machine-checkable condition, not a vague description. "Generate a purchase order recommendation" is vague; "generate a PO recommendation with a valid vendor, quantity within ±5% of historical baseline, and price within approved supplier price list" is checkable.
 
 2.  **What are the boundary conditions?** — Define cases where the agent must NOT act (e.g., transaction value above approval threshold, vendor not in approved list, output confidence below threshold). These are the guardrail test cases.
 
-3.  **What is the test data strategy?** — During the FDE Development phase, anonymized/synthetic data can be used under a TEA (Test & Evaluation Agreement). Real customer data requires a Collaboration Agreement. Build-time evals should be designed to work with synthetic data so they can run continuously without legal friction.
+3.  **What is the test data strategy?** — This is a legal question as much as a technical one. During the FDE Development phase, anonymized/synthetic data can be used under a TEA (Test & Evaluation Agreement). Real customer data requires a Collaboration Agreement. Build-time evals should be designed to work with synthetic data so they can run continuously without legal friction.
 
 4.  **What is acceptable failure behavior?** — Define what the agent should do when it cannot complete the goal: escalate, do nothing, or produce a partial result with explicit uncertainty flagging. Undefined failure behavior is the single most common source of production incidents.
 
@@ -572,16 +617,20 @@ The SAP AI Agent Hub provides a dedicated evaluation capability for agents acros
 
 During the build phase, the Agent Evals & Assessment capability enables structured evaluation runs against defined test suites. The output of these eval runs becomes the evidence package for the FDE Gate — the mandatory checkpoint before execution can proceed. The FDE Gate specifically requires a feasibility assessment by Product Engineering; eval results from the Agent Hub provide the technical grounding for that assessment.
 
-The concrete evaluation mechanism — SAP's `aeval` framework, the test case DSL, the offline/online evaluation split, and how evaluation maps to sprint weeks — is covered in [Agent Evaluation in FDE Sprints](agent-evaluation-6150d04.md). TR9 (mandatory offline + online evaluation for all production agents) requires the framework described there.
+The concrete evaluation mechanism — SAP's `aeval` framework, the test case DSL, the offline/online evaluation split, and how evaluation maps to sprint weeks — is covered in [Agent Evaluation](agent-evaluation-65fd098.md). TR9 (mandatory offline + online evaluation for all production agents) requires the framework described there.
 
 ### The "Done Enough" Threshold
 
-A common FDE pitfall is treating build-time eval as a pass/fail gate with an arbitrary threshold (e.g., "95% goal completion"). The correct approach is to define acceptance criteria per scenario type.
+A common FDE pitfall is treating build-time eval as a pass/fail gate with an arbitrary threshold (e.g., "95% goal completion"). This creates two failure modes:
 
-**Acceptance Thresholds by Scenario Type**
+-   **Under-threshold blocking**: The agent is held back because it fails edge cases that will never occur in the customer's actual process. This delays delivery.
+-   **Over-threshold acceptance**: The agent passes the eval suite but the suite did not cover the cases that matter. This creates false confidence.
+
+The correct approach is to define acceptance criteria per scenario type:
+
+**Table: Acceptance Threshold Approach by Scenario Type**
 
 <table>
-<thead>
 <tr>
 <th valign="top">
 
@@ -594,8 +643,6 @@ Acceptance Threshold Approach
 
 </th>
 </tr>
-</thead>
-<tbody>
 <tr>
 <td valign="top">
 
@@ -644,17 +691,15 @@ Verify graceful degradation; do not require correct output
 
 </td>
 </tr>
-</tbody>
 </table>
 
 ### Domain Primitive Vocabulary
 
-For structured knowledge extraction from customer artifacts, CIS uses 12 canonical domain primitive types that map directly to agent design elements.
+For structured knowledge extraction from customer artifacts, CIS uses 12 canonical domain primitive types that map directly to agent design elements. These types form a shared vocabulary between the discovery process and the agent build phase: customer knowledge is first extracted into these primitives, then primitives are mapped to agent topology and quality controls.
 
-**Domain Primitive Types**
+**Table: Domain Primitive Types and Mappings**
 
 <table>
-<thead>
 <tr>
 <th valign="top">
 
@@ -667,8 +712,6 @@ Maps To
 
 </th>
 </tr>
-</thead>
-<tbody>
 <tr>
 <td valign="top">
 
@@ -689,7 +732,7 @@ Actor
 </td>
 <td valign="top">
 
-Customer persona → one dedicated sub-agent
+Customer persona → one dedicated sub-agent (see [Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md))
 
 </td>
 </tr>
@@ -797,7 +840,7 @@ Risk
 </td>
 <td valign="top">
 
-Risk factor (source for guardrail design — [Precision Guardrails](precision-guardrails-a116de6.md))
+Risk factor (source for guardrail design — [Precision Guardrails](precision-guardrails-c279f4e.md))
 
 </td>
 </tr>
@@ -813,31 +856,27 @@ System integration point (source for API binding; checked by G4)
 
 </td>
 </tr>
-</tbody>
 </table>
 
-Three primitive types have direct implications for agent quality design: **Actors** drive topology (one Actor per sub-agent), **Rules** are the source material for MUST rules and human-in-the-loop gates, and **Risks** inform the guardrail stack.
+Three primitive types have direct implications for agent quality design: **Actors** drive topology (one Actor per sub-agent, [Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)), **Rules** are the source material for MUST rules and human-in-the-loop gates, and **Risks** inform the guardrail stack ([Precision Guardrails](precision-guardrails-c279f4e.md)). The G1–G4 readiness gates directly test the completeness of the Goal, Actor, and Integration primitives before spec generation begins.
 
 ### Evaluation Design Philosophy — TDD/BDD, Test Onion, and 11 Dimensions
 
-Three principles from the SAP AI Golden Path evaluation framework govern how eval suites should be designed in FDE sprints.
+Three principles from the SAP AI Golden Path evaluation framework govern how eval suites should be designed in FDE sprints:
 
-#### TDD/BDD: Tests Before Code
+### TDD/BDD: Tests Before Code
 
-Evaluation test cases are a **Week 0 sprint deliverable**, not something created after the agent is built. Define BDD-style test cases — given / when / then scenarios that describe exactly what the agent must do — before writing any workflow code. These test cases are the agent's specification.
+Evaluation test cases are a **Week 0 sprint deliverable**, not something created after the agent is built. Define BDD-style test cases — given / when / then scenarios that describe exactly what the agent must do — before writing any workflow code. These test cases are the agent's specification. Scenario runs use the Joule Studio CLI's `joule test` (which executes your BDD feature files) or the Joule Studio editor Test button; pre-build validation uses the Solution Management CLI (`jl solution validate`); and the broader eval suite runs in CI via aeval (see [Agent Evaluation](agent-evaluation-65fd098.md)) throughout development.
 
-Scenario runs use the Joule Studio CLI's `joule test` (which executes BDD feature files) or the Joule Studio editor Test button; pre-build validation uses the Solution Management CLI (`jl solution validate`); and the broader eval suite runs in CI via aeval throughout development.
+This is not optional: writing tests after the fact tests what the agent does, not what it should do. Retroactive test suites accumulate false coverage of edge cases the implementation happened to get right. Tests written first express business intent and become the ground truth for the Quality Flywheel ([Agent Evaluation](agent-evaluation-65fd098.md)).
 
-Writing tests after the fact tests what the agent does, not what it should do. Retroactive test suites accumulate false coverage of edge cases the implementation happened to get right. Tests written first express business intent and become the ground truth for the Quality Flywheel.
+### Test Onion — Layered Testing Strategy
 
-#### Test Onion — Layered Testing Strategy
+Agent quality testing is organized in three concentric layers:
 
-Agent quality testing is organized in three concentric layers.
-
-**Test Onion Layers**
+**Table: Test Onion — Layered Testing Strategy**
 
 <table>
-<thead>
 <tr>
 <th valign="top">
 
@@ -855,8 +894,6 @@ Investment Priority
 
 </th>
 </tr>
-</thead>
-<tbody>
 <tr>
 <td valign="top">
 
@@ -908,19 +945,17 @@ Medium — validates final wiring
 
 </td>
 </tr>
-</tbody>
 </table>
 
 The aeval layer is the most important investment. Tool-level tests confirm that connectors work; integration tests confirm deployment. Only the eval layer validates whether the agent is actually making correct decisions.
 
-#### 11 Evaluation Dimensions
+### 11 Evaluation Dimensions
 
-The SAP AI Golden Path defines a set of evaluation dimensions for comprehensive agent evaluation. Cover at minimum the High-priority dimensions before the Week 6 gate and all Medium-priority dimensions before production go-live.
+The SAP AI Golden Path defines a set of evaluation dimensions for comprehensive agent evaluation. **The canonical set — 11 dimensions with their priorities — is maintained in [Agent Evaluation](agent-evaluation-65fd098.md); the table below matches it row-for-row.** Cover at minimum the High-priority dimensions before the Week 6 gate and all Medium-priority dimensions before production go-live:
 
-**Evaluation Dimensions**
+**Table: 11 Evaluation Dimensions**
 
 <table>
-<thead>
 <tr>
 <th valign="top">
 
@@ -938,8 +973,6 @@ What It Tests
 
 </th>
 </tr>
-</thead>
-<tbody>
 <tr>
 <td valign="top">
 
@@ -977,7 +1010,7 @@ Does the agent avoid inventing facts not present in the grounding context?
 <tr>
 <td valign="top">
 
-**Safety Guardrails**
+**Safety guardrails**
 
 </td>
 <td valign="top">
@@ -987,7 +1020,7 @@ Does the agent avoid inventing facts not present in the grounding context?
 </td>
 <td valign="top">
 
-Do precision guardrails fire correctly on boundary inputs; does Layer 3 escalation trigger?
+Do precision guardrails fire correctly on boundary inputs ([Precision Guardrails](precision-guardrails-c279f4e.md)); does Layer 3 escalation trigger?
 
 </td>
 </tr>
@@ -1062,7 +1095,7 @@ Does the agent maintain relevant context across conversation turns?
 <tr>
 <td valign="top">
 
-**RAG Retrieval**
+**RAG retrieval**
 
 </td>
 <td valign="top">
@@ -1096,7 +1129,7 @@ Does the agent meet latency and throughput targets under load?
 <tr>
 <td valign="top">
 
-**UI/UX Output**
+**UI/UX output**
 
 </td>
 <td valign="top">
@@ -1113,7 +1146,7 @@ Does the agent's output render correctly and usably in the Joule surface?
 <tr>
 <td valign="top">
 
-**Digression / Scope**
+**Digression / scope**
 
 </td>
 <td valign="top">
@@ -1127,18 +1160,19 @@ Does the agent stay within its defined scope and reject out-of-scope instruction
 
 </td>
 </tr>
-</tbody>
 </table>
 
 > ### Caution:  
-> Security and Safety are HIGH priority — not optional. For FDE-delivered Industry AI agents handling financial commitments, production data, or regulated outputs, a security/safety failure is a production incident regardless of correctness performance. Eval suites that omit prompt injection resistance, privilege constraint verification, and HITL gate behavior are incomplete. These dimensions must be included from week 1.
+> Security/Safety is HIGH priority — not optional. For FDE-delivered Industry AI agents handling financial commitments, production data, or regulated outputs, a security/safety failure is a production incident regardless of correctness performance. Eval suites that omit prompt injection resistance, privilege constraint verification, and HITL gate behavior are incomplete. These dimensions must be included from week 1.
 
-**Judge verdict model — three-way C/I/N**: The aeval LLM-as-judge returns one of three verdicts per check: **Complete**, **Incomplete**, or **Not Applicable**. `NOT_APPLICABLE` scores are not emitted to OpenTelemetry output; absence in the trace is the signal. Build dashboards that distinguish "no score emitted" from "score = 0" to avoid silently skewing aggregate success rates.
+**Judge verdict model — three-way C/I/N**: The aeval LLM-as-judge returns one of three verdicts per check: **Complete**, **Incomplete**, or **Not Applicable**. Not Applicable (N) means the check criterion was not triggered in this session — it is the *absence* of a data point, not a failure. From the aeval OTel schema (November 2026): `NOT_APPLICABLE` scores are **not emitted** to OpenTelemetry output at all; absence in the trace is the signal. This matters for dashboards and aggregations — a check that never fired appears as no data, not as `0`. Build dashboards that distinguish "no score emitted" from "score = 0" to avoid silently skewing aggregate success rates. For online eval specifically (`validate_online`), the 3-way C/I/N judge is now the standard template.
+
+For the full aeval framework, offline CI evaluation (GitHub Actions, deterministic + LLM-as-judge), online DwC pipeline evaluation (sampled production traffic), and TR9 compliance requirements, see [Agent Evaluation](agent-evaluation-65fd098.md).
 
 
-<a name="loio09082f84cef94da5826757f3ae63b5e2__section_runtime_quality"/>
+<a name="loio5ec914bdff9343389482e456839c8f88__section_runtime_quality"/>
 
-## Runtime Quality
+## Runtime Quality (Post-Deployment)
 
 Build-time quality can only cover what was anticipated. Runtime quality monitoring detects what was not.
 
@@ -1150,9 +1184,9 @@ When an agent is created in SAP's BAIP managed agent runtime, the platform autom
 -   **Logs**: structured log entries at key decision points
 -   **Metrics**: aggregated counts and distributions (call volume, error rate, latency percentiles, tool call counts per invocation)
 
-This telemetry is captured via OpenTelemetry. The operational telemetry itself (traces, metrics, error codes) is pushed to **SAP Cloud ALM** — an SAP-operated service, region-bound to the customer's contracted data-residency region. Business data and reasoning stay local by default.
+This telemetry is captured via OpenTelemetry. Business and personal data and the LLM inference stay within the customer's BAIP tenant (personal data masked via DPI). The operational telemetry itself (traces, metrics, error codes) is pushed to **SAP Cloud ALM** — an SAP-operated service, region-bound to the customer's contracted data-residency region (see [Security and Data Protection](security-and-data-protection-27868d4.md) and [Production Operations](production-operations-f963579.md)). So the accurate data-protection statement is not that telemetry never leaves the tenant, but that it is stored within the customer's SAP-operated data-residency boundary; business data and reasoning stay local by default.
 
-The harness is not optional — it is automatically applied to all agents running on the BAIP managed runtime.
+The harness is not optional — it is automatically applied to all agents running on the BAIP managed runtime. This means quality observability is built in, not added on.
 
 ### SAP AI Agent Hub: Agent Observability
 
@@ -1163,7 +1197,7 @@ The Agent Observability capability in SAP AI Agent Hub surfaces the BAIP harness
 -   **Error rate tracking**: tool failures, LLM refusals, system unavailability events
 -   **Human override rate**: how often downstream humans reject or modify agent outputs — a direct signal of output quality that technical metrics alone cannot capture
 
-The human override rate is the most underused runtime quality signal. If agents produce recommendations that humans override 40% of the time, the agent is generating work rather than saving it.
+The human override rate is the most underused runtime quality signal. If agents produce recommendations that humans override 40% of the time, the agent is generating work rather than saving it. This signal requires connecting agent output tracking to the process step that follows the agent — typically a task in SAP Task Center.
 
 ### Self-Verification in the Runtime Loop
 
@@ -1179,13 +1213,13 @@ Self-verification is an architectural pattern, not a specific product feature. I
     └── NO  → [sapTaskCenter: escalate to human] or [retry / abort]
 ```
 
-The validation step uses a second `sapOrchestration` call with a different system prompt explicitly designed for critique rather than generation. It catches the most common failure mode — confident but wrong output — without requiring inter-agent communication overhead.
+The validation step uses a second `sapOrchestration` call with a different system prompt explicitly designed for critique rather than generation. This is a lightweight version of a supervisor pattern operating within a single agent's workflow rather than as a separate agent process. It catches the most common failure mode — confident but wrong output — without requiring inter-agent communication overhead.
 
 **Limitation**: using the same underlying model for both generation and validation reduces the independence of the check. For high-stakes outputs, the validation step should use a different model (e.g., a smaller, deterministic model for rule-checking, or a rule-based code node for numerical validation).
 
 ### Multi-Stage Verification: Combining Deterministic and LLM-Based Checks
 
-For many Industry AI scenarios, a deterministic check of the agent's output is also possible, because a simplified rule-based or algorithmic computation of the "correct" answer exists independently of the AI reasoning.
+The self-verification pattern above uses a second LLM call for validation. This is often the only option — but not always. For many Industry AI scenarios, a deterministic check of the agent's output is also possible, because a simplified rule-based or algorithmic computation of the "correct" answer exists independently of the AI reasoning.
 
 The deterministic check is implemented as:
 
@@ -1193,7 +1227,7 @@ The deterministic check is implemented as:
 -   A `sapMcpClient` call to an existing SAP calculation service — e.g., batch classification rules in S/4HANA, a pricing engine, or a valuation model in SAP Analytics Cloud
 -   An `HTTP Request` to a custom BAIP function for domain-specific computations
 
-**Deterministic algorithms produce binary, explainable verdicts with no hallucination risk.** When a deterministic check is available, the two approaches can be combined into a multi-stage verification pattern:
+The key advantage: **deterministic algorithms produce binary, explainable verdicts with no hallucination risk**. When a deterministic check is available, the two approaches can be combined into a multi-stage verification pattern:
 
 ```
 [sapOrchestration: generate output]
@@ -1207,27 +1241,35 @@ The deterministic check is implemented as:
     └── DISAGREE     → escalate to human (uncertain, requires judgment)
 ```
 
-Two independent control mechanisms agreeing constitutes a strong verification signal. Disagreement between the two surfaces cases where the deterministic rule does not capture the full complexity of the situation — exactly the case a human should review.
+Two independent control mechanisms agreeing constitutes a strong verification signal — stronger than either check alone. Disagreement between the two is itself informative: it surfaces cases where the deterministic rule does not capture the full complexity of the situation, which is exactly the case a human should review.
 
-A further benefit: every confirmed or rejected output becomes a **labeled data point**. Over time, the collected records constitute a ground-truth dataset that can be used to improve build-time evals and to measure hallucination rate.
+A further benefit: every confirmed or rejected output becomes a **labeled data point**. Over time, the collected (output, deterministic verdict, LLM verdict, human decision) records constitute a ground-truth dataset that can be used to improve build-time evals and to measure hallucination rate — the metric that the Dimension 1 section identified as hard to quantify without reference data.
+
+When a deterministic check does not exist (the reason the AI agent was built in the first place is that no computable answer is available), the LLM-as-verifier remains the appropriate fallback. The choice of which verification stages to apply is a design decision made during FDE Discovery, informed by what calculation capabilities already exist in the customer's SAP landscape.
 
 ### Per-Step Iteration Count as an Optimization Signal
 
-The number of internal iterations an agent takes on a single step is a runtime signal with optimization value. An agent that retries a tool call, cycles through multiple self-correction loops, or consumes disproportionate tokens on one step signals a design mismatch at that point in the workflow.
+Beyond output quality, the number of internal iterations an agent takes on a single step is a runtime signal with optimization value. Just as a chatbot user who must rephrase the same request multiple times signals a context or capability gap, an agent that retries a tool call, cycles through multiple self-correction loops, or consumes disproportionate tokens on one step signals a design mismatch at that point in the workflow.
 
 The BAIP harness captures the raw data via OpenTelemetry traces — tool call counts per invocation, latency per step, and self-correction loop depth. The optimization value lies not in individual spikes (those are incidents, handled by the supervisor) but in **patterns across invocations**: a step that consistently requires more iterations than others is a candidate for redesign, not just monitoring.
 
-This signal connects directly to the tool-selection principle in [Precision Guardrails](precision-guardrails-a116de6.md): a step with chronically high retry counts is often one where the LLM is computing something that a deterministic SAP service could resolve in a single call.
+This signal connects directly to the tool-selection principle in [Precision Guardrails](precision-guardrails-c279f4e.md): a step with chronically high retry counts is often one where the LLM is computing something that a deterministic SAP service could resolve in a single call.
+
+[CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md) covers how to operationalize iteration pattern analysis in the CIS CoE continuous improvement loop.
 
 ### Agent Behavior Mining — Forward-Looking Capability
 
-A complementary approach to OpenTelemetry-based observability is **agent behavior mining** via SAP Signavio Process Intelligence: analyzing production agent execution traces at the process level to surface behavioral patterns, flow variants, conformance deviations, and value vs. decommission assessments.
+A complementary approach to OpenTelemetry-based observability is **agent behavior mining** via SAP Signavio Process Intelligence: analyzing production agent execution traces at the process level to surface behavioral patterns, flow variants, conformance deviations, telemetry-to-KPI conformance mapping, process KPI impact, and value vs. decommission assessments — each execution pattern compared against the original business case to determine whether the agent continues to generate measurable value.
 
-> ### Note:  
-> Agent behavior mining in Signavio is designed for the next generation of SAP agents built on **Joule Studio 2.0** and is **not yet generally available**. SAP Architecture Center (RA0029/9) is explicit: "This page describes the planned agent mining model for the next generation of SAP AI agents built on Joule Studio 2.0 which is yet to be made generally available." For current FDE-built agents, **OpenTelemetry-based observability via the BAIP harness and the supervisor telemetry patterns** ([Supervisor Agent Pattern](supervisor-agent-pattern-0d90e5f.md), [CIS CoE Operations Model](cis-coe-operations-model-07aa8f3.md)) are the production options. Signavio agent mining is a capability to plan for in the productization roadmap, not a current FDE deliverable.
+> ### Caution:  
+> Agent behavior mining in Signavio is designed for the next generation of SAP agents built on **Joule Studio 2.0**. GA is phased: the Joule Studio 2.0 build environment is itself in phased GA, but the Signavio agent-mining capability built on these next-generation agents is **not yet generally available**. SAP Architecture Center (RA0029/9) is explicit: *"This page describes the planned agent mining model for the next generation of SAP AI agents built on Joule Studio 2.0 which is yet to be made generally available (GA). It does not apply to the current agent implementations."*
+
+For current FDE-built agents — including BYOA custom agents and Joule Studio canvas workflows — **OpenTelemetry-based observability via the BAIP harness and the supervisor telemetry patterns ([Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md), [CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md)) are the production options**. Signavio agent mining is a capability to plan for in the productization roadmap, not a current deliverable for FDE engagements.
+
+When Joule Studio 2.0 agents become GA: mining is enabled at the agent type level per customer tenant — configured in the SAP AI Agent Hub and trackable via LeanIX (SAP's enterprise architecture management tool) for broader application inventory governance — not per running instance. Confirm Signavio Process Intelligence availability during FDE Discovery before building any customer operational dependency on it.
 
 
-<a name="loio09082f84cef94da5826757f3ae63b5e2__section_goodharts_law"/>
+<a name="loio5ec914bdff9343389482e456839c8f88__section_goodharts_law"/>
 
 ## The Goodhart's Law Problem
 
@@ -1239,15 +1281,17 @@ Concrete examples in Industry AI:
 -   A procurement agent maximizes "PO generation speed" by reusing existing vendor quotes rather than checking for better alternatives, optimizing the metric while increasing spend.
 -   A batch release agent maximizes "release approval rate" by flagging fewer anomalies, reducing false positives at the cost of missed genuine deviations.
 
-The safeguard is multi-objective evaluation: optimize across all three dimensions simultaneously, with explicit trade-off thresholds defined for each use case. In practice:
+The safeguard is multi-objective evaluation: optimize across all three dimensions simultaneously, with explicit trade-off thresholds defined for each use case. In practice this means:
 
 1.  Define at least one metric per dimension before the agent is deployed
 2.  Alert when any dimension degrades beyond threshold, even if others improve
 3.  Review aggregate performance monthly; review after any model or data change
 4.  Define a reversion trigger: if Dimension 3 (business outcomes) degrades despite Dimension 1 (technical) appearing healthy, investigate the gap before the next model update
 
+**A note on this concept's own metrics**: the human override rate, verification rejection rate, and goal completion rate proposed in this concept are themselves subject to Goodhart's Law. An agent (or prompt engineer) optimizing to keep the human override rate below 40% may become better at avoiding escalations rather than better at producing correct outputs. The multi-metric approach mitigates this — degradation on any dimension triggers investigation — but it does not eliminate it. Treat the proposed thresholds as monitoring signals, not performance targets to optimize for in isolation.
 
-<a name="loio09082f84cef94da5826757f3ae63b5e2__section_escalation_path"/>
+
+<a name="loio5ec914bdff9343389482e456839c8f88__section_escalation_path"/>
 
 ## Quality Signal Escalation Path
 
@@ -1278,16 +1322,18 @@ Level 3 — Blocked (agent suspended, IT governance engaged)
 Levels 0 and 1 are automated through the BAIP harness and Agent Hub. Levels 2 and 3 require explicit configuration: Level 2 requires a `sapTaskCenter` node in the agent workflow; Level 3 requires a governance policy configured in the Agent Hub's Secure & Govern capability.
 
 
-<a name="loio09082f84cef94da5826757f3ae63b5e2__section_fde_implications"/>
+<a name="loio5ec914bdff9343389482e456839c8f88__section_fde_implications"/>
 
 ## Implications for FDE Delivery
+
+The agent quality framework has direct implications for how FDE engagements are scoped and executed:
 
 **During Discovery, sub-phases 2–4 (Generate–Prioritize):**
 
 -   The TO-BE process flow must define not just what the agent does but how its outputs will be measured. Both process KPIs (Dimension 2) and the human override mechanism (Level 2 escalation) should be identified in the Draft Product Design Specs.
 -   The value/feasibility scorecard (FDE Go/No-Go) should include explicit quality criteria: what eval threshold triggers a Go, and what runtime KPI degradation would trigger a reversion.
 
-**During Development (Rapid Prototyping → MVP Build):**
+**During Develop (formerly Execute) (Rapid Prototyping → MVP Build):**
 
 -   Eval test suites should be built alongside the agent, not after. The FDE Sprint ends when both the agent and its eval suite are complete.
 -   Synthetic test data for eval runs should be prepared before the TEA is signed, so eval can begin on day one of the Development phase.
@@ -1299,16 +1345,121 @@ Levels 0 and 1 are automated through the BAIP harness and Agent Hub. Levels 2 an
 -   The runtime quality configuration (alert thresholds, escalation policies) is part of the production handover. Customers should receive a documented quality baseline: what normal looks like, what triggers an alert, and who owns the response.
 
 
-<a name="loio09082f84cef94da5826757f3ae63b5e2__section_four_pillars"/>
+<a name="loio5ec914bdff9343389482e456839c8f88__section_summary"/>
+
+## Summary
+
+**Table: Agent Quality Framework — Key Principles**
+
+<table>
+<tr>
+<th valign="top">
+
+Aspect
+
+</th>
+<th valign="top">
+
+Key Principle
+
+</th>
+</tr>
+<tr>
+<td valign="top">
+
+What to measure
+
+</td>
+<td valign="top">
+
+Three dimensions simultaneously: technical, process KPI, business outcome
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+When to measure
+
+</td>
+<td valign="top">
+
+Build-time (evals) and runtime (BAIP harness + Agent Hub observability)
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+Goodhart's Law guard
+
+</td>
+<td valign="top">
+
+Multi-objective evaluation; alert on any dimension degrading
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+Self-verification
+
+</td>
+<td valign="top">
+
+Inline validation before write-back; second model/rule-check for high stakes
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+Human-in-the-loop
+
+</td>
+<td valign="top">
+
+First-class via `sapTaskCenter`; must be in MVP from day one
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+Data protection
+
+</td>
+<td valign="top">
+
+BAIP harness telemetry stays in customer tenant by default
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+FDE integration
+
+</td>
+<td valign="top">
+
+Quality criteria in TO-BE specs; eval suite ships with agent; thresholds in production handover
+
+</td>
+</tr>
+</table>
+
+
+<a name="loio5ec914bdff9343389482e456839c8f88__section_four_pillars"/>
 
 ## The Four Pillars of Agent Excellence
 
-SAP Signavio frames responsible AI agent adoption around four complementary pillars that span the full agent lifecycle.
+SAP Signavio frames responsible AI agent adoption around four complementary pillars that span the full agent lifecycle — from identifying where agents should operate to proving their business value:
 
-**Four Pillars of Agent Excellence**
+**Table: Four Pillars of Agent Excellence**
 
 <table>
-<thead>
 <tr>
 <th valign="top">
 
@@ -1326,8 +1477,6 @@ CIS Concept Mapping
 
 </th>
 </tr>
-</thead>
-<tbody>
 <tr>
 <td valign="top">
 
@@ -1341,7 +1490,7 @@ Identify the right processes and opportunities for AI agents; assess feasibility
 </td>
 <td valign="top">
 
-FDE Discovery phases (G1–G4 readiness gates; Project LightSpeed Stages 1–8)
+FDE Discovery phases (Pre-Build Readiness Gates G1–G4; [CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md) LightSpeed Stage 1–8)
 
 </td>
 </tr>
@@ -1358,7 +1507,7 @@ Provide agents with process knowledge, compliance parameters, domain rules, and 
 </td>
 <td valign="top">
 
-Pre-check constraints ([Precision Guardrails](precision-guardrails-a116de6.md)); system prompt grounding ([Joule Studio Build Map](joule-studio-build-map-6c4ecf5.md)); RAG corpus design ([Security and Data Protection](security-and-data-protection-a6b66d5.md))
+Pre-check constraints ([Precision Guardrails](precision-guardrails-c279f4e.md)); system prompt grounding ([Joule Studio Build Map](joule-studio-build-map-7de243e.md)); RAG corpus design ([Security and Data Protection](security-and-data-protection-27868d4.md))
 
 </td>
 </tr>
@@ -1375,7 +1524,7 @@ Observe and analyze actual agent behavior in operation; detect deviations from d
 </td>
 <td valign="top">
 
-Supervisor Workflow B ([Supervisor Agent Pattern](supervisor-agent-pattern-0d90e5f.md)); online eval statistical trends ([Agent Evaluation in FDE Sprints](agent-evaluation-6150d04.md)); Signavio agent behavior mining (forward-looking for Joule Studio 2.0)
+Supervisor Workflow B ([Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)); online eval statistical trends ([Agent Evaluation](agent-evaluation-65fd098.md)); Signavio agent behavior mining ([CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md) — forward-looking for Joule Studio 2.0; see Agent Behavior Mining section for GA status)
 
 </td>
 </tr>
@@ -1392,20 +1541,30 @@ Quantify the business value the agent delivers: efficiency gains, cost reduction
 </td>
 <td valign="top">
 
-Dimension 3 — Business Outcomes; value realization tracking in FDE handover; continuous improvement loop ([CIS CoE Operations Model](cis-coe-operations-model-07aa8f3.md))
+Dimension 3 — Business Outcomes; value realization tracking in FDE handover; continuous improvement loop ([CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md))
 
 </td>
 </tr>
-</tbody>
 </table>
 
-The three evaluation dimensions describe *how to measure* agent quality at a technical and operational level. The four pillars describe *why and where* agents are deployed and what evidence the business needs to justify and sustain the investment.
+These four pillars provide an adoption-oriented vocabulary that complements the technical three-dimension evaluation framework:
+
+-   The **three dimensions** describe *how to measure* agent quality at a technical and operational level
+-   The **four pillars** describe *why and where* agents are deployed and what evidence the business needs to justify and sustain the investment
+
+For FDE Discovery conversations, the four pillars translate directly: Agent Discovery maps to opportunity identification and the FDE go/no-go gate; Agent Context maps to the grounding and constraints work in Develop; Agent Mining and Agent Value Impact are the post-productization evidence requirements that the CoE monitoring model ([CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md)) is designed to satisfy.
 
 **Related Information**  
 
 
-[SAP AI Agent Hub — Key Capabilities](https://help.sap.com/docs/AI_AGENT_HUB/225000cc2ce44a228b9534a0f1098a9b/3f7ceafb1eb24d00ac50bf3499f50688.html "Overview of SAP AI Agent Hub capabilities including agent discovery, verification, monitoring, and governance.") :arrow_upper_right:
+[SAP AI Launchpad Evaluations and Optimizations](https://help.sap.com/docs/ai-launchpad/sap-ai-launchpad/optimizations "Evaluations and Optimizations in SAP AI Launchpad: benchmark LLM prompts, review evaluation runs, and analyze metrics.") :arrow_upper_right:
 
-[SAP AI Agent Hub — Plan and Build](https://help.sap.com/docs/AI_AGENT_HUB/225000cc2ce44a228b9534a0f1098a9b/e2a29b0c422e4aceadee658f4bbab71b.html "Guidance for planning which AI agents to build or adopt and avoiding duplication using the agent inventory.") :arrow_upper_right:
+[SAP Generative AI Hub](https://help.sap.com/docs/sap-ai-core/generative-ai/generative-ai-hub "SAP Generative AI Hub: managed LLM integration, model execution, and operational controls within SAP AI Core.") :arrow_upper_right:
 
-[SAP AI Agent Hub](https://help.sap.com/docs/AI_AGENT_HUB/225000cc2ce44a228b9534a0f1098a9b/8ebd704d35a746c180af003db1f5acb0.html "Introduction to SAP AI Agent Hub — discover, govern, and monitor AI agents across your enterprise landscape.") :arrow_upper_right:
+[Introduction: Why Agent Governance Matters for Industry AI](introduction-c495d02.md)
+
+[Agent Evaluation](agent-evaluation-65fd098.md)
+
+[Precision Guardrails](precision-guardrails-c279f4e.md)
+
+[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)

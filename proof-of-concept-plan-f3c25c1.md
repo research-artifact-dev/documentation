@@ -1,15 +1,17 @@
-<!-- loio26b38cc255374a2b922ef2818310392c -->
+<!-- loiof3c25c157b5a4b5eb9a5b7cdaee4d1de -->
 
-# Proof of Concept Plan
+# Proof of Concept Plan: Supervisor Agent Pattern
 
-This topic provides the complete build specification for a minimal, end-to-end demonstrable proof of concept (PoC) for the supervisor agent pattern. The PoC substantiates that the core design works in practice on the actual target platform (Joule Studio / BAIP), not only as a design document.
+Complete build specification for a minimal, end-to-end demonstrable proof of concept (PoC) for the supervisor agent pattern described in Chapters 1–5 of this concept. The PoC is designed to substantiate that the core design works in practice on the actual target platform (Joule Studio / BAIP), not only as a design document.
+
+---
 
 
-<a name="loio26b38cc255374a2b922ef2818310392c__section_purpose"/>
+<a name="loiof3c25c157b5a4b5eb9a5b7cdaee4d1de__section_purpose"/>
 
-## Purpose and Scope
+## Purpose
 
-**What the PoC proves:**
+**What the PoC Proves:**
 
 -   A worker agent running in Joule Studio can produce a numerically wrong output
 -   The supervisor agent intercepts that output *before* it reaches the system of record
@@ -19,152 +21,140 @@ This topic provides the complete build specification for a minimal, end-to-end d
 -   Every committed output is recorded in an immutable audit trail
 -   If the supervisor itself is unavailable, the worker routes all outputs to human review
 
-**What the PoC does NOT prove:**
+**What the PoC Does NOT Prove:**
 
 -   Live integration with a productive SAP S/4HANA system (synthetic data is used)
--   Full Supervisor Workflow B (telemetry monitor) and Workflow C (support relay) — these are optional extensions
+-   Full Supervisor Workflow B (telemetry monitor) and Workflow C (support relay) — these are optional extensions noted in the Extension Options section
 -   Multi-agent orchestration — out of scope for the minimal PoC
 -   Production-grade performance, security hardening, or regulatory compliance
 
-**Intended audiences:**
+**Intended Audiences:**
 
 -   FDE teams considering whether to adopt this pattern
 -   CIS leadership evaluating the concept for broader rollout
 -   Customer enterprise architects reviewing the approach before an FDE engagement
 
+---
 
-<a name="loio26b38cc255374a2b922ef2818310392c__section_prerequisites"/>
+
+<a name="loiof3c25c157b5a4b5eb9a5b7cdaee4d1de__section_prerequisites"/>
 
 ## Prerequisites
 
 ### Required Platform Components
 
-**PoC Platform Requirements**
+<br>
+
+**Platform Components Required for the PoC**
 
 <table>
-<thead>
-<tr>
-<th valign="top">
-
-Component
-
-</th>
-<th valign="top">
-
-Purpose in PoC
-
-</th>
-<th valign="top">
-
-Notes
-
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td valign="top">
+  <tr>
+    <th valign="top">Component</th>
+    <th valign="top">Purpose in PoC</th>
+    <th valign="top">Notes</th>
+  </tr>
+  <tr>
+    <td valign="top">
 
 SAP BTP account
 
 </td>
-<td valign="top">
+    <td valign="top">
 
 Host environment
 
 </td>
-<td valign="top">
+    <td valign="top">
 
 CIS development subaccount is sufficient
 
 </td>
-</tr>
-<tr>
-<td valign="top">
+  </tr>
+  <tr>
+    <td valign="top">
 
 Joule Studio (n8n canvas)
 
 </td>
-<td valign="top">
+    <td valign="top">
 
 Build and run all workflows
 
 </td>
-<td valign="top">
+    <td valign="top">
 
 Requires BAIP subscription. **Orchestrator: SMJ (SAP-Managed Joule)** — the default for new engagements (GA since 2026-06-01); the managed runtime handles auth, the observability harness, and agent registry entries automatically. CMJ (Customer-Managed Joule) is a deprecated migration target, not a delivery choice.
 
 </td>
-</tr>
-<tr>
-<td valign="top">
+  </tr>
+  <tr>
+    <td valign="top">
 
 SAP AI Core (via Joule Studio)
 
 </td>
-<td valign="top">
+    <td valign="top">
 
 `sapOrchestration` LLM calls
 
 </td>
-<td valign="top">
+    <td valign="top">
 
 Requires generative AI hub model access
 
 </td>
-</tr>
-<tr>
-<td valign="top">
+  </tr>
+  <tr>
+    <td valign="top">
 
 SAP HANA Cloud
 
 </td>
-<td valign="top">
+    <td valign="top">
 
 Audit trail table
 
 </td>
-<td valign="top">
+    <td valign="top">
 
 Must be bound to the BAIP environment
 
 </td>
-</tr>
-<tr>
-<td valign="top">
+  </tr>
+  <tr>
+    <td valign="top">
 
 SAP Task Center
 
 </td>
-<td valign="top">
+    <td valign="top">
 
 Human-in-the-loop escalation
 
 </td>
-<td valign="top">
+    <td valign="top">
 
 If unavailable: substitute with HTTP Request → mock notification endpoint
 
 </td>
-</tr>
-<tr>
-<td valign="top">
+  </tr>
+  <tr>
+    <td valign="top">
 
 BAIP application registration
 
 </td>
-<td valign="top">
+    <td valign="top">
 
 Agent identity per workflow
 
 </td>
-<td valign="top">
+    <td valign="top">
 
-**Managed runtime (JS2.0 / SMJ):** automatic — the managed runtime registers each agent identity. **BYOA** (custom agent on the customer's BTP subaccount, registered to SMJ via A2A — the standard runtime for productization-intent agents): one registration per workflow (worker, supervisor/committer A) created manually.
+**Managed runtime (JS2.0 / SMJ):** automatic — the managed runtime registers each agent identity. **BYOA (custom agent on the customer's BTP subaccount, registered to SMJ via A2A — the standard runtime for productization-intent agents, not a fallback):** one registration per workflow (worker, supervisor/committer A) created manually. Joule Studio 2.0 is the low-code alternative runtime (build env in phased GA; managed custom-agent runtime EAC-gated, free through Dec 2026).
 
 </td>
-</tr>
-</tbody>
+  </tr>
 </table>
 
 ### Acceptable Substitutions for Missing Components
@@ -181,10 +171,12 @@ If a live SAP S/4HANA system is not available:
 
 -   1 FDE Application Engineer to build the workflows
 -   1 Data Scientist or Domain PM to author the LLM critic system prompt and calibrate verification rules
--   Access to the CIS Starter Kit (see [Reusable Components and Reference Implementations](reusable-components-4ff1667.md)) for Workflow A skeleton and DDL scripts
+-   Access to the CIS Starter Kit (see [Reusable Components](reusable-components-8a3dd4c.md)) for Workflow A skeleton and DDL scripts
+
+---
 
 
-<a name="loio26b38cc255374a2b922ef2818310392c__section_scenario"/>
+<a name="loiof3c25c157b5a4b5eb9a5b7cdaee4d1de__section_scenario"/>
 
 ## Scenario: Batch Release Quantity — Autonomous Regulated Manufacturing
 
@@ -231,12 +223,14 @@ The supervisor verifies the quantity before it is posted. Errors — wrong magni
 }
 ```
 
+---
 
-<a name="loio26b38cc255374a2b922ef2818310392c__section_architecture"/>
+
+<a name="loiof3c25c157b5a4b5eb9a5b7cdaee4d1de__section_architecture"/>
 
 ## PoC Architecture
 
-This PoC implements the **committer pattern**: the worker agent is **recommend-only** — it holds no system-of-record write scope and returns a structured proposal — and the **supervisor acts as the committer**, holding the write scope and performing the write to the system of record under its own identity after approval. The audit trail attributes every write to the committer identity. This makes "the worker cannot write directly" an architectural property, not a convention.
+This PoC implements the **committer pattern**: the worker agent is **recommend-only** — it holds no system-of-record write scope and returns a structured proposal — and the **supervisor acts as the committer**, holding the write scope and performing the write to the system of record under its own identity after approval. The audit trail attributes every write to the committer identity. This makes "the worker cannot write directly" an architectural property, not a convention. The Agent Gateway denies any direct worker write at the API-call level (`min(user, agent)`), and an optional S/4HANA RAP instance-authorization backstop can reject a write unless the record is in an approved state.
 
 ```
 [Trigger: HTTP Request with batch input]
@@ -253,6 +247,8 @@ This PoC implements the **committer pattern**: the worker agent is **recommend-o
   Routing: If/Switch on combined verdict
     ├── BOTH CONFIRM + confidence ≥ 0.75 + value within approval threshold
     │       → Committer (supervisor identity): write committed value to the SoR
+    │         (simulated Code node for the PoC, or sapMcpClient/OData under the
+    │          supervisor's write scope if S/4HANA is connected)
     │         Code node: write to audit trail (HANA Cloud), committed_by = committer identity
     │         sapAgent: notify worker of the COMMITTED outcome (logging only)
     │         Log: COMMITTED
@@ -269,24 +265,26 @@ This PoC implements the **committer pattern**: the worker agent is **recommend-o
               Code node: write to audit trail (ESCALATED)
          ↓
 [Worker Agent Workflow — receives committer outcome notification]
-    ├── COMMITTED → Code node: log "Committer posted {{committed_value}} KG" — worker performs no write-back
+    ├── COMMITTED → Code node: log the committer-reported outcome (worker performs NO write-back)
     └── REJECTED  → terminate; log rejection
 ```
 
+---
 
-<a name="loio26b38cc255374a2b922ef2818310392c__section_build_plan"/>
+
+<a name="loiof3c25c157b5a4b5eb9a5b7cdaee4d1de__section_build_plan"/>
 
 ## Build Plan
 
-Follow the [Joule Studio Build Map](joule-studio-build-map-6c4ecf5.md) build sequence: worker first, supervisor second, integration third. Never add the supervisor to an unstable worker.
+Follow the [Joule Studio Build Map](joule-studio-build-map-7de243e.md) build sequence: worker first, supervisor second, integration third. Never add the supervisor to an unstable worker.
 
 ### Step 1: Environment Setup (Day 1, ~3 Hours)
 
--   **Managed runtime (JS2.0 / SMJ):** confirm the BAIP/SMJ subscription is active in the customer or CIS dev BTP account — BAIP application registrations and agent identities are provisioned automatically by the managed runtime; skip the manual registration sub-steps below.
--   **BYOA (custom agent on the customer's BTP subaccount):** create BAIP application registrations: one for `poc-worker-agent`, one for `poc-supervisor-workflow-a`; assign scoped authorizations under the committer pattern: worker → SAP AI Core access **only** (read/recommend; **no** SoR or HANA write scope); supervisor/committer → SAP AI Core access + Task Center write + HANA Cloud write + system-of-record (S/4HANA) write scope.
--   Provision HANA Cloud service instance and bind to BAIP environment
--   Deploy audit trail DDL (from `cis-audit-trail-ddl.sql` in the Starter Kit) — verify append-only behavior by attempting an UPDATE (should fail)
--   Verify Joule Studio canvas is accessible and connected to SAP AI Core
+-   [ ] **Managed runtime (JS2.0 / SMJ):** confirm the BAIP/SMJ subscription is active in the customer or CIS dev BTP account — BAIP application registrations and agent identities are provisioned automatically by the managed runtime; skip the manual registration sub-steps below.
+-   [ ] **BYOA (custom agent on the customer's BTP subaccount):** create BAIP application registrations: one for `poc-worker-agent`, one for `poc-supervisor-workflow-a`; assign scoped authorizations under the committer pattern: worker → SAP AI Core access **only** (read/recommend; **no** SoR or HANA write scope); supervisor/committer → SAP AI Core access + Task Center write + HANA Cloud write + system-of-record (S/4HANA) write scope.
+-   [ ] Provision HANA Cloud service instance and bind to BAIP environment
+-   [ ] Deploy audit trail DDL (from `cis-audit-trail-ddl.sql` in the Starter Kit) — verify append-only behavior by attempting an UPDATE (should fail)
+-   [ ] Verify Joule Studio canvas is accessible and connected to SAP AI Core
 
 ### Step 2: Worker Agent (Days 1–2, ~2 Days)
 
@@ -296,14 +294,14 @@ Build the worker agent workflow in Joule Studio n8n.
 
 ```
 [Webhook trigger or Manual trigger]
-  Input: batch input JSON (paste from synthetic data above)
+  Input: batch input JSON (paste from synthetic data in section 6)
          ↓
 [Code node: "Return synthetic batch data"]
   Hardcodes the synthetic input values as if retrieved from SAP
   Output: {standard_quantity, unit, yield_rate, batch_characteristics, tolerance_band_pct}
          ↓
 [sapOrchestration: "Generate batch release recommendation"]
-  model: [select available model from generative AI hub]
+  model: [select available model from generative AI hub — Claude or equivalent]
   enableMasking: true
   enableFiltering: true
   systemPrompt: (see Worker System Prompt below)
@@ -337,11 +335,11 @@ Build the worker agent workflow in Joule Studio n8n.
   Input: {outcome: "COMMITTED"|"REJECTED", correlation_id, committed_value}
          ↓
 [If: outcome == "COMMITTED"?]
-    ├── YES → [Code node: log "Committer posted {{committed_value}} KG — worker performs no write-back"]
+    ├── YES → [Code node: log "Committer posted {{committed_value}} KG for {{batch_id}}" — worker performs no write-back]
     └── NO  → [Code node: log "REJECTED: nothing committed for {{batch_id}}"]
 ```
 
-**Worker system prompt:**
+**Worker System Prompt:**
 
 ```
 You are a batch release quantity recommendation agent for pharmaceutical manufacturing.
@@ -372,7 +370,7 @@ Test the worker in isolation before adding the supervisor:
 
 Fork `cis-supervisor-workflow-a-skeleton` from the Starter Kit and complete it for the batch release scenario.
 
-**Code node — Stage 1 deterministic checks:**
+**Code node — Stage 1 Deterministic Checks:**
 
 ```javascript
 // Inputs from callback payload:
@@ -397,12 +395,14 @@ if (unit.toUpperCase() !== "KG") {
 }
 
 // Magnitude sanity check: flag if more than 5× or less than 0.2× standard
+// (catches decimal point errors and metric ton / KG confusion)
 if (qty > standardQty * 5 || qty < standardQty * 0.2) {
   results.verdict = "REJECT";
   results.issues.push(`Magnitude anomaly: ${qty} KG vs standard ${standardQty} KG — possible unit confusion`);
 }
 
 // Tolerance deviation from reference calculation
+// Reference: standard_quantity × yield_rate
 const reference = standardQty * $input.first().json.input_state.yield_rate;
 const deviation = Math.abs(qty - reference) / reference;
 results.deviation_pct = (deviation * 100).toFixed(2);
@@ -421,7 +421,7 @@ if ((qty.toString().split('.')[1] || '').length > 2) {
 return [{ json: { ...results, reference_quantity: reference } }];
 ```
 
-**LLM critic system prompt (Stage 2):**
+**LLM Critic System Prompt (Stage 2):**
 
 ```
 You are a pharmaceutical batch release verification agent.
@@ -445,7 +445,7 @@ Output a JSON object with:
   reason: one sentence explaining your verdict
 ```
 
-**Routing logic (If/Switch node):**
+**Routing Logic (If/Switch Node):**
 
 ```
 Inputs: stage1_verdict, stage2_verdict, stage2_confidence, recommended_quantity
@@ -460,7 +460,7 @@ Branch conditions (evaluated in order):
   4. All pass → APPROVE
 ```
 
-**Task Center node configuration:**
+**Task Center Node Configuration:**
 
 ```
 subject: "Batch release blocked: {{recommended_quantity}} KG for {{batch_id}}"
@@ -478,6 +478,8 @@ customAttributes:
   - name: "Batch ID",            value: "{{batch_id}}"
 ```
 
+**Committer Write Node (APPROVE Branch):**
+
 On the APPROVE branch the supervisor acts as the **committer**: it performs the write to the system of record under its own (supervisor/committer) identity — the worker never writes. For the PoC, simulate the SoR write with a Code node (or issue a real `sapMcpClient`/OData call if an S/4HANA dev system is connected). Then write the audit trail record with `committed_by` set to the committer identity, and finally send an outcome notification (`COMMITTED`) back to the worker for logging only. The worker's own authorization holds no SoR write scope, so even a mis-wired worker cannot commit directly.
 
 ### Step 4: Integration Testing (Day 4, ~1 Day)
@@ -489,14 +491,16 @@ Wire worker and supervisor together. Run all six test cases from the Synthetic T
 -   Audit trail record is created with all required fields
 -   The committer (supervisor identity) performs the SoR write on APPROVE; the worker performs no write-back
 -   `sapAgent` outcome notification reaches the worker correctly and the worker logs the outcome
--   Supervisor/committer unavailability fail-safe: disable Supervisor Workflow A and verify the worker routes its recommendation to Task Center for human review
+-   Supervisor/committer unavailability fail-safe: disable Supervisor Workflow A and verify the worker routes its recommendation to Task Center for human review. Because the worker holds no SoR write scope (committer pattern), autonomous write-back is impossible by construction; the fail-safe ensures the recommendation still reaches a human rather than being dropped
+
+---
 
 
-<a name="loio26b38cc255374a2b922ef2818310392c__section_test_data"/>
+<a name="loiof3c25c157b5a4b5eb9a5b7cdaee4d1de__section_test_data"/>
 
 ## Synthetic Test Data
 
-Six input sets designed to exercise each routing branch.
+Six input sets designed to exercise each routing branch:
 
 ### Test Case 1 — Happy Path (Both Confirm, Approve)
 
@@ -554,28 +558,32 @@ Both stages confirm, but quantity exceeds the 2000 KG approval threshold. Expect
 
 Disable Supervisor Workflow A in the BAIP Agent Hub. Trigger the worker with Test Case 1 data. Expected: the worker routes its recommendation to Task Center for human review (fail-safe). The worker cannot write back — it holds no SoR write scope under the committer pattern — so nothing is committed. Re-enable Supervisor Workflow A after verifying.
 
+---
 
-<a name="loio26b38cc255374a2b922ef2818310392c__section_verification_checklist"/>
+
+<a name="loiof3c25c157b5a4b5eb9a5b7cdaee4d1de__section_checklist"/>
 
 ## Test Verification Checklist
 
 For each test case, verify:
 
--   Routing decision matches expected (approve / escalate / block)
--   Task Center task fires with correct priority
--   Task Center custom attributes contain all 9 fields with correct values
--   On APPROVE, the committer (supervisor identity) performs the SoR write; the worker performs no write-back
--   Audit trail `committed_by` attributes the write to the committer identity, not the worker
--   `sapAgent` outcome notification (COMMITTED) or rejection signal reaches the worker
--   Worker logs the outcome correctly (it does not itself commit or write back)
--   Audit trail record created for every invocation (including blocked ones)
--   Audit trail record contains all required fields (check against [Precision Guardrails](precision-guardrails-a116de6.md) audit trail field list)
--   Audit trail records cannot be modified (attempt UPDATE and verify failure)
--   For Test Case 4 (disagree): both stage verdicts are visible in the Task Center task
--   For Test Case 6 (supervisor unavailable): no autonomous write-back occurs
+-   [ ] Routing decision matches expected (approve / escalate / block)
+-   [ ] Task Center task fires with correct priority
+-   [ ] Task Center custom attributes contain all 9 fields with correct values
+-   [ ] On APPROVE, the committer (supervisor identity) performs the SoR write; the worker performs no write-back
+-   [ ] Audit trail `committed_by` attributes the write to the committer identity, not the worker
+-   [ ] `sapAgent` outcome notification (COMMITTED) or rejection signal reaches the worker
+-   [ ] Worker logs the outcome correctly (it does not itself commit or write back)
+-   [ ] Audit trail record created for every invocation (including blocked ones)
+-   [ ] Audit trail record contains all required fields (check against [Precision Guardrails](precision-guardrails-c279f4e.md) audit trail field list)
+-   [ ] Audit trail records cannot be modified (attempt UPDATE and verify failure)
+-   [ ] For Test Case 4 (disagree): both stage verdicts are visible in the Task Center task
+-   [ ] For Test Case 6 (supervisor unavailable): no autonomous write-back occurs
+
+---
 
 
-<a name="loio26b38cc255374a2b922ef2818310392c__section_demonstration_script"/>
+<a name="loiof3c25c157b5a4b5eb9a5b7cdaee4d1de__section_demo"/>
 
 ## Demonstration Script
 
@@ -636,265 +644,302 @@ Open the audit trail table. Show the four records from the demonstration — app
 
 > "Everything that happened in the last 20 minutes is in this table — what the agent proposed, what each verification stage said, what the human decided, what was ultimately committed, and the gap between the agent's proposal and the committed value. This is the ground-truth dataset that improves the agent over time."
 
+---
 
-<a name="loio26b38cc255374a2b922ef2818310392c__section_known_limitations"/>
 
-## Known Limitations
+<a name="loiof3c25c157b5a4b5eb9a5b7cdaee4d1de__section_limitations"/>
 
-**PoC Limitations and Mitigation Options**
+## Known Limitations of This PoC
+
+<br>
+
+**PoC Limitations and Remediation Paths**
 
 <table>
-<thead>
-<tr>
-<th valign="top">
-
-Limitation
-
-</th>
-<th valign="top">
-
-What It Means
-
-</th>
-<th valign="top">
-
-How to Address If Needed
-
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td valign="top">
+  <tr>
+    <th valign="top">Limitation</th>
+    <th valign="top">What It Means</th>
+    <th valign="top">How to Address If Needed</th>
+  </tr>
+  <tr>
+    <td valign="top">
 
 Synthetic data only
 
 </td>
-<td valign="top">
+    <td valign="top">
 
 Agent receives hardcoded batch data, not live SAP retrieval
 
 </td>
-<td valign="top">
+    <td valign="top">
 
 Connect `sapMcpClient` to a real S/4HANA dev system to demonstrate live data retrieval
 
 </td>
-</tr>
-<tr>
-<td valign="top">
+  </tr>
+  <tr>
+    <td valign="top">
 
 Injected outputs for failure test cases
 
 </td>
-<td valign="top">
+    <td valign="top">
 
 Test Cases 2–4 override the agent's output to ensure the failure mode is demonstrated
 
 </td>
-<td valign="top">
+    <td valign="top">
 
 Run with a real agent and prompt engineering to produce wrong outputs naturally (less reliable for demos)
 
 </td>
-</tr>
-<tr>
-<td valign="top">
+  </tr>
+  <tr>
+    <td valign="top">
 
 No Workflow B or C
 
 </td>
-<td valign="top">
+    <td valign="top">
 
 Telemetry monitoring and support relay are not demonstrated
 
 </td>
-<td valign="top">
+    <td valign="top">
 
-See Extension Options below
+See Extension Options section
 
 </td>
-</tr>
-<tr>
-<td valign="top">
+  </tr>
+  <tr>
+    <td valign="top">
 
 No multi-agent orchestration
 
 </td>
-<td valign="top">
+    <td valign="top">
 
 Single worker only
 
 </td>
-<td valign="top">
+    <td valign="top">
 
 Add a second worker and orchestrator as Extension Option C
 
 </td>
-</tr>
-<tr>
-<td valign="top">
+  </tr>
+  <tr>
+    <td valign="top">
 
 Task Center may be substituted
 
 </td>
-<td valign="top">
+    <td valign="top">
 
 If Task Center is not available, escalations go to a webhook log
 
 </td>
-<td valign="top">
+    <td valign="top">
 
 The UI experience of receiving and approving/rejecting a Task Center task is not shown
 
 </td>
-</tr>
-<tr>
-<td valign="top">
+  </tr>
+  <tr>
+    <td valign="top">
 
 BAIP graceful drain not tested
 
 </td>
-<td valign="top">
+    <td valign="top">
 
 In-flight transaction continuity during rollback is not demonstrated
 
 </td>
-<td valign="top">
+    <td valign="top">
 
 Requires a higher-volume test scenario beyond PoC scope
 
 </td>
-</tr>
-</tbody>
+  </tr>
 </table>
 
+---
 
-<a name="loio26b38cc255374a2b922ef2818310392c__section_extension_options"/>
+
+<a name="loiof3c25c157b5a4b5eb9a5b7cdaee4d1de__section_extensions"/>
 
 ## Extension Options
 
-If time permits after the minimal PoC is complete, the following extensions add demonstrable value in roughly increasing order of effort.
+If time permits after the minimal PoC is complete, the following extensions add demonstrable value in roughly increasing order of effort:
 
-**Extension A — Supervisor Workflow B (Telemetry Monitor, ~1 Day)**
-
+**Extension A — Supervisor Workflow B (Telemetry Monitor, ~1 Day)**  
 Deploy the `cis-supervisor-workflow-b-ref` Starter Kit workflow. Set it to a 1-minute schedule for demonstration purposes. Inject anomalous telemetry by running a burst of Test Case 2 inputs. Show Workflow B detecting the elevated rejection rate and firing a Task Center alert to the IT admin.
 
-**Extension B — Audit Trail Cost Fields (~2 Hours)**
-
+**Extension B — Audit Trail Cost Fields (~2 Hours)**  
 Add the four cost extension fields (`input_tokens`, `output_tokens`, `total_tokens_invocation`, `model_used`) to the audit trail Code node. After running all test cases, show the per-invocation token counts in the table and calculate cost-per-committed-output for the approved case.
 
-**Extension C — Second Worker + Shared Supervisor (Topology 3, ~3 Days)**
+**Extension C — Second Worker + Shared Supervisor (Topology 3, ~3 Days)**  
+Add a second worker (e.g., a deviation classification agent) and configure both workers to use the same Supervisor Workflow A (shared supervisor). Demonstrate that one supervisor can handle callbacks from two different workers, differentiating verification by `agent_identity`. Demonstrates [Multi-Agent Orchestration](multi-agent-orchestration-2f6e92e.md) Topology 3.
 
-Add a second worker (e.g., a deviation classification agent) and configure both workers to use the same Supervisor Workflow A (shared supervisor). Demonstrate that one supervisor can handle callbacks from two different workers, differentiating verification by `agent_identity`. Demonstrates the Shared Supervisor topology from [Multi-Agent Orchestration](multi-agent-orchestration-b97269e.md).
-
-**Extension D — Supervisor Workflow C (Support Relay, ~1 Day)**
-
+**Extension D — Supervisor Workflow C (Support Relay, ~1 Day)**  
 Deploy the `cis-supervisor-workflow-c-ref` Starter Kit workflow. Trigger it from Workflow B with a simulated anomaly event. Show the sanitization pass and the resulting SAP support ticket (or simulated ticket payload) with no business data.
 
+---
 
-<a name="loio26b38cc255374a2b922ef2818310392c__section_reference_table"/>
+
+<a name="loiof3c25c157b5a4b5eb9a5b7cdaee4d1de__section_reference"/>
 
 ## Reference
 
-**Concept Topics Referenced by This PoC**
+<br>
+
+**Chapter References for This PoC**
 
 <table>
-<thead>
-<tr>
-<th valign="top">
+  <tr>
+    <th valign="top">Chapter</th>
+    <th valign="top">What It Specifies for This PoC</th>
+  </tr>
+  <tr>
+    <td valign="top">
 
-Topic
-
-</th>
-<th valign="top">
-
-What It Specifies for This PoC
-
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td valign="top">
-
-[Agent Quality Framework](agent-quality-framework-09082f8.md)
+[Agent Quality Framework](agent-quality-framework-5ec914b.md)
 
 </td>
-<td valign="top">
+    <td valign="top">
 
-Judge verdict model (3-way C/I/N) — the LLM critic stage uses Complete/Incomplete/Not Applicable; Not Applicable is not emitted to OTel. Self-verification pattern — the logic inside Workflow A's two verification stages.
-
-</td>
-</tr>
-<tr>
-<td valign="top">
-
-[Supervisor Agent Pattern](supervisor-agent-pattern-0d90e5f.md)
+Judge verdict model (3-way C/I/N) — the LLM critic stage uses Complete/Incomplete/Not Applicable; Not Applicable is not emitted to OTel
 
 </td>
-<td valign="top">
+  </tr>
+  <tr>
+    <td valign="top">
 
-Supervisor Workflow A — the full execution pattern this PoC implements. Worker-supervisor communication — `sapAgent` non-blocking + Webhook callback. Supervisor governance and fail-safe default.
-
-</td>
-</tr>
-<tr>
-<td valign="top">
-
-[Precision Guardrails](precision-guardrails-a116de6.md)
+[Agent Quality Framework](agent-quality-framework-5ec914b.md)
 
 </td>
-<td valign="top">
+    <td valign="top">
+
+Self-verification pattern — the logic inside Workflow A's two verification stages
+
+</td>
+  </tr>
+  <tr>
+    <td valign="top">
+
+[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)
+
+</td>
+    <td valign="top">
+
+Supervisor Workflow A — the full execution pattern this PoC implements
+
+</td>
+  </tr>
+  <tr>
+    <td valign="top">
+
+[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)
+
+</td>
+    <td valign="top">
+
+Worker-supervisor communication — `sapAgent` non-blocking + Webhook callback
+
+</td>
+  </tr>
+  <tr>
+    <td valign="top">
+
+[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)
+
+</td>
+    <td valign="top">
+
+Supervisor governance and fail-safe default
+
+</td>
+  </tr>
+  <tr>
+    <td valign="top">
+
+[Precision Guardrails](precision-guardrails-c279f4e.md)
+
+</td>
+    <td valign="top">
 
 Audit trail schema — all fields the PoC must record
 
 </td>
-</tr>
-<tr>
-<td valign="top">
+  </tr>
+  <tr>
+    <td valign="top">
 
-[Joule Studio Build Map](joule-studio-build-map-6c4ecf5.md)
-
-</td>
-<td valign="top">
-
-Workflow A n8n implementation — node-by-node reference. Build sequence — the order in which to build and test.
+[Joule Studio Build Map](joule-studio-build-map-7de243e.md)
 
 </td>
-</tr>
-<tr>
-<td valign="top">
+    <td valign="top">
 
-[Production Operations](production-operations-168fd42.md)
+Workflow A n8n implementation — node-by-node reference
 
 </td>
-<td valign="top">
+  </tr>
+  <tr>
+    <td valign="top">
+
+[Joule Studio Build Map](joule-studio-build-map-7de243e.md)
+
+</td>
+    <td valign="top">
+
+Build sequence — the order in which to build and test
+
+</td>
+  </tr>
+  <tr>
+    <td valign="top">
+
+[Production Operations](production-operations-f963579.md)
+
+</td>
+    <td valign="top">
 
 Cost extension fields for the audit trail
 
 </td>
-</tr>
-<tr>
-<td valign="top">
+  </tr>
+  <tr>
+    <td valign="top">
 
-[Reusable Components and Reference Implementations](reusable-components-4ff1667.md)
+[Reusable Components](reusable-components-8a3dd4c.md)
 
 </td>
-<td valign="top">
+    <td valign="top">
 
 Starter Kit — `cis-supervisor-workflow-a-skeleton` and `cis-audit-trail-ddl.sql`
 
 </td>
-</tr>
-</tbody>
+  </tr>
 </table>
 
 **Related Information**  
 
+[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)
 
-[Joule Studio](https://help.sap.com/docs/JOULESTUDIO/7e496fe6f81f4975aec07d9c1cbd2aef/36d3e974446844a1b0ffb7af8fa9446c.html "SAP's AI-first development environment for building and deploying AI agents, intelligent apps, and automations.") :arrow_upper_right:
+[Agent Quality Framework](agent-quality-framework-5ec914b.md)
 
-[SAP AI Agent Hub — Plan and Build](https://help.sap.com/docs/AI_AGENT_HUB/225000cc2ce44a228b9534a0f1098a9b/e2a29b0c422e4aceadee658f4bbab71b.html "Guidance for planning which AI agents to build or adopt and avoiding duplication using the agent inventory.") :arrow_upper_right:
+[Precision Guardrails](precision-guardrails-c279f4e.md)
 
-[Developing with Joule Studio CLI](https://help.sap.com/docs/JOULESTUDIO/7e496fe6f81f4975aec07d9c1cbd2aef/a7bbbde0cf3b48f4a82a4403577a6b2c.html "Build Joule Studio solutions from a local IDE using the jl CLI, with full control over code structure and CI/CD integration.") :arrow_upper_right:
+[Joule Studio Build Map](joule-studio-build-map-7de243e.md)
+
+[Multi-Agent Orchestration](multi-agent-orchestration-2f6e92e.md)
+
+[Production Operations](production-operations-f963579.md)
+
+[Reusable Components](reusable-components-8a3dd4c.md)
+
+[SAP Generative AI Hub](https://help.sap.com/docs/sap-ai-core/generative-ai/generative-ai-hub "SAP Generative AI Hub: managed LLM integration within SAP AI Core for enterprise-grade model execution.") :arrow_upper_right:
+
+[Joule Studio Documentation](https://help.sap.com/docs/joule-studio "Joule Studio documentation hub covering agent development, workflows, and enterprise application building.") :arrow_upper_right:
