@@ -28,130 +28,46 @@ The Context Layer has evaluated multiple project tracking systems as KG inputs. 
 
 <table>
   <tr>
-    <th valign="top">
-Source
-
-    </th>
-    <th valign="top">
-Lifecycle Coverage
-
-    </th>
-    <th valign="top">
-KG Relevance
-
-    </th>
-    <th valign="top">
-Status
-
-    </th>
+    <th valign="top">Source</th>
+    <th valign="top">Lifecycle Coverage</th>
+    <th valign="top">KG Relevance</th>
+    <th valign="top">Status</th>
   </tr>
   <tr>
-    <td valign="top">
-**Cortex**
-
-    </td>
-    <td valign="top">
-Phase 1–5 (full)
-
-    </td>
-    <td valign="top">
-**Highest** — richest structured use-case data; primary Phase 1+2 candidate
-
-    </td>
-    <td valign="top">
-REST API confirmed; data volume to confirm (Ajay Tikare)
-
-    </td>
+    <td valign="top">**Cortex**</td>
+    <td valign="top">Phase 1–5 (full)</td>
+    <td valign="top">**Highest** — richest structured use-case data; primary Phase 1+2 candidate</td>
+    <td valign="top">REST API confirmed; data volume to confirm (Ajay Tikare)</td>
   </tr>
   <tr>
-    <td valign="top">
-CIS Project Tracker
-
-    </td>
-    <td valign="top">
-Phase 4–5 (delivery+)
-
-    </td>
-    <td valign="top">
-High — current anchor source; 96 projects in prototype
-
-    </td>
-    <td valign="top">
-API in development (~Dec 2026, Philipp Koehler)
-
-    </td>
+    <td valign="top">CIS Project Tracker</td>
+    <td valign="top">Phase 4–5 (delivery+)</td>
+    <td valign="top">High — current anchor source; 96 projects in prototype</td>
+    <td valign="top">API in development (~Dec 2026, Philipp Koehler)</td>
   </tr>
   <tr>
-    <td valign="top">
-MXP IAI Tool
-
-    </td>
-    <td valign="top">
-Phase 1–2 (pre-project)
-
-    </td>
-    <td valign="top">
-High — fills pre-project qualification gap; `mxp_opportunity_id` links to Cortex
-
-    </td>
-    <td valign="top">
-MCP + Joule Skill live; data model TBD
-
-    </td>
+    <td valign="top">MXP IAI Tool</td>
+    <td valign="top">Phase 1–2 (pre-project)</td>
+    <td valign="top">High — fills pre-project qualification gap; `mxp_opportunity_id` links to Cortex</td>
+    <td valign="top">MCP + Joule Skill live; data model TBD</td>
   </tr>
   <tr>
-    <td valign="top">
-CIS Git repos
-
-    </td>
-    <td valign="top">
-Phase 4–5 artifacts
-
-    </td>
-    <td valign="top">
-Phase 2 — direct access, not KG-ingested
-
-    </td>
-    <td valign="top">
-GitHub MCP PoC complete (CTXL-67, Oct 2026)
-
-    </td>
+    <td valign="top">CIS Git repos</td>
+    <td valign="top">Phase 4–5 artifacts</td>
+    <td valign="top">Phase 2 — direct access, not KG-ingested</td>
+    <td valign="top">GitHub MCP PoC complete (CTXL-67, Oct 2026)</td>
   </tr>
   <tr>
-    <td valign="top">
-SAP Cloud ALM
-
-    </td>
-    <td valign="top">
-Phase 4 (what was built)
-
-    </td>
-    <td valign="top">
-Phase 2 — requirements, scoping, test coverage per project
-
-    </td>
-    <td valign="top">
-Identified; EKG entity confirmed; access TBD
-
-    </td>
+    <td valign="top">SAP Cloud ALM</td>
+    <td valign="top">Phase 4 (what was built)</td>
+    <td valign="top">Phase 2 — requirements, scoping, test coverage per project</td>
+    <td valign="top">Identified; EKG entity confirmed; access TBD</td>
   </tr>
   <tr>
-    <td valign="top">
-EPPM, FELIPE, PEP
-
-    </td>
-    <td valign="top">
-Delivery structure, financials
-
-    </td>
-    <td valign="top">
-Phase 3
-
-    </td>
-    <td valign="top">
-Evaluated; for Delivery Intelligence (EP-14)
-
-    </td>
+    <td valign="top">EPPM, FELIPE, PEP</td>
+    <td valign="top">Delivery structure, financials</td>
+    <td valign="top">Phase 3</td>
+    <td valign="top">Evaluated; for Delivery Intelligence (EP-14)</td>
   </tr>
 </table>
 

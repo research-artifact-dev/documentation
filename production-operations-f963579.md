@@ -41,74 +41,29 @@ A deployed agent is not a single artifact — it is a coordinated set of version
     <th valign="top">Where It Is Versioned</th>
   </tr>
   <tr>
-    <td valign="top">
-Joule Studio workflow definition
-
-    </td>
-    <td valign="top">
-The workflow's node structure, routing logic, and wiring
-
-    </td>
-    <td valign="top">
-SAP AI Agent Hub / Joule Studio version history
-
-    </td>
+    <td valign="top">Joule Studio workflow definition</td>
+    <td valign="top">The workflow's node structure, routing logic, and wiring</td>
+    <td valign="top">SAP AI Agent Hub / Joule Studio version history</td>
   </tr>
   <tr>
-    <td valign="top">
-SAP Prompt Registry entry
-
-    </td>
-    <td valign="top">
-The agent's system prompt (and critic prompts for supervisor)
-
-    </td>
-    <td valign="top">
-Git repo + workflow parameter (current); SAP Prompt Registry when `promptTemplate` source ships
-
-    </td>
+    <td valign="top">SAP Prompt Registry entry</td>
+    <td valign="top">The agent's system prompt (and critic prompts for supervisor)</td>
+    <td valign="top">Git repo + workflow parameter (current); SAP Prompt Registry when `promptTemplate` source ships</td>
   </tr>
   <tr>
-    <td valign="top">
-Model selection
-
-    </td>
-    <td valign="top">
-Which LLM is used in each `sapOrchestration` node
-
-    </td>
-    <td valign="top">
-`sapOrchestration` model parameter (BAIP configuration)
-
-    </td>
+    <td valign="top">Model selection</td>
+    <td valign="top">Which LLM is used in each `sapOrchestration` node</td>
+    <td valign="top">`sapOrchestration` model parameter (BAIP configuration)</td>
   </tr>
   <tr>
-    <td valign="top">
-Threshold configuration
-
-    </td>
-    <td valign="top">
-Human approval thresholds, anomaly detection baselines, tolerance bands
-
-    </td>
-    <td valign="top">
-n8n workflow variables (`$vars`) in Joule Studio UI — no redeployment required to change
-
-    </td>
+    <td valign="top">Threshold configuration</td>
+    <td valign="top">Human approval thresholds, anomaly detection baselines, tolerance bands</td>
+    <td valign="top">n8n workflow variables (`$vars`) in Joule Studio UI — no redeployment required to change</td>
   </tr>
   <tr>
-    <td valign="top">
-Authorization scope
-
-    </td>
-    <td valign="top">
-Which tools and entities the agent can access
-
-    </td>
-    <td valign="top">
-BAIP application registration (policy assignments)
-
-    </td>
+    <td valign="top">Authorization scope</td>
+    <td valign="top">Which tools and entities the agent can access</td>
+    <td valign="top">BAIP application registration (policy assignments)</td>
   </tr>
 </table>
 
@@ -151,102 +106,39 @@ Not all changes carry the same rollback risk. Classify changes before deploying:
     <th valign="top">Required Before Deploying</th>
   </tr>
   <tr>
-    <td valign="top">
-Threshold adjustment
-
-    </td>
-    <td valign="top">
-Low
-
-    </td>
-    <td valign="top">
-Process owner approval; log in audit trail
-
-    </td>
+    <td valign="top">Threshold adjustment</td>
+    <td valign="top">Low</td>
+    <td valign="top">Process owner approval; log in audit trail</td>
   </tr>
   <tr>
-    <td valign="top">
-Prompt update (minor wording) — **SAP Prompt Registry path** *(future — when `promptTemplate` ships)*
-
-    </td>
-    <td valign="top">
-Medium
-
-    </td>
-    <td valign="top">
-Eval run against existing test suite; review diff
-
-    </td>
+    <td valign="top">Prompt update (minor wording) — **SAP Prompt Registry path** *(future — when `promptTemplate` ships)*</td>
+    <td valign="top">Medium</td>
+    <td valign="top">Eval run against existing test suite; review diff</td>
   </tr>
   <tr>
-    <td valign="top">
-Prompt update (minor wording) — **inline prompt fallback path**
-
-    </td>
-    <td valign="top">
-High
-
-    </td>
-    <td valign="top">
-Full eval run; workflow redeployment required; treat as Workflow structure change
-
-    </td>
+    <td valign="top">Prompt update (minor wording) — **inline prompt fallback path**</td>
+    <td valign="top">High</td>
+    <td valign="top">Full eval run; workflow redeployment required; treat as Workflow structure change</td>
   </tr>
   <tr>
-    <td valign="top">
-Prompt update (structural change to output schema)
-
-    </td>
-    <td valign="top">
-High
-
-    </td>
-    <td valign="top">
-Full eval run; boundary condition tests; EAC re-validation
-
-    </td>
+    <td valign="top">Prompt update (structural change to output schema)</td>
+    <td valign="top">High</td>
+    <td valign="top">Full eval run; boundary condition tests; EAC re-validation</td>
   </tr>
   <tr>
-    <td valign="top">
-Model version change
-
-    </td>
-    <td valign="top">
-High
-
-    </td>
-    <td valign="top">
-Full eval run; compare Dimension 1 metrics before/after
-
-    </td>
+    <td valign="top">Model version change</td>
+    <td valign="top">High</td>
+    <td valign="top">Full eval run; compare Dimension 1 metrics before/after</td>
   </tr>
   <tr>
-    <td valign="top">
-Workflow structure change
-
-    </td>
-    <td valign="top">
-High
-
-    </td>
-    <td valign="top">
-Full eval run; security concept update; process owner review
-
-    </td>
+    <td valign="top">Workflow structure change</td>
+    <td valign="top">High</td>
+    <td valign="top">Full eval run; security concept update; process owner review</td>
   </tr>
   <tr>
-    <td valign="top">
-Authorization scope change
-
-    </td>
-    <td valign="top">
-Very high
-
-    </td>
-    <td valign="top">
-DPCE (Data Protection and Compliance Engineering) review; CA assessment if scope expands
-
-    </td>
+    <td valign="top">Authorization scope change</td>
+    <td valign="top">Very high</td>
+    <td valign="top">DPCE (Data Protection and Compliance Engineering) review; CA assessment if scope expands</td>
   </tr>
 </table>
 
@@ -284,74 +176,29 @@ A rollback is warranted when production quality metrics show a confirmed regress
     <th valign="top">Source</th>
   </tr>
   <tr>
-    <td valign="top">
-Human override rate increase
-
-    </td>
-    <td valign="top">
-> 20 percentage points above pre-deployment baseline
-
-    </td>
-    <td valign="top">
-Audit trail `delta` field ([Precision Guardrails](precision-guardrails-c279f4e.md))
-
-    </td>
+    <td valign="top">Human override rate increase</td>
+    <td valign="top">> 20 percentage points above pre-deployment baseline</td>
+    <td valign="top">Audit trail `delta` field ([Precision Guardrails](precision-guardrails-c279f4e.md))</td>
   </tr>
   <tr>
-    <td valign="top">
-Verification rejection rate increase
-
-    </td>
-    <td valign="top">
-> 15 percentage points above pre-deployment baseline
-
-    </td>
-    <td valign="top">
-Supervisor Workflow A telemetry
-
-    </td>
+    <td valign="top">Verification rejection rate increase</td>
+    <td valign="top">> 15 percentage points above pre-deployment baseline</td>
+    <td valign="top">Supervisor Workflow A telemetry</td>
   </tr>
   <tr>
-    <td valign="top">
-Process KPI degradation
-
-    </td>
-    <td valign="top">
-> 20% below pre-deployment baseline
-
-    </td>
-    <td valign="top">
-Process owner report or Agent Hub process KPI tracking
-
-    </td>
+    <td valign="top">Process KPI degradation</td>
+    <td valign="top">> 20% below pre-deployment baseline</td>
+    <td valign="top">Process owner report or Agent Hub process KPI tracking</td>
   </tr>
   <tr>
-    <td valign="top">
-Structured output format failures
-
-    </td>
-    <td valign="top">
-> 5% of invocations producing malformed output
-
-    </td>
-    <td valign="top">
-BAIP harness error rate telemetry
-
-    </td>
+    <td valign="top">Structured output format failures</td>
+    <td valign="top">> 5% of invocations producing malformed output</td>
+    <td valign="top">BAIP harness error rate telemetry</td>
   </tr>
   <tr>
-    <td valign="top">
-LLM refusal rate
-
-    </td>
-    <td valign="top">
-Any non-zero refusal rate in production (zero expected baseline)
-
-    </td>
-    <td valign="top">
-SAP Cloud ALM error classification
-
-    </td>
+    <td valign="top">LLM refusal rate</td>
+    <td valign="top">Any non-zero refusal rate in production (zero expected baseline)</td>
+    <td valign="top">SAP Cloud ALM error classification</td>
   </tr>
 </table>
 
@@ -421,24 +268,12 @@ Who authorizes a rollback depends on the deployment topology ([CIS CoE Operation
     <th valign="top">Rollback Authorization</th>
   </tr>
   <tr>
-    <td valign="top">
-Customer tenant (Topology A)
-
-    </td>
-    <td valign="top">
-Customer IT admin authorizes; CIS T&O proposes and may execute with consent
-
-    </td>
+    <td valign="top">Customer tenant (Topology A)</td>
+    <td valign="top">Customer IT admin authorizes; CIS T&O proposes and may execute with consent</td>
   </tr>
   <tr>
-    <td valign="top">
-SAP managed tenant (Topology B)
-
-    </td>
-    <td valign="top">
-CIS T&O can execute rollback directly as the operator; notify customer
-
-    </td>
+    <td valign="top">SAP managed tenant (Topology B)</td>
+    <td valign="top">CIS T&O can execute rollback directly as the operator; notify customer</td>
   </tr>
 </table>
 
@@ -554,102 +389,39 @@ Token consumption is not just a billing concern — it is a quality and operatio
     <th valign="top">Alert Threshold</th>
   </tr>
   <tr>
-    <td valign="top">
-Input tokens per invocation
-
-    </td>
-    <td valign="top">
-Context size; grounding data volume
-
-    </td>
-    <td valign="top">
-> 2× p95 baseline for 5 consecutive invocations
-
-    </td>
+    <td valign="top">Input tokens per invocation</td>
+    <td valign="top">Context size; grounding data volume</td>
+    <td valign="top">> 2× p95 baseline for 5 consecutive invocations</td>
   </tr>
   <tr>
-    <td valign="top">
-Output tokens per invocation
-
-    </td>
-    <td valign="top">
-Response verbosity; structured output completeness
-
-    </td>
-    <td valign="top">
-> 3× p95 baseline for 3 consecutive invocations
-
-    </td>
+    <td valign="top">Output tokens per invocation</td>
+    <td valign="top">Response verbosity; structured output completeness</td>
+    <td valign="top">> 3× p95 baseline for 3 consecutive invocations</td>
   </tr>
   <tr>
-    <td valign="top">
-Total tokens per invocation
-
-    </td>
-    <td valign="top">
-Composite cost signal
-
-    </td>
-    <td valign="top">
-> 3× p95 baseline (runaway indicator)
-
-    </td>
+    <td valign="top">Total tokens per invocation</td>
+    <td valign="top">Composite cost signal</td>
+    <td valign="top">> 3× p95 baseline (runaway indicator)</td>
   </tr>
   <tr>
-    <td valign="top">
-Cost per invocation
-
-    </td>
-    <td valign="top">
-Token count × model price rate
-
-    </td>
-    <td valign="top">
-> 3× p95 baseline
-
-    </td>
+    <td valign="top">Cost per invocation</td>
+    <td valign="top">Token count × model price rate</td>
+    <td valign="top">> 3× p95 baseline</td>
   </tr>
   <tr>
-    <td valign="top">
-Cost per committed output
-
-    </td>
-    <td valign="top">
-Total cost ÷ outputs successfully written to system of record
-
-    </td>
-    <td valign="top">
-Trend upward > 30% over 30-day window
-
-    </td>
+    <td valign="top">Cost per committed output</td>
+    <td valign="top">Total cost ÷ outputs successfully written to system of record</td>
+    <td valign="top">Trend upward > 30% over 30-day window</td>
   </tr>
   <tr>
-    <td valign="top">
-Cost per escalation
-
-    </td>
-    <td valign="top">
-Total cost ÷ escalations to sapTaskCenter
-
-    </td>
-    <td valign="top">
-High ratio = agent is consuming tokens before failing; needs review
-
-    </td>
+    <td valign="top">Cost per escalation</td>
+    <td valign="top">Total cost ÷ escalations to sapTaskCenter</td>
+    <td valign="top">High ratio = agent is consuming tokens before failing; needs review</td>
   </tr>
   <tr>
-    <td valign="top">
-Daily total cost
-
-    </td>
-    <td valign="top">
-Budget tracking
-
-    </td>
-    <td valign="top">
-> 150% of expected daily budget (alert IT admin)
-
-    </td>
+    <td valign="top">Daily total cost</td>
+    <td valign="top">Budget tracking</td>
+    <td valign="top">> 150% of expected daily budget (alert IT admin)</td>
   </tr>
 </table>
 
@@ -676,46 +448,19 @@ Token consumption is the internal operational signal for cost monitoring. The co
     <th valign="top">Net Price Range (EUR)</th>
   </tr>
   <tr>
-    <td valign="top">
-Basic (simple lookups, single tool calls, content retrieval)
-
-    </td>
-    <td valign="top">
-0.005
-
-    </td>
-    <td valign="top">
-€0.013–€0.035
-
-    </td>
+    <td valign="top">Basic (simple lookups, single tool calls, content retrieval)</td>
+    <td valign="top">0.005</td>
+    <td valign="top">€0.013–€0.035</td>
   </tr>
   <tr>
-    <td valign="top">
-Standard (multi-tool orchestration, moderate reasoning)
-
-    </td>
-    <td valign="top">
-0.010
-
-    </td>
-    <td valign="top">
-€0.026–€0.070
-
-    </td>
+    <td valign="top">Standard (multi-tool orchestration, moderate reasoning)</td>
+    <td valign="top">0.010</td>
+    <td valign="top">€0.026–€0.070</td>
   </tr>
   <tr>
-    <td valign="top">
-Advanced (complex reasoning, multi-system orchestration, voice)
-
-    </td>
-    <td valign="top">
-0.025
-
-    </td>
-    <td valign="top">
-€0.066–€0.175
-
-    </td>
+    <td valign="top">Advanced (complex reasoning, multi-system orchestration, voice)</td>
+    <td valign="top">0.025</td>
+    <td valign="top">€0.066–€0.175</td>
   </tr>
 </table>
 
@@ -785,44 +530,20 @@ The audit trail ([Precision Guardrails](precision-guardrails-c279f4e.md)) should
     <th valign="top">Content</th>
   </tr>
   <tr>
-    <td valign="top">
-`input_tokens`
-
-    </td>
-    <td valign="top">
-Input token count for the primary `sapOrchestration` call in this invocation
-
-    </td>
+    <td valign="top">`input_tokens`</td>
+    <td valign="top">Input token count for the primary `sapOrchestration` call in this invocation</td>
   </tr>
   <tr>
-    <td valign="top">
-`output_tokens`
-
-    </td>
-    <td valign="top">
-Output token count for the primary `sapOrchestration` call
-
-    </td>
+    <td valign="top">`output_tokens`</td>
+    <td valign="top">Output token count for the primary `sapOrchestration` call</td>
   </tr>
   <tr>
-    <td valign="top">
-`total_tokens_invocation`
-
-    </td>
-    <td valign="top">
-Sum of all `sapOrchestration` calls in this invocation (worker + critic)
-
-    </td>
+    <td valign="top">`total_tokens_invocation`</td>
+    <td valign="top">Sum of all `sapOrchestration` calls in this invocation (worker + critic)</td>
   </tr>
   <tr>
-    <td valign="top">
-`model_used`
-
-    </td>
-    <td valign="top">
-Model identifier used in this invocation
-
-    </td>
+    <td valign="top">`model_used`</td>
+    <td valign="top">Model identifier used in this invocation</td>
   </tr>
 </table>
 
@@ -869,60 +590,24 @@ FDE engagements move through a predictable sequence of environments before reach
     <th valign="top">Who Operates</th>
   </tr>
   <tr>
-    <td valign="top">
-Developer sandbox
-
-    </td>
-    <td valign="top">
-Initial build, rapid iteration, no governance constraints
-
-    </td>
-    <td valign="top">
-FDE Application Engineer
-
-    </td>
+    <td valign="top">Developer sandbox</td>
+    <td valign="top">Initial build, rapid iteration, no governance constraints</td>
+    <td valign="top">FDE Application Engineer</td>
   </tr>
   <tr>
-    <td valign="top">
-Internal test
-
-    </td>
-    <td valign="top">
-Integration testing, eval runs, security review
-
-    </td>
-    <td valign="top">
-FDE team (all roles)
-
-    </td>
+    <td valign="top">Internal test</td>
+    <td valign="top">Integration testing, eval runs, security review</td>
+    <td valign="top">FDE team (all roles)</td>
   </tr>
   <tr>
-    <td valign="top">
-Customer non-production (EAC)
-
-    </td>
-    <td valign="top">
-Customer validation with Early Adopter Care contacts; behavioral baseline establishment
-
-    </td>
-    <td valign="top">
-FDE team + customer IT admin
-
-    </td>
+    <td valign="top">Customer non-production (EAC)</td>
+    <td valign="top">Customer validation with Early Adopter Care contacts; behavioral baseline establishment</td>
+    <td valign="top">FDE team + customer IT admin</td>
   </tr>
   <tr>
-    <td valign="top">
-Customer production
-
-    </td>
-    <td valign="top">
-Live operation; handover complete
-
-    </td>
-    <td valign="top">
-Customer IT admin + CIS T&O (per [CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md))
-
-    </td>
+    <td valign="top">Customer production</td>
+    <td valign="top">Live operation; handover complete</td>
+    <td valign="top">Customer IT admin + CIS T&O (per [CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md))</td>
   </tr>
 </table>
 
@@ -940,184 +625,64 @@ Customer IT admin + CIS T&O (per [CIS CoE Operations Model](cis-coe-operations-m
     <th valign="top">Notes</th>
   </tr>
   <tr>
-    <td valign="top">
-Joule Studio workflow definition
-
-    </td>
-    <td valign="top">
-Yes — export
-
-    </td>
-    <td valign="top">
-Workflow export from source env; import in target env
-
-    </td>
-    <td valign="top">
-Credentials are NOT included in exports — re-provision per environment
-
-    </td>
+    <td valign="top">Joule Studio workflow definition</td>
+    <td valign="top">Yes — export</td>
+    <td valign="top">Workflow export from source env; import in target env</td>
+    <td valign="top">Credentials are NOT included in exports — re-provision per environment</td>
   </tr>
   <tr>
-    <td valign="top">
-SAP Prompt Registry entries
-
-    </td>
-    <td valign="top">
-Yes — promote
-
-    </td>
-    <td valign="top">
-Create new version in Registry with env tag; reference by name in workflow
-
-    </td>
-    <td valign="top">
-Use env-tagged versions: `agent-name-prompt-dev`, `...-test`, `...-prod`
-
-    </td>
+    <td valign="top">SAP Prompt Registry entries</td>
+    <td valign="top">Yes — promote</td>
+    <td valign="top">Create new version in Registry with env tag; reference by name in workflow</td>
+    <td valign="top">Use env-tagged versions: `agent-name-prompt-dev`, `...-test`, `...-prod`</td>
   </tr>
   <tr>
-    <td valign="top">
-Eval test suite
-
-    </td>
-    <td valign="top">
-Yes — same suite in all envs
-
-    </td>
-    <td valign="top">
-Git-versioned alongside the concept; runs unchanged in each environment
-
-    </td>
-    <td valign="top">
-Synthetic test data must be available in each environment
-
-    </td>
+    <td valign="top">Eval test suite</td>
+    <td valign="top">Yes — same suite in all envs</td>
+    <td valign="top">Git-versioned alongside the concept; runs unchanged in each environment</td>
+    <td valign="top">Synthetic test data must be available in each environment</td>
   </tr>
   <tr>
-    <td valign="top">
-BAIP application registrations (agent identities)
-
-    </td>
-    <td valign="top">
-No — re-create
-
-    </td>
-    <td valign="top">
-New registration per environment
-
-    </td>
-    <td valign="top">
-Each environment needs a separate identity with appropriate scoped authorizations
-
-    </td>
+    <td valign="top">BAIP application registrations (agent identities)</td>
+    <td valign="top">No — re-create</td>
+    <td valign="top">New registration per environment</td>
+    <td valign="top">Each environment needs a separate identity with appropriate scoped authorizations</td>
   </tr>
   <tr>
-    <td valign="top">
-Authorization scope definitions
-
-    </td>
-    <td valign="top">
-No — re-define
-
-    </td>
-    <td valign="top">
-Tighter scope in production than in dev/test; prod scope reviewed and approved
-
-    </td>
-    <td valign="top">
-Dev may have broader read access for debugging; prod should be minimum necessary
-
-    </td>
+    <td valign="top">Authorization scope definitions</td>
+    <td valign="top">No — re-define</td>
+    <td valign="top">Tighter scope in production than in dev/test; prod scope reviewed and approved</td>
+    <td valign="top">Dev may have broader read access for debugging; prod should be minimum necessary</td>
   </tr>
   <tr>
-    <td valign="top">
-Threshold configuration parameters
-
-    </td>
-    <td valign="top">
-No — re-set
-
-    </td>
-    <td valign="top">
-Copy dev values as starting point; adjust test values based on eval results; calibrate prod values from EAC behavioral data
-
-    </td>
-    <td valign="top">
-Never copy dev thresholds directly to production
-
-    </td>
+    <td valign="top">Threshold configuration parameters</td>
+    <td valign="top">No — re-set</td>
+    <td valign="top">Copy dev values as starting point; adjust test values based on eval results; calibrate prod values from EAC behavioral data</td>
+    <td valign="top">Never copy dev thresholds directly to production</td>
   </tr>
   <tr>
-    <td valign="top">
-HANA Cloud connection credentials
-
-    </td>
-    <td valign="top">
-No — re-provision
-
-    </td>
-    <td valign="top">
-New service credentials per environment
-
-    </td>
-    <td valign="top">
-Never copy credentials between environments
-
-    </td>
+    <td valign="top">HANA Cloud connection credentials</td>
+    <td valign="top">No — re-provision</td>
+    <td valign="top">New service credentials per environment</td>
+    <td valign="top">Never copy credentials between environments</td>
   </tr>
   <tr>
-    <td valign="top">
-Shared state store schema
-
-    </td>
-    <td valign="top">
-No — re-create
-
-    </td>
-    <td valign="top">
-DDL script creates the schema; initial state is empty in each environment
-
-    </td>
-    <td valign="top">
-State does NOT migrate — each environment builds its own baseline from scratch
-
-    </td>
+    <td valign="top">Shared state store schema</td>
+    <td valign="top">No — re-create</td>
+    <td valign="top">DDL script creates the schema; initial state is empty in each environment</td>
+    <td valign="top">State does NOT migrate — each environment builds its own baseline from scratch</td>
   </tr>
   <tr>
-    <td valign="top">
-Audit trail table schema
-
-    </td>
-    <td valign="top">
-No — re-create
-
-    </td>
-    <td valign="top">
-Same DDL, empty table per environment
-
-    </td>
-    <td valign="top">
-Audit records from lower environments are NOT migrated to production
-
-    </td>
+    <td valign="top">Audit trail table schema</td>
+    <td valign="top">No — re-create</td>
+    <td valign="top">Same DDL, empty table per environment</td>
+    <td valign="top">Audit records from lower environments are NOT migrated to production</td>
   </tr>
   <tr>
-    <td valign="top">
-Supervisor Workflow B baseline
-
-    </td>
-    <td valign="top">
-No — rebuild
-
-    </td>
-    <td valign="top">
-Allow 48–72 hours of observation in new environment before enabling anomaly alerts
-
-    </td>
-    <td valign="top">
-Imported baseline from prior environment is invalid in new environment
-
-    </td>
+    <td valign="top">Supervisor Workflow B baseline</td>
+    <td valign="top">No — rebuild</td>
+    <td valign="top">Allow 48–72 hours of observation in new environment before enabling anomaly alerts</td>
+    <td valign="top">Imported baseline from prior environment is invalid in new environment</td>
   </tr>
 </table>
 
@@ -1175,136 +740,46 @@ Threshold parameters:
     <th valign="top">Production</th>
   </tr>
   <tr>
-    <td valign="top">
-SAP system endpoint
-
-    </td>
-    <td valign="top">
-Dev S/4HANA
-
-    </td>
-    <td valign="top">
-Test S/4HANA
-
-    </td>
-    <td valign="top">
-Customer non-prod S/4HANA
-
-    </td>
-    <td valign="top">
-Customer prod S/4HANA
-
-    </td>
+    <td valign="top">SAP system endpoint</td>
+    <td valign="top">Dev S/4HANA</td>
+    <td valign="top">Test S/4HANA</td>
+    <td valign="top">Customer non-prod S/4HANA</td>
+    <td valign="top">Customer prod S/4HANA</td>
   </tr>
   <tr>
-    <td valign="top">
-Approval threshold
-
-    </td>
-    <td valign="top">
-Permissive (for testing)
-
-    </td>
-    <td valign="top">
-Mid-range (for eval coverage)
-
-    </td>
-    <td valign="top">
-Calibrated from initial observation
-
-    </td>
-    <td valign="top">
-Calibrated from EAC baseline
-
-    </td>
+    <td valign="top">Approval threshold</td>
+    <td valign="top">Permissive (for testing)</td>
+    <td valign="top">Mid-range (for eval coverage)</td>
+    <td valign="top">Calibrated from initial observation</td>
+    <td valign="top">Calibrated from EAC baseline</td>
   </tr>
   <tr>
-    <td valign="top">
-Prompt Registry version
-
-    </td>
-    <td valign="top">
-`dev` tagged version
-
-    </td>
-    <td valign="top">
-`test` tagged version
-
-    </td>
-    <td valign="top">
-`uat` or `v1.0-rc`
-
-    </td>
-    <td valign="top">
-`v1.0` or later
-
-    </td>
+    <td valign="top">Prompt Registry version</td>
+    <td valign="top">`dev` tagged version</td>
+    <td valign="top">`test` tagged version</td>
+    <td valign="top">`uat` or `v1.0-rc`</td>
+    <td valign="top">`v1.0` or later</td>
   </tr>
   <tr>
-    <td valign="top">
-Task Center recipient
-
-    </td>
-    <td valign="top">
-FDE engineer userId
-
-    </td>
-    <td valign="top">
-FDE team group
-
-    </td>
-    <td valign="top">
-Customer process owner (UAT)
-
-    </td>
-    <td valign="top">
-Customer process owner (prod)
-
-    </td>
+    <td valign="top">Task Center recipient</td>
+    <td valign="top">FDE engineer userId</td>
+    <td valign="top">FDE team group</td>
+    <td valign="top">Customer process owner (UAT)</td>
+    <td valign="top">Customer process owner (prod)</td>
   </tr>
   <tr>
-    <td valign="top">
-Anomaly detection thresholds
-
-    </td>
-    <td valign="top">
-Not active in dev sandbox
-
-    </td>
-    <td valign="top">
-Conservative (broad detection for testing)
-
-    </td>
-    <td valign="top">
-Calibrated after 48h observation
-
-    </td>
-    <td valign="top">
-Calibrated from EAC baseline
-
-    </td>
+    <td valign="top">Anomaly detection thresholds</td>
+    <td valign="top">Not active in dev sandbox</td>
+    <td valign="top">Conservative (broad detection for testing)</td>
+    <td valign="top">Calibrated after 48h observation</td>
+    <td valign="top">Calibrated from EAC baseline</td>
   </tr>
   <tr>
-    <td valign="top">
-Audit trail retention
-
-    </td>
-    <td valign="top">
-Short (dev data)
-
-    </td>
-    <td valign="top">
-Medium (test cycles)
-
-    </td>
-    <td valign="top">
-Per regulatory requirement (EAC data may be real)
-
-    </td>
-    <td valign="top">
-Per regulatory requirement (confirmed with compliance team)
-
-    </td>
+    <td valign="top">Audit trail retention</td>
+    <td valign="top">Short (dev data)</td>
+    <td valign="top">Medium (test cycles)</td>
+    <td valign="top">Per regulatory requirement (EAC data may be real)</td>
+    <td valign="top">Per regulatory requirement (confirmed with compliance team)</td>
   </tr>
 </table>
 
@@ -1409,200 +884,74 @@ Every agent developed in an FDE sprint that will be productized as a commercial 
     <th valign="top">FDE Implication</th>
   </tr>
   <tr>
-    <td valign="top">
-TR1
-
-    </td>
-    <td valign="top">
-A2A Server exposure
-
-    </td>
-    <td valign="top">
-Agent must expose an A2A protocol endpoint. Required for eval harness integration ([Agent Evaluation](agent-evaluation-65fd098.md)) and ecosystem interoperability
-
-    </td>
+    <td valign="top">TR1</td>
+    <td valign="top">A2A Server exposure</td>
+    <td valign="top">Agent must expose an A2A protocol endpoint. Required for eval harness integration ([Agent Evaluation](agent-evaluation-65fd098.md)) and ecosystem interoperability</td>
   </tr>
   <tr>
-    <td valign="top">
-TR2
-
-    </td>
-    <td valign="top">
-AppFND (Application Foundation) runtime
-
-    </td>
-    <td valign="top">
-Agents run on BTP Kyma via AppFND. A formal exception process exists but requires justification
-
-    </td>
+    <td valign="top">TR2</td>
+    <td valign="top">AppFND (Application Foundation) runtime</td>
+    <td valign="top">Agents run on BTP Kyma via AppFND. A formal exception process exists but requires justification</td>
   </tr>
   <tr>
-    <td valign="top">
-TR3
-
-    </td>
-    <td valign="top">
-IAS app2app tokens
-
-    </td>
-    <td valign="top">
-No API keys or username/password for agent-to-agent calls. IAS app2app tokens throughout
-
-    </td>
+    <td valign="top">TR3</td>
+    <td valign="top">IAS app2app tokens</td>
+    <td valign="top">No API keys or username/password for agent-to-agent calls. IAS app2app tokens throughout</td>
   </tr>
   <tr>
-    <td valign="top">
-TR4
-
-    </td>
-    <td valign="top">
-Unified Services onboarding
-
-    </td>
-    <td valign="top">
-SAP-managed provisioning via Unified Metadata Service (UMS). Required for Agent Gateway routing
-
-    </td>
+    <td valign="top">TR4</td>
+    <td valign="top">Unified Services onboarding</td>
+    <td valign="top">SAP-managed provisioning via Unified Metadata Service (UMS). Required for Agent Gateway routing</td>
   </tr>
   <tr>
-    <td valign="top">
-TR5
-
-    </td>
-    <td valign="top">
-UCL onboarding
-
-    </td>
-    <td valign="top">
-SAP-managed integrations. Required for production deployment
-
-    </td>
+    <td valign="top">TR5</td>
+    <td valign="top">UCL onboarding</td>
+    <td valign="top">SAP-managed integrations. Required for production deployment</td>
   </tr>
   <tr>
-    <td valign="top">
-TR6
-
-    </td>
-    <td valign="top">
-ORD with `sap:ai:v1` policy level
-
-    </td>
-    <td valign="top">
-ORD endpoint published with AI policy level; agent namespace must use `sap.agt*` pattern. Without this, the agent is invisible to Agent Gateway
-
-    </td>
+    <td valign="top">TR6</td>
+    <td valign="top">ORD with `sap:ai:v1` policy level</td>
+    <td valign="top">ORD endpoint published with AI policy level; agent namespace must use `sap.agt*` pattern. Without this, the agent is invisible to Agent Gateway</td>
   </tr>
   <tr>
-    <td valign="top">
-TR7
-
-    </td>
-    <td valign="top">
-SPII for Agent Gateway
-
-    </td>
-    <td valign="top">
-Bi-directional IAS app2app trust for Agent Gateway. Required for tool invocation routing
-
-    </td>
+    <td valign="top">TR7</td>
+    <td valign="top">SPII for Agent Gateway</td>
+    <td valign="top">Bi-directional IAS app2app trust for Agent Gateway. Required for tool invocation routing</td>
   </tr>
   <tr>
-    <td valign="top">
-TR8
-
-    </td>
-    <td valign="top">
-BTP Test Blueprint
-
-    </td>
-    <td valign="top">
-Test blueprint covering functional, security, and performance validation
-
-    </td>
+    <td valign="top">TR8</td>
+    <td valign="top">BTP Test Blueprint</td>
+    <td valign="top">Test blueprint covering functional, security, and performance validation</td>
   </tr>
   <tr>
-    <td valign="top">
-TR9
-
-    </td>
-    <td valign="top">
-Offline + online evaluations (aeval)
-
-    </td>
-    <td valign="top">
-Offline eval suite in CI before each release; online eval monitoring active in production. See [Agent Evaluation](agent-evaluation-65fd098.md)
-
-    </td>
+    <td valign="top">TR9</td>
+    <td valign="top">Offline + online evaluations (aeval)</td>
+    <td valign="top">Offline eval suite in CI before each release; online eval monitoring active in production. See [Agent Evaluation](agent-evaluation-65fd098.md)</td>
   </tr>
   <tr>
-    <td valign="top">
-TR10
-
-    </td>
-    <td valign="top">
-Agent Gateway for all tool/agent calls
-
-    </td>
-    <td valign="top">
-Every tool invocation and agent-to-agent call routes through Agent Gateway — no direct external API calls bypass governance
-
-    </td>
+    <td valign="top">TR10</td>
+    <td valign="top">Agent Gateway for all tool/agent calls</td>
+    <td valign="top">Every tool invocation and agent-to-agent call routes through Agent Gateway — no direct external API calls bypass governance</td>
   </tr>
   <tr>
-    <td valign="top">
-TR11
-
-    </td>
-    <td valign="top">
-MCP servers for tool calls
-
-    </td>
-    <td valign="top">
-All tool calls use MCP protocol. `sapMcpClient` in Joule Studio satisfies this for SAP system connections
-
-    </td>
+    <td valign="top">TR11</td>
+    <td valign="top">MCP servers for tool calls</td>
+    <td valign="top">All tool calls use MCP protocol. `sapMcpClient` in Joule Studio satisfies this for SAP system connections</td>
   </tr>
   <tr>
-    <td valign="top">
-TR12
-
-    </td>
-    <td valign="top">
-OpenTelemetry with GenAI semantic conventions
-
-    </td>
-    <td valign="top">
-Mandatory, not recommended. Enables token monitoring, evaluation metrics ([Agent Evaluation](agent-evaluation-65fd098.md)), and the audit trail ([Precision Guardrails](precision-guardrails-c279f4e.md))
-
-    </td>
+    <td valign="top">TR12</td>
+    <td valign="top">OpenTelemetry with GenAI semantic conventions</td>
+    <td valign="top">Mandatory, not recommended. Enables token monitoring, evaluation metrics ([Agent Evaluation](agent-evaluation-65fd098.md)), and the audit trail ([Precision Guardrails](precision-guardrails-c279f4e.md))</td>
   </tr>
   <tr>
-    <td valign="top">
-TR13
-
-    </td>
-    <td valign="top">
-Metering via OctoRoute + Unified Metering Service
-
-    </td>
-    <td valign="top">
-Revenue-critical. Origin propagated via `x-sap-origin` header; `sap.ai.agent.trigger.type` in metering payload. Origin propagates transitively through agent-to-agent calls
-
-    </td>
+    <td valign="top">TR13</td>
+    <td valign="top">Metering via OctoRoute + Unified Metering Service</td>
+    <td valign="top">Revenue-critical. Origin propagated via `x-sap-origin` header; `sap.ai.agent.trigger.type` in metering payload. Origin propagates transitively through agent-to-agent calls</td>
   </tr>
   <tr>
-    <td valign="top">
-TR14
-
-    </td>
-    <td valign="top">
-Extensibility support
-
-    </td>
-    <td valign="top">
-Every production agent must support Prompt/Tool Extensions, Pre-Extension Hooks, and Post-Extension Hooks with configurable timeout and circuit-breaker failure policies
-
-    </td>
+    <td valign="top">TR14</td>
+    <td valign="top">Extensibility support</td>
+    <td valign="top">Every production agent must support Prompt/Tool Extensions, Pre-Extension Hooks, and Post-Extension Hooks with configurable timeout and circuit-breaker failure policies</td>
   </tr>
 </table>
 
@@ -1620,44 +969,20 @@ TR1–TR14 compliance is a design constraint from week 1, not a productization-p
     <th valign="top">TR Readiness Targets</th>
   </tr>
   <tr>
-    <td valign="top">
-Week 0 — Architecture
-
-    </td>
-    <td valign="top">
-A2A endpoint design (TR1); AppFND runtime confirmed (TR2); ORD namespace reserved (TR6)
-
-    </td>
+    <td valign="top">Week 0 — Architecture</td>
+    <td valign="top">A2A endpoint design (TR1); AppFND runtime confirmed (TR2); ORD namespace reserved (TR6)</td>
   </tr>
   <tr>
-    <td valign="top">
-Weeks 1–6 — MVP
-
-    </td>
-    <td valign="top">
-IAS app2app tokens configured (TR3); OTel instrumentation active (TR12); Agent Gateway routing established (TR10, TR11)
-
-    </td>
+    <td valign="top">Weeks 1–6 — MVP</td>
+    <td valign="top">IAS app2app tokens configured (TR3); OTel instrumentation active (TR12); Agent Gateway routing established (TR10, TR11)</td>
   </tr>
   <tr>
-    <td valign="top">
-Weeks 7–9 — Pre-deployment
-
-    </td>
-    <td valign="top">
-UMS/UCL onboarding started (TR4, TR5); offline eval in CI (TR9); metering payload implemented (TR13); extensibility hooks defined (TR14)
-
-    </td>
+    <td valign="top">Weeks 7–9 — Pre-deployment</td>
+    <td valign="top">UMS/UCL onboarding started (TR4, TR5); offline eval in CI (TR9); metering payload implemented (TR13); extensibility hooks defined (TR14)</td>
   </tr>
   <tr>
-    <td valign="top">
-Weeks 9–12 — EAC
-
-    </td>
-    <td valign="top">
-SPII configured (TR7); BTP Test Blueprint complete (TR8); online eval active (TR9); TR self-assessment signed off
-
-    </td>
+    <td valign="top">Weeks 9–12 — EAC</td>
+    <td valign="top">SPII configured (TR7); BTP Test Blueprint complete (TR8); online eval active (TR9); TR self-assessment signed off</td>
   </tr>
 </table>
 
@@ -1690,32 +1015,14 @@ SAP's formal AI use case lifecycle policy classifies deprecated AI use cases int
     <th valign="top">Implication for FDE-Delivered Agents</th>
   </tr>
   <tr>
-    <td valign="top">
-**Group 1**
-
-    </td>
-    <td valign="top">
-Customer continues using the deprecated capability through the end of their current cloud subscription term; no forced migration during the contract period
-
-    </td>
-    <td valign="top">
-CIS commits to supporting the agent through the subscription term; microdeliveries continue as planned
-
-    </td>
+    <td valign="top">**Group 1**</td>
+    <td valign="top">Customer continues using the deprecated capability through the end of their current cloud subscription term; no forced migration during the contract period</td>
+    <td valign="top">CIS commits to supporting the agent through the subscription term; microdeliveries continue as planned</td>
   </tr>
   <tr>
-    <td valign="top">
-**Group 2**
-
-    </td>
-    <td valign="top">
-6-month transition period from deprecation announcement; migration to the replacement capability is mandatory after 6 months
-
-    </td>
-    <td valign="top">
-CIS must plan and support a migration path; the CoE operating rhythm ([CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md)) must include migration sprint planning within the 6-month window
-
-    </td>
+    <td valign="top">**Group 2**</td>
+    <td valign="top">6-month transition period from deprecation announcement; migration to the replacement capability is mandatory after 6 months</td>
+    <td valign="top">CIS must plan and support a migration path; the CoE operating rhythm ([CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md)) must include migration sprint planning within the 6-month window</td>
   </tr>
 </table>
 
@@ -1745,130 +1052,49 @@ The Project LightSpeed deploy pattern (`/fde-deploy`) provides a repeatable 9-st
     <th valign="top">Abort Condition</th>
   </tr>
   <tr>
-    <td valign="top">
-1
-
-    </td>
-    <td valign="top">
-Read deployment profile (`pilot.yaml`)
-
-    </td>
-    <td valign="top">
-Profile missing or malformed
-
-    </td>
+    <td valign="top">1</td>
+    <td valign="top">Read deployment profile (`pilot.yaml`)</td>
+    <td valign="top">Profile missing or malformed</td>
   </tr>
   <tr>
-    <td valign="top">
-2
-
-    </td>
-    <td valign="top">
-Verify BTP environment — subaccount, entitlements, service instances
-
-    </td>
-    <td valign="top">
-Required service instances not present
-
-    </td>
+    <td valign="top">2</td>
+    <td valign="top">Verify BTP environment — subaccount, entitlements, service instances</td>
+    <td valign="top">Required service instances not present</td>
   </tr>
   <tr>
-    <td valign="top">
-3
-
-    </td>
-    <td valign="top">
-Run 21-check deploy guardrails (FAIL = abort, WARN = continue with log)
-
-    </td>
-    <td valign="top">
-Any FAIL-level check fails
-
-    </td>
+    <td valign="top">3</td>
+    <td valign="top">Run 21-check deploy guardrails (FAIL = abort, WARN = continue with log)</td>
+    <td valign="top">Any FAIL-level check fails</td>
   </tr>
   <tr>
-    <td valign="top">
-4
-
-    </td>
-    <td valign="top">
-Build + push container image (3 retries on transient failure)
-
-    </td>
-    <td valign="top">
-Build or push fails after 3 retries
-
-    </td>
+    <td valign="top">4</td>
+    <td valign="top">Build + push container image (3 retries on transient failure)</td>
+    <td valign="top">Build or push fails after 3 retries</td>
   </tr>
   <tr>
-    <td valign="top">
-5
-
-    </td>
-    <td valign="top">
-Apply Kubernetes manifests (or CF push for Cloud Foundry deployments)
-
-    </td>
-    <td valign="top">
-Apply fails; rollback initiated
-
-    </td>
+    <td valign="top">5</td>
+    <td valign="top">Apply Kubernetes manifests (or CF push for Cloud Foundry deployments)</td>
+    <td valign="top">Apply fails; rollback initiated</td>
   </tr>
   <tr>
-    <td valign="top">
-6
-
-    </td>
-    <td valign="top">
-Backend service deployment
-
-    </td>
-    <td valign="top">
-Service deployment fails
-
-    </td>
+    <td valign="top">6</td>
+    <td valign="top">Backend service deployment</td>
+    <td valign="top">Service deployment fails</td>
   </tr>
   <tr>
-    <td valign="top">
-7
-
-    </td>
-    <td valign="top">
-A2A smoke test — verify agent responds on the A2A endpoint
-
-    </td>
-    <td valign="top">
-A2A endpoint unreachable or returns error
-
-    </td>
+    <td valign="top">7</td>
+    <td valign="top">A2A smoke test — verify agent responds on the A2A endpoint</td>
+    <td valign="top">A2A endpoint unreachable or returns error</td>
   </tr>
   <tr>
-    <td valign="top">
-8
-
-    </td>
-    <td valign="top">
-Joule capability registration — connect agent to Joule
-
-    </td>
-    <td valign="top">
-Registration fails or capability bundle rejected
-
-    </td>
+    <td valign="top">8</td>
+    <td valign="top">Joule capability registration — connect agent to Joule</td>
+    <td valign="top">Registration fails or capability bundle rejected</td>
   </tr>
   <tr>
-    <td valign="top">
-9
-
-    </td>
-    <td valign="top">
-Update deployment profile and generate status report
-
-    </td>
-    <td valign="top">
-Non-blocking; logged
-
-    </td>
+    <td valign="top">9</td>
+    <td valign="top">Update deployment profile and generate status report</td>
+    <td valign="top">Non-blocking; logged</td>
   </tr>
 </table>
 
@@ -1891,60 +1117,24 @@ See the Standard Observability Middleware Integration section for the drop-in Py
     <th valign="top">Configuration</th>
   </tr>
   <tr>
-    <td valign="top">
-Local development
-
-    </td>
-    <td valign="top">
-stdout (logging-only)
-
-    </td>
-    <td valign="top">
-No configuration needed; graceful fallback
-
-    </td>
+    <td valign="top">Local development</td>
+    <td valign="top">stdout (logging-only)</td>
+    <td valign="top">No configuration needed; graceful fallback</td>
   </tr>
   <tr>
-    <td valign="top">
-Standard SAP regions (EU, US East, AP)
-
-    </td>
-    <td valign="top">
-SAP Cloud Logging via CF `cloud-logging` binding
-
-    </td>
-    <td valign="top">
-Binding auto-detected; no env var needed
-
-    </td>
+    <td valign="top">Standard SAP regions (EU, US East, AP)</td>
+    <td valign="top">SAP Cloud Logging via CF `cloud-logging` binding</td>
+    <td valign="top">Binding auto-detected; no env var needed</td>
   </tr>
   <tr>
-    <td valign="top">
-Sovereign regions (CN40, NS2, KSA)
-
-    </td>
-    <td valign="top">
-Custom OTLP endpoint
-
-    </td>
-    <td valign="top">
-Set `OTEL_EXPORTER_OTLP_ENDPOINT`
-
-    </td>
+    <td valign="top">Sovereign regions (CN40, NS2, KSA)</td>
+    <td valign="top">Custom OTLP endpoint</td>
+    <td valign="top">Set `OTEL_EXPORTER_OTLP_ENDPOINT`</td>
   </tr>
   <tr>
-    <td valign="top">
-Canary / sandbox
-
-    </td>
-    <td valign="top">
-stdout (logging-only)
-
-    </td>
-    <td valign="top">
-Cloud Logging unavailable; graceful fallback
-
-    </td>
+    <td valign="top">Canary / sandbox</td>
+    <td valign="top">stdout (logging-only)</td>
+    <td valign="top">Cloud Logging unavailable; graceful fallback</td>
   </tr>
 </table>
 
@@ -1981,224 +1171,92 @@ This is a known production failure pattern encountered in BTP CF + Dynatrace int
     <th valign="top">Key Principle</th>
   </tr>
   <tr>
-    <td valign="top">
-Version stack
-
-    </td>
-    <td valign="top">
-An agent version is five components: workflow, prompt, model, thresholds, authorization scope — update and roll back as a group
-
-    </td>
+    <td valign="top">Version stack</td>
+    <td valign="top">An agent version is five components: workflow, prompt, model, thresholds, authorization scope — update and roll back as a group</td>
   </tr>
   <tr>
-    <td valign="top">
-Rollback triggers
-
-    </td>
-    <td valign="top">
-Confirmed regression correlated with a deployment event: human override rate, verification rejection rate, process KPI degradation, format failures
-
-    </td>
+    <td valign="top">Rollback triggers</td>
+    <td valign="top">Confirmed regression correlated with a deployment event: human override rate, verification rejection rate, process KPI degradation, format failures</td>
   </tr>
   <tr>
-    <td valign="top">
-Rollback mechanics
-
-    </td>
-    <td valign="top">
-Prompt rollback currently requires a workflow redeployment (inline prompts) — Registry-based no-redeploy prompt rollback is future, when `promptTemplate` ships; model rollback requires no redeployment; workflow rollback is most disruptive; full stack rollback last resort
-
-    </td>
+    <td valign="top">Rollback mechanics</td>
+    <td valign="top">Prompt rollback currently requires a workflow redeployment (inline prompts) — Registry-based no-redeploy prompt rollback is future, when `promptTemplate` ships; model rollback requires no redeployment; workflow rollback is most disruptive; full stack rollback last resort</td>
   </tr>
   <tr>
-    <td valign="top">
-State during rollback
-
-    </td>
-    <td valign="top">
-Audit trail is immutable and version-tagged; shared state store baseline must be reset after rollback; in-flight sessions should drain before cutover
-
-    </td>
+    <td valign="top">State during rollback</td>
+    <td valign="top">Audit trail is immutable and version-tagged; shared state store baseline must be reset after rollback; in-flight sessions should drain before cutover</td>
   </tr>
   <tr>
-    <td valign="top">
-Token monitoring
-
-    </td>
-    <td valign="top">
-Runaway loop indicator (single-invocation spike) is Critical severity; daily cost trend tracks value case health; extend Workflow B with token anomaly checks
-
-    </td>
+    <td valign="top">Token monitoring</td>
+    <td valign="top">Runaway loop indicator (single-invocation spike) is Critical severity; daily cost trend tracks value case health; extend Workflow B with token anomaly checks</td>
   </tr>
   <tr>
-    <td valign="top">
-Production shipping
-
-    </td>
-    <td valign="top">
-TR1–TR14 must all be satisfied before commercial release; design for compliance from week 1 of Develop, not at productization
-
-    </td>
+    <td valign="top">Production shipping</td>
+    <td valign="top">TR1–TR14 must all be satisfied before commercial release; design for compliance from week 1 of Develop, not at productization</td>
   </tr>
   <tr>
-    <td valign="top">
-Token budget cap
-
-    </td>
-    <td valign="top">
-Set max_tokens to 2× p95 output token count from EAC — prevents runaway but calibrated to not truncate legitimate outputs
-
-    </td>
+    <td valign="top">Token budget cap</td>
+    <td valign="top">Set max_tokens to 2× p95 output token count from EAC — prevents runaway but calibrated to not truncate legitimate outputs</td>
   </tr>
   <tr>
-    <td valign="top">
-Audit trail cost fields
-
-    </td>
-    <td valign="top">
-Add input_tokens, output_tokens, total_tokens_invocation, model_used to support cost-per-committed-output tracking
-
-    </td>
+    <td valign="top">Audit trail cost fields</td>
+    <td valign="top">Add input_tokens, output_tokens, total_tokens_invocation, model_used to support cost-per-committed-output tracking</td>
   </tr>
   <tr>
-    <td valign="top">
-Three things never to copy
-
-    </td>
-    <td valign="top">
-Credentials, dev/test thresholds, agent identities — all must be re-provisioned per environment
-
-    </td>
+    <td valign="top">Three things never to copy</td>
+    <td valign="top">Credentials, dev/test thresholds, agent identities — all must be re-provisioned per environment</td>
   </tr>
   <tr>
-    <td valign="top">
-Environment-agnostic workflow
-
-    </td>
-    <td valign="top">
-All environment-specific values in named BAIP credential objects and configuration parameters; workflow definition is the same across environments
-
-    </td>
+    <td valign="top">Environment-agnostic workflow</td>
+    <td valign="top">All environment-specific values in named BAIP credential objects and configuration parameters; workflow definition is the same across environments</td>
   </tr>
   <tr>
-    <td valign="top">
-Pre-migration checklist
-
-    </td>
-    <td valign="top">
-Three checklists: dev→test, test→EAC, EAC→production — each with specific conditions that must be met before transition
-
-    </td>
+    <td valign="top">Pre-migration checklist</td>
+    <td valign="top">Three checklists: dev→test, test→EAC, EAC→production — each with specific conditions that must be met before transition</td>
   </tr>
   <tr>
-    <td valign="top">
-Rollback runbook
-
-    </td>
-    <td valign="top">
-Write the procedure during Productization, not during the first incident; include trigger criteria, authorization path, step-by-step mechanics, and post-rollback verification
-
-    </td>
+    <td valign="top">Rollback runbook</td>
+    <td valign="top">Write the procedure during Productization, not during the first incident; include trigger criteria, authorization path, step-by-step mechanics, and post-rollback verification</td>
   </tr>
   <tr>
-    <td valign="top">
-CALM monitoring
-
-    </td>
-    <td valign="top">
-Cannot be mandated at customer sites for CAE deployments (CISATQ-131); production monitoring baseline is project-specific — agree in Discovery; default is OTel telemetry + Workflow B signals. If Cloud ALM is used: requires 5-step LMS service registration; the `serviceId` assigned by Cloud ALM must be injected at deployment (`CALM_SERVICE_ID` env var); OTel `service.name` is ignored — only `serviceId` routes correctly
-
-    </td>
+    <td valign="top">CALM monitoring</td>
+    <td valign="top">Cannot be mandated at customer sites for CAE deployments (CISATQ-131); production monitoring baseline is project-specific — agree in Discovery; default is OTel telemetry + Workflow B signals. If Cloud ALM is used: requires 5-step LMS service registration; the `serviceId` assigned by Cloud ALM must be injected at deployment (`CALM_SERVICE_ID` env var); OTel `service.name` is ignored — only `serviceId` routes correctly</td>
   </tr>
   <tr>
-    <td valign="top">
-OTel middleware
-
-    </td>
-    <td valign="top">
-Two-line setup (`setup_observability`); auto-resolves to OTLP env var → CF Cloud Logging binding → logging-only fallback; works unchanged across all deployment environments
-
-    </td>
+    <td valign="top">OTel middleware</td>
+    <td valign="top">Two-line setup (`setup_observability`); auto-resolves to OTLP env var → CF Cloud Logging binding → logging-only fallback; works unchanged across all deployment environments</td>
   </tr>
   <tr>
-    <td valign="top">
-9-step deploy loop
-
-    </td>
-    <td valign="top">
-Repeatable autonomous deploy procedure: read profile → verify BTP env → 21-check guardrails (FAIL = abort) → build + push → apply manifests → backend deploy → A2A smoke test → Joule registration → status report
-
-    </td>
+    <td valign="top">9-step deploy loop</td>
+    <td valign="top">Repeatable autonomous deploy procedure: read profile → verify BTP env → 21-check guardrails (FAIL = abort) → build + push → apply manifests → backend deploy → A2A smoke test → Joule registration → status report</td>
   </tr>
   <tr>
-    <td valign="top">
-Dynatrace CF binding
-
-    </td>
-    <td valign="top">
-Use scoped API token (ingest scope only), not admin token; mis-scoped token causes silent metric drop with no application-side error
-
-    </td>
+    <td valign="top">Dynatrace CF binding</td>
+    <td valign="top">Use scoped API token (ingest scope only), not admin token; mis-scoped token causes silent metric drop with no application-side error</td>
   </tr>
   <tr>
-    <td valign="top">
-Synthetic monitoring
-
-    </td>
-    <td valign="top">
-Active health checks at platform level via BTP Availability Service, Site 24/7, Monterey (SAP-operated); FDE responsibility: A2A endpoint smoke test (step 7 of deploy loop) + endpoint reachability check in EAC→prod migration checklist
-
-    </td>
+    <td valign="top">Synthetic monitoring</td>
+    <td valign="top">Active health checks at platform level via BTP Availability Service, Site 24/7, Monterey (SAP-operated); FDE responsibility: A2A endpoint smoke test (step 7 of deploy loop) + endpoint reachability check in EAC→prod migration checklist</td>
   </tr>
   <tr>
-    <td valign="top">
-Agentic Remediation
-
-    </td>
-    <td valign="top">
-SAP-operated proactive remediation of platform-level agent issues (Topology B only); reduces CIS T&O infrastructure overhead; application-layer quality monitoring remains CIS T&O scope
-
-    </td>
+    <td valign="top">Agentic Remediation</td>
+    <td valign="top">SAP-operated proactive remediation of platform-level agent issues (Topology B only); reduces CIS T&O infrastructure overhead; application-layer quality monitoring remains CIS T&O scope</td>
   </tr>
   <tr>
-    <td valign="top">
-ServiceNow
-
-    </td>
-    <td valign="top">
-Route Workflow B guardrail/runaway alerts to ServiceNow incidents via Cloud Service Management for ITSM-focused customers; confirm alert target in Discovery; include in Draft Product Design Specs
-
-    </td>
+    <td valign="top">ServiceNow</td>
+    <td valign="top">Route Workflow B guardrail/runaway alerts to ServiceNow incidents via Cloud Service Management for ITSM-focused customers; confirm alert target in Discovery; include in Draft Product Design Specs</td>
   </tr>
   <tr>
-    <td valign="top">
-ALS v3 NG
-
-    </td>
-    <td valign="top">
-Platform-level immutable audit log (Audit Log Service Next Gen) for agent security events and authorization decisions; complements the business-focused audit trail; confirm which is required for customer's compliance framework in Discovery
-
-    </td>
+    <td valign="top">ALS v3 NG</td>
+    <td valign="top">Platform-level immutable audit log (Audit Log Service Next Gen) for agent security events and authorization decisions; complements the business-focused audit trail; confirm which is required for customer's compliance framework in Discovery</td>
   </tr>
   <tr>
-    <td valign="top">
-OTel pipeline (SAP internal)
-
-    </td>
-    <td valign="top">
-OctoRoute / OctoBus / CaaS routes SAP Cloud ALM telemetry in SAP-managed regions; transparent to FDE; relevant when diagnosing missing telemetry — raise SAP support ticket if agent-side OTel config is confirmed correct but telemetry is absent
-
-    </td>
+    <td valign="top">OTel pipeline (SAP internal)</td>
+    <td valign="top">OctoRoute / OctoBus / CaaS routes SAP Cloud ALM telemetry in SAP-managed regions; transparent to FDE; relevant when diagnosing missing telemetry — raise SAP support ticket if agent-side OTel config is confirmed correct but telemetry is absent</td>
   </tr>
   <tr>
-    <td valign="top">
-Customer-centric observability
-
-    </td>
-    <td valign="top">
-When CALM is deployed: agent telemetry surfaced to customer and CSM via CALM; separate from CIS-side Workflow B monitoring; cannot be mandated; confirm in Discovery (see [CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md))
-
-    </td>
+    <td valign="top">Customer-centric observability</td>
+    <td valign="top">When CALM is deployed: agent telemetry surfaced to customer and CSM via CALM; separate from CIS-side Workflow B monitoring; cannot be mandated; confirm in Discovery (see [CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md))</td>
   </tr>
 </table>
 

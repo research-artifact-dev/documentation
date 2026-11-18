@@ -54,70 +54,34 @@ Complete build specification for a minimal, end-to-end demonstrable proof of con
     <th valign="top">Notes</th>
   </tr>
   <tr>
-    <td valign="top">
-SAP BTP account
-</td>
-    <td valign="top">
-Host environment
-</td>
-    <td valign="top">
-CIS development subaccount is sufficient
-</td>
+    <td valign="top">SAP BTP account</td>
+    <td valign="top">Host environment</td>
+    <td valign="top">CIS development subaccount is sufficient</td>
   </tr>
   <tr>
-    <td valign="top">
-Joule Studio (n8n canvas)
-</td>
-    <td valign="top">
-Build and run all workflows
-</td>
-    <td valign="top">
-Requires BAIP subscription. **Orchestrator: SMJ (SAP-Managed Joule)** — the default for new engagements (GA since 2026-06-01); the managed runtime handles auth, the observability harness, and agent registry entries automatically. CMJ (Customer-Managed Joule) is a deprecated migration target, not a delivery choice.
-</td>
+    <td valign="top">Joule Studio (n8n canvas)</td>
+    <td valign="top">Build and run all workflows</td>
+    <td valign="top">Requires BAIP subscription. **Orchestrator: SMJ (SAP-Managed Joule)** — the default for new engagements (GA since 2026-06-01); the managed runtime handles auth, the observability harness, and agent registry entries automatically. CMJ (Customer-Managed Joule) is a deprecated migration target, not a delivery choice.</td>
   </tr>
   <tr>
-    <td valign="top">
-SAP AI Core (via Joule Studio)
-</td>
-    <td valign="top">
-`sapOrchestration` LLM calls
-</td>
-    <td valign="top">
-Requires generative AI hub model access
-</td>
+    <td valign="top">SAP AI Core (via Joule Studio)</td>
+    <td valign="top">`sapOrchestration` LLM calls</td>
+    <td valign="top">Requires generative AI hub model access</td>
   </tr>
   <tr>
-    <td valign="top">
-SAP HANA Cloud
-</td>
-    <td valign="top">
-Audit trail table
-</td>
-    <td valign="top">
-Must be bound to the BAIP environment
-</td>
+    <td valign="top">SAP HANA Cloud</td>
+    <td valign="top">Audit trail table</td>
+    <td valign="top">Must be bound to the BAIP environment</td>
   </tr>
   <tr>
-    <td valign="top">
-SAP Task Center
-</td>
-    <td valign="top">
-Human-in-the-loop escalation
-</td>
-    <td valign="top">
-If unavailable: substitute with HTTP Request → mock notification endpoint
-</td>
+    <td valign="top">SAP Task Center</td>
+    <td valign="top">Human-in-the-loop escalation</td>
+    <td valign="top">If unavailable: substitute with HTTP Request → mock notification endpoint</td>
   </tr>
   <tr>
-    <td valign="top">
-BAIP application registration
-</td>
-    <td valign="top">
-Agent identity per workflow
-</td>
-    <td valign="top">
-**Managed runtime (JS2.0 / SMJ):** automatic — the managed runtime registers each agent identity. **BYOA (custom agent on the customer's BTP subaccount, registered to SMJ via A2A — the standard runtime for productization-intent agents, not a fallback):** one registration per workflow (worker, supervisor/committer A) created manually. Joule Studio 2.0 is the low-code alternative runtime (build env in phased GA; managed custom-agent runtime EAC-gated, free through Dec 2026).
-</td>
+    <td valign="top">BAIP application registration</td>
+    <td valign="top">Agent identity per workflow</td>
+    <td valign="top">**Managed runtime (JS2.0 / SMJ):** automatic — the managed runtime registers each agent identity. **BYOA (custom agent on the customer's BTP subaccount, registered to SMJ via A2A — the standard runtime for productization-intent agents, not a fallback):** one registration per workflow (worker, supervisor/committer A) created manually. Joule Studio 2.0 is the low-code alternative runtime (build env in phased GA; managed custom-agent runtime EAC-gated, free through Dec 2026).</td>
   </tr>
 </table>
 
@@ -626,70 +590,34 @@ Open the audit trail table. Show the four records from the demonstration — app
     <th valign="top">How to Address If Needed</th>
   </tr>
   <tr>
-    <td valign="top">
-Synthetic data only
-</td>
-    <td valign="top">
-Agent receives hardcoded batch data, not live SAP retrieval
-</td>
-    <td valign="top">
-Connect `sapMcpClient` to a real S/4HANA dev system to demonstrate live data retrieval
-</td>
+    <td valign="top">Synthetic data only</td>
+    <td valign="top">Agent receives hardcoded batch data, not live SAP retrieval</td>
+    <td valign="top">Connect `sapMcpClient` to a real S/4HANA dev system to demonstrate live data retrieval</td>
   </tr>
   <tr>
-    <td valign="top">
-Injected outputs for failure test cases
-</td>
-    <td valign="top">
-Test Cases 2–4 override the agent's output to ensure the failure mode is demonstrated
-</td>
-    <td valign="top">
-Run with a real agent and prompt engineering to produce wrong outputs naturally (less reliable for demos)
-</td>
+    <td valign="top">Injected outputs for failure test cases</td>
+    <td valign="top">Test Cases 2–4 override the agent's output to ensure the failure mode is demonstrated</td>
+    <td valign="top">Run with a real agent and prompt engineering to produce wrong outputs naturally (less reliable for demos)</td>
   </tr>
   <tr>
-    <td valign="top">
-No Workflow B or C
-</td>
-    <td valign="top">
-Telemetry monitoring and support relay are not demonstrated
-</td>
-    <td valign="top">
-See Extension Options section
-</td>
+    <td valign="top">No Workflow B or C</td>
+    <td valign="top">Telemetry monitoring and support relay are not demonstrated</td>
+    <td valign="top">See Extension Options section</td>
   </tr>
   <tr>
-    <td valign="top">
-No multi-agent orchestration
-</td>
-    <td valign="top">
-Single worker only
-</td>
-    <td valign="top">
-Add a second worker and orchestrator as Extension Option C
-</td>
+    <td valign="top">No multi-agent orchestration</td>
+    <td valign="top">Single worker only</td>
+    <td valign="top">Add a second worker and orchestrator as Extension Option C</td>
   </tr>
   <tr>
-    <td valign="top">
-Task Center may be substituted
-</td>
-    <td valign="top">
-If Task Center is not available, escalations go to a webhook log
-</td>
-    <td valign="top">
-The UI experience of receiving and approving/rejecting a Task Center task is not shown
-</td>
+    <td valign="top">Task Center may be substituted</td>
+    <td valign="top">If Task Center is not available, escalations go to a webhook log</td>
+    <td valign="top">The UI experience of receiving and approving/rejecting a Task Center task is not shown</td>
   </tr>
   <tr>
-    <td valign="top">
-BAIP graceful drain not tested
-</td>
-    <td valign="top">
-In-flight transaction continuity during rollback is not demonstrated
-</td>
-    <td valign="top">
-Requires a higher-volume test scenario beyond PoC scope
-</td>
+    <td valign="top">BAIP graceful drain not tested</td>
+    <td valign="top">In-flight transaction continuity during rollback is not demonstrated</td>
+    <td valign="top">Requires a higher-volume test scenario beyond PoC scope</td>
   </tr>
 </table>
 
@@ -731,84 +659,44 @@ Deploy the `cis-supervisor-workflow-c-ref` Starter Kit workflow. Trigger it from
     <th valign="top">What It Specifies for This PoC</th>
   </tr>
   <tr>
-    <td valign="top">
-[Agent Quality Framework](agent-quality-framework-5ec914b.md)
-</td>
-    <td valign="top">
-Judge verdict model (3-way C/I/N) — the LLM critic stage uses Complete/Incomplete/Not Applicable; Not Applicable is not emitted to OTel
-</td>
+    <td valign="top">[Agent Quality Framework](agent-quality-framework-5ec914b.md)</td>
+    <td valign="top">Judge verdict model (3-way C/I/N) — the LLM critic stage uses Complete/Incomplete/Not Applicable; Not Applicable is not emitted to OTel</td>
   </tr>
   <tr>
-    <td valign="top">
-[Agent Quality Framework](agent-quality-framework-5ec914b.md)
-</td>
-    <td valign="top">
-Self-verification pattern — the logic inside Workflow A's two verification stages
-</td>
+    <td valign="top">[Agent Quality Framework](agent-quality-framework-5ec914b.md)</td>
+    <td valign="top">Self-verification pattern — the logic inside Workflow A's two verification stages</td>
   </tr>
   <tr>
-    <td valign="top">
-[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)
-</td>
-    <td valign="top">
-Supervisor Workflow A — the full execution pattern this PoC implements
-</td>
+    <td valign="top">[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)</td>
+    <td valign="top">Supervisor Workflow A — the full execution pattern this PoC implements</td>
   </tr>
   <tr>
-    <td valign="top">
-[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)
-</td>
-    <td valign="top">
-Worker-supervisor communication — `sapAgent` non-blocking + Webhook callback
-</td>
+    <td valign="top">[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)</td>
+    <td valign="top">Worker-supervisor communication — `sapAgent` non-blocking + Webhook callback</td>
   </tr>
   <tr>
-    <td valign="top">
-[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)
-</td>
-    <td valign="top">
-Supervisor governance and fail-safe default
-</td>
+    <td valign="top">[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)</td>
+    <td valign="top">Supervisor governance and fail-safe default</td>
   </tr>
   <tr>
-    <td valign="top">
-[Precision Guardrails](precision-guardrails-c279f4e.md)
-</td>
-    <td valign="top">
-Audit trail schema — all fields the PoC must record
-</td>
+    <td valign="top">[Precision Guardrails](precision-guardrails-c279f4e.md)</td>
+    <td valign="top">Audit trail schema — all fields the PoC must record</td>
   </tr>
   <tr>
-    <td valign="top">
-[Joule Studio Build Map](joule-studio-build-map-7de243e.md)
-</td>
-    <td valign="top">
-Workflow A n8n implementation — node-by-node reference
-</td>
+    <td valign="top">[Joule Studio Build Map](joule-studio-build-map-7de243e.md)</td>
+    <td valign="top">Workflow A n8n implementation — node-by-node reference</td>
   </tr>
   <tr>
-    <td valign="top">
-[Joule Studio Build Map](joule-studio-build-map-7de243e.md)
-</td>
-    <td valign="top">
-Build sequence — the order in which to build and test
-</td>
+    <td valign="top">[Joule Studio Build Map](joule-studio-build-map-7de243e.md)</td>
+    <td valign="top">Build sequence — the order in which to build and test</td>
   </tr>
   <tr>
-    <td valign="top">
-[Production Operations](production-operations-f963579.md)
-</td>
-    <td valign="top">
-Cost extension fields for the audit trail
-</td>
+    <td valign="top">[Production Operations](production-operations-f963579.md)</td>
+    <td valign="top">Cost extension fields for the audit trail</td>
   </tr>
   <tr>
-    <td valign="top">
-[Reusable Components](reusable-components-8a3dd4c.md)
-</td>
-    <td valign="top">
-Starter Kit — `cis-supervisor-workflow-a-skeleton` and `cis-audit-trail-ddl.sql`
-</td>
+    <td valign="top">[Reusable Components](reusable-components-8a3dd4c.md)</td>
+    <td valign="top">Starter Kit — `cis-supervisor-workflow-a-skeleton` and `cis-audit-trail-ddl.sql`</td>
   </tr>
 </table>
 

@@ -27,44 +27,20 @@ This means the FDE model needs a lifecycle management layer that operates after 
     <th valign="top">CIS CoE Operations Model</th>
   </tr>
   <tr>
-    <td valign="top">
-CIS engages when customer reports a problem
-
-    </td>
-    <td valign="top">
-CIS is notified by the agent before the customer notices
-
-    </td>
+    <td valign="top">CIS engages when customer reports a problem</td>
+    <td valign="top">CIS is notified by the agent before the customer notices</td>
   </tr>
   <tr>
-    <td valign="top">
-Investigation requires access negotiation
-
-    </td>
-    <td valign="top">
-The supervisor agent has already collected and sanitized the relevant evidence
-
-    </td>
+    <td valign="top">Investigation requires access negotiation</td>
+    <td valign="top">The supervisor agent has already collected and sanitized the relevant evidence</td>
   </tr>
   <tr>
-    <td valign="top">
-Fix requires a new engagement
-
-    </td>
-    <td valign="top">
-Many issues are resolved through configuration or minor workflow adjustments
-
-    </td>
+    <td valign="top">Fix requires a new engagement</td>
+    <td valign="top">Many issues are resolved through configuration or minor workflow adjustments</td>
   </tr>
   <tr>
-    <td valign="top">
-Each engagement is independent
-
-    </td>
-    <td valign="top">
-Findings across engagements feed back into improved patterns and productization
-
-    </td>
+    <td valign="top">Each engagement is independent</td>
+    <td valign="top">Findings across engagements feed back into improved patterns and productization</td>
   </tr>
 </table>
 
@@ -132,40 +108,16 @@ Project LightSpeed implements a two-phase delivery model that maps directly to F
     <th valign="top">Output</th>
   </tr>
   <tr>
-    <td valign="top">
-Phase 1 — Solution Design
-
-    </td>
-    <td valign="top">
-Stages 1–8: ingest discovery artifacts, extract knowledge, ground to SAP canonical objects, run readiness gates, generate agent topology, compile `context-transfer.yaml`
-
-    </td>
-    <td valign="top">
-Within one day of the customer workshop
-
-    </td>
-    <td valign="top">
-Compiled knowledge artifact + agent topology design + readiness scores + coaching questions for any gaps
-
-    </td>
+    <td valign="top">Phase 1 — Solution Design</td>
+    <td valign="top">Stages 1–8: ingest discovery artifacts, extract knowledge, ground to SAP canonical objects, run readiness gates, generate agent topology, compile `context-transfer.yaml`</td>
+    <td valign="top">Within one day of the customer workshop</td>
+    <td valign="top">Compiled knowledge artifact + agent topology design + readiness scores + coaching questions for any gaps</td>
   </tr>
   <tr>
-    <td valign="top">
-Phase 2 — Enterprise Integration & Production PoC
-
-    </td>
-    <td valign="top">
-Stages 9–13: spec generation, LangGraph agent scaffolding, Joule capability registration, evaluation scorecard, BTP provisioning
-
-    </td>
-    <td valign="top">
-Weeks (across the FDE Develop sprint, formerly Execute)
-
-    </td>
-    <td valign="top">
-Deployed agents with Joule surface, OTel observability, BTP infrastructure
-
-    </td>
+    <td valign="top">Phase 2 — Enterprise Integration & Production PoC</td>
+    <td valign="top">Stages 9–13: spec generation, LangGraph agent scaffolding, Joule capability registration, evaluation scorecard, BTP provisioning</td>
+    <td valign="top">Weeks (across the FDE Develop sprint, formerly Execute)</td>
+    <td valign="top">Deployed agents with Joule surface, OTel observability, BTP infrastructure</td>
   </tr>
 </table>
 
@@ -221,34 +173,16 @@ On a customer tenant (Topology A), CIS cannot monitor continuously without perma
     <th valign="top">How It Handles Autonomously</th>
   </tr>
   <tr>
-    <td valign="top">
-Individual output quality (Workflow A)
-
-    </td>
-    <td valign="top">
-Verifies, approves, or blocks write-back; escalates to customer process owner via Task Center
-
-    </td>
+    <td valign="top">Individual output quality (Workflow A)</td>
+    <td valign="top">Verifies, approves, or blocks write-back; escalates to customer process owner via Task Center</td>
   </tr>
   <tr>
-    <td valign="top">
-Telemetry anomaly detection (Workflow B)
-
-    </td>
-    <td valign="top">
-Classifies anomalies; alerts customer IT admin for non-critical issues
-
-    </td>
+    <td valign="top">Telemetry anomaly detection (Workflow B)</td>
+    <td valign="top">Classifies anomalies; alerts customer IT admin for non-critical issues</td>
   </tr>
   <tr>
-    <td valign="top">
-SAP support relay (Workflow C)
-
-    </td>
-    <td valign="top">
-Creates sanitized support ticket; notifies customer IT admin
-
-    </td>
+    <td valign="top">SAP support relay (Workflow C)</td>
+    <td valign="top">Creates sanitized support ticket; notifies customer IT admin</td>
   </tr>
 </table>
 
@@ -298,60 +232,24 @@ For escalated issues that reach the CIS team, a defined operating rhythm ensures
     <th valign="top">CIS Response Target</th>
   </tr>
   <tr>
-    <td valign="top">
-Critical
-
-    </td>
-    <td valign="top">
-Agent producing wrong numerical outputs that have been committed to system of record; regulatory impact possible
-
-    </td>
-    <td valign="top">
-Same business day
-
-    </td>
+    <td valign="top">Critical</td>
+    <td valign="top">Agent producing wrong numerical outputs that have been committed to system of record; regulatory impact possible</td>
+    <td valign="top">Same business day</td>
   </tr>
   <tr>
-    <td valign="top">
-High
-
-    </td>
-    <td valign="top">
-Agent producing outputs that humans consistently override; process KPI degradation > 20% from baseline
-
-    </td>
-    <td valign="top">
-Within 2 business days
-
-    </td>
+    <td valign="top">High</td>
+    <td valign="top">Agent producing outputs that humans consistently override; process KPI degradation > 20% from baseline</td>
+    <td valign="top">Within 2 business days</td>
   </tr>
   <tr>
-    <td valign="top">
-Medium
-
-    </td>
-    <td valign="top">
-Telemetry anomalies without confirmed business impact; elevated error rate
-
-    </td>
-    <td valign="top">
-Within 5 business days
-
-    </td>
+    <td valign="top">Medium</td>
+    <td valign="top">Telemetry anomalies without confirmed business impact; elevated error rate</td>
+    <td valign="top">Within 5 business days</td>
   </tr>
   <tr>
-    <td valign="top">
-Low
-
-    </td>
-    <td valign="top">
-Advisory: human override rate trending up; model drift detected early
-
-    </td>
-    <td valign="top">
-Weekly review cycle
-
-    </td>
+    <td valign="top">Low</td>
+    <td valign="top">Advisory: human override rate trending up; model drift detected early</td>
+    <td valign="top">Weekly review cycle</td>
   </tr>
 </table>
 
@@ -438,74 +336,29 @@ The BAIP harness captures this via OpenTelemetry traces — tool call counts per
     <th valign="top">Optimization Candidate</th>
   </tr>
   <tr>
-    <td valign="top">
-Tool call retry count > 1 on same tool
-
-    </td>
-    <td valign="top">
-Wrong parameters, insufficient input context, or poor tool fit
-
-    </td>
-    <td valign="top">
-Prompt refinement; pre-call input validation; tool substitution
-
-    </td>
+    <td valign="top">Tool call retry count > 1 on same tool</td>
+    <td valign="top">Wrong parameters, insufficient input context, or poor tool fit</td>
+    <td valign="top">Prompt refinement; pre-call input validation; tool substitution</td>
   </tr>
   <tr>
-    <td valign="top">
-Self-correction loop count > 1 before pass or escalation
-
-    </td>
-    <td valign="top">
-Agent's first output consistently fails its own verification
-
-    </td>
-    <td valign="top">
-Verification threshold recalibration; prompt restructuring for first-time validity
-
-    </td>
+    <td valign="top">Self-correction loop count > 1 before pass or escalation</td>
+    <td valign="top">Agent's first output consistently fails its own verification</td>
+    <td valign="top">Verification threshold recalibration; prompt restructuring for first-time validity</td>
   </tr>
   <tr>
-    <td valign="top">
-Token consumption per step significantly above step baseline
-
-    </td>
-    <td valign="top">
-LLM reasoning around missing context or ambiguous instructions
-
-    </td>
-    <td valign="top">
-Context enrichment (RAG, richer system prompt); or route to a deterministic SAP service
-
-    </td>
+    <td valign="top">Token consumption per step significantly above step baseline</td>
+    <td valign="top">LLM reasoning around missing context or ambiguous instructions</td>
+    <td valign="top">Context enrichment (RAG, richer system prompt); or route to a deterministic SAP service</td>
   </tr>
   <tr>
-    <td valign="top">
-Step latency outliers on specific input patterns
-
-    </td>
-    <td valign="top">
-Disproportionate processing time for a subset of inputs
-
-    </td>
-    <td valign="top">
-Identify triggering input characteristics; add pre-processing or fast-path routing
-
-    </td>
+    <td valign="top">Step latency outliers on specific input patterns</td>
+    <td valign="top">Disproportionate processing time for a subset of inputs</td>
+    <td valign="top">Identify triggering input characteristics; add pre-processing or fast-path routing</td>
   </tr>
   <tr>
-    <td valign="top">
-High LLM critic REJECT rate on specific output types
-
-    </td>
-    <td valign="top">
-Agent consistently fails plausibility on a narrow output category
-
-    </td>
-    <td valign="top">
-Few-shot examples for that output type; tighter Layer 1 input constraints
-
-    </td>
+    <td valign="top">High LLM critic REJECT rate on specific output types</td>
+    <td valign="top">Agent consistently fails plausibility on a narrow output category</td>
+    <td valign="top">Few-shot examples for that output type; tighter Layer 1 input constraints</td>
   </tr>
 </table>
 
@@ -528,74 +381,29 @@ This is why the quarterly review cycle should include iteration pattern analysis
     <th valign="top">Action</th>
   </tr>
   <tr>
-    <td valign="top">
-Agent lacks context to construct tool call correctly
-
-    </td>
-    <td valign="top">
-Prompt quality issue
-
-    </td>
-    <td valign="top">
-Update system prompt or RAG corpus — in-place fix
-
-    </td>
+    <td valign="top">Agent lacks context to construct tool call correctly</td>
+    <td valign="top">Prompt quality issue</td>
+    <td valign="top">Update system prompt or RAG corpus — in-place fix</td>
   </tr>
   <tr>
-    <td valign="top">
-LLM computing what a deterministic SAP service should compute
-
-    </td>
-    <td valign="top">
-Design issue
-
-    </td>
-    <td valign="top">
-Replace with `sapMcpClient` call to authoritative service — Microdelivery
-
-    </td>
+    <td valign="top">LLM computing what a deterministic SAP service should compute</td>
+    <td valign="top">Design issue</td>
+    <td valign="top">Replace with `sapMcpClient` call to authoritative service — Microdelivery</td>
   </tr>
   <tr>
-    <td valign="top">
-Verification threshold calibrated too tightly
-
-    </td>
-    <td valign="top">
-Threshold issue
-
-    </td>
-    <td valign="top">
-Recalibrate threshold — in-place fix
-
-    </td>
+    <td valign="top">Verification threshold calibrated too tightly</td>
+    <td valign="top">Threshold issue</td>
+    <td valign="top">Recalibrate threshold — in-place fix</td>
   </tr>
   <tr>
-    <td valign="top">
-Input patterns not covered by build-time evals
-
-    </td>
-    <td valign="top">
-Eval coverage gap
-
-    </td>
-    <td valign="top">
-Add test cases for the triggering input patterns — build improvement
-
-    </td>
+    <td valign="top">Input patterns not covered by build-time evals</td>
+    <td valign="top">Eval coverage gap</td>
+    <td valign="top">Add test cases for the triggering input patterns — build improvement</td>
   </tr>
   <tr>
-    <td valign="top">
-Task decomposition mismatch: step too complex for single agent
-
-    </td>
-    <td valign="top">
-Design flaw
-
-    </td>
-    <td valign="top">
-Redesign step or split into sub-agent — Microdelivery or new sprint
-
-    </td>
+    <td valign="top">Task decomposition mismatch: step too complex for single agent</td>
+    <td valign="top">Design flaw</td>
+    <td valign="top">Redesign step or split into sub-agent — Microdelivery or new sprint</td>
   </tr>
 </table>
 
@@ -619,46 +427,19 @@ Agent mining is distinct from supervisor real-time monitoring and from the onlin
     <th valign="top">Cadence</th>
   </tr>
   <tr>
-    <td valign="top">
-Supervisor Workflow A+B
-
-    </td>
-    <td valign="top">
-Individual invocation quality; real-time anomalies
-
-    </td>
-    <td valign="top">
-Per invocation (real-time)
-
-    </td>
+    <td valign="top">Supervisor Workflow A+B</td>
+    <td valign="top">Individual invocation quality; real-time anomalies</td>
+    <td valign="top">Per invocation (real-time)</td>
   </tr>
   <tr>
-    <td valign="top">
-Online eval (aeval)
-
-    </td>
-    <td valign="top">
-Statistical quality trends; success rate drift; LLM-as-judge scoring
-
-    </td>
-    <td valign="top">
-Daily / weekly aggregation
-
-    </td>
+    <td valign="top">Online eval (aeval)</td>
+    <td valign="top">Statistical quality trends; success rate drift; LLM-as-judge scoring</td>
+    <td valign="top">Daily / weekly aggregation</td>
   </tr>
   <tr>
-    <td valign="top">
-Agent mining (Signavio)
-
-    </td>
-    <td valign="top">
-Process-level behavioral patterns across many executions; flow variants; deviation from expected paths
-
-    </td>
-    <td valign="top">
-Periodic analysis (quarterly review cycle)
-
-    </td>
+    <td valign="top">Agent mining (Signavio)</td>
+    <td valign="top">Process-level behavioral patterns across many executions; flow variants; deviation from expected paths</td>
+    <td valign="top">Periodic analysis (quarterly review cycle)</td>
   </tr>
 </table>
 
@@ -691,60 +472,24 @@ The CoE operational capability can be assessed against four maturity levels. Mos
     <th valign="top">What It Looks Like</th>
   </tr>
   <tr>
-    <td valign="top">
-**1 — Reactive**
-
-    </td>
-    <td valign="top">
-Incident response
-
-    </td>
-    <td valign="top">
-CIS engages when the customer reports a problem; no automated monitoring; investigation starts from scratch
-
-    </td>
+    <td valign="top">**1 — Reactive**</td>
+    <td valign="top">Incident response</td>
+    <td valign="top">CIS engages when the customer reports a problem; no automated monitoring; investigation starts from scratch</td>
   </tr>
   <tr>
-    <td valign="top">
-**2 — Monitored**
-
-    </td>
-    <td valign="top">
-Automated alerting
-
-    </td>
-    <td valign="top">
-Supervisor Workflows A+B are deployed; CIS is notified by automated tickets (Workflow C); response is faster because evidence is already collected
-
-    </td>
+    <td valign="top">**2 — Monitored**</td>
+    <td valign="top">Automated alerting</td>
+    <td valign="top">Supervisor Workflows A+B are deployed; CIS is notified by automated tickets (Workflow C); response is faster because evidence is already collected</td>
   </tr>
   <tr>
-    <td valign="top">
-**3 — Supervised**
-
-    </td>
-    <td valign="top">
-Cross-engagement visibility
-
-    </td>
-    <td valign="top">
-CIS T&O has aggregated visibility across multiple deployed agents; can detect patterns that individual supervisors don't see; proactive recommendations before issues escalate
-
-    </td>
+    <td valign="top">**3 — Supervised**</td>
+    <td valign="top">Cross-engagement visibility</td>
+    <td valign="top">CIS T&O has aggregated visibility across multiple deployed agents; can detect patterns that individual supervisors don't see; proactive recommendations before issues escalate</td>
   </tr>
   <tr>
-    <td valign="top">
-**4 — Optimized**
-
-    </td>
-    <td valign="top">
-Continuous improvement
-
-    </td>
-    <td valign="top">
-Production data systematically feeds build-time evals; prompts and models improve between versions; new engagements benefit from operational learnings of prior ones
-
-    </td>
+    <td valign="top">**4 — Optimized**</td>
+    <td valign="top">Continuous improvement</td>
+    <td valign="top">Production data systematically feeds build-time evals; prompts and models improve between versions; new engagements benefit from operational learnings of prior ones</td>
   </tr>
 </table>
 
@@ -796,44 +541,20 @@ The skill encodes:
     <th valign="top">Description</th>
   </tr>
   <tr>
-    <td valign="top">
-Phase checklists
-
-    </td>
-    <td valign="top">
-All phases from Discovery 0 through Productization, with per-phase completion criteria
-
-    </td>
+    <td valign="top">Phase checklists</td>
+    <td valign="top">All phases from Discovery 0 through Productization, with per-phase completion criteria</td>
   </tr>
   <tr>
-    <td valign="top">
-Artifact system
-
-    </td>
-    <td valign="top">
-Numbered set: 01 AS-IS Process Documentation through 08 Pre-Execute Plan — every major Discovery deliverable
-
-    </td>
+    <td valign="top">Artifact system</td>
+    <td valign="top">Numbered set: 01 AS-IS Process Documentation through 08 Pre-Execute Plan — every major Discovery deliverable</td>
   </tr>
   <tr>
-    <td valign="top">
-Go/No-Go scorecard
-
-    </td>
-    <td valign="top">
-Explicit thresholds: HIGH = proceed, CONDITIONAL = proceed with named risks, NO-GO = stop and escalate
-
-    </td>
+    <td valign="top">Go/No-Go scorecard</td>
+    <td valign="top">Explicit thresholds: HIGH = proceed, CONDITIONAL = proceed with named risks, NO-GO = stop and escalate</td>
   </tr>
   <tr>
-    <td valign="top">
-Compliance & Technical Release track
-
-    </td>
-    <td valign="top">
-Covers Metering, Ethics Assessment, EU AI Act classification, IUCR, and TR/Golden Path requirements
-
-    </td>
+    <td valign="top">Compliance & Technical Release track</td>
+    <td valign="top">Covers Metering, Ethics Assessment, EU AI Act classification, IUCR, and TR/Golden Path requirements</td>
   </tr>
 </table>
 
@@ -883,94 +604,40 @@ The FDE Engagement Playbook (Oct 2026) formalizes the **Adoption Strategy** as a
     <th valign="top">Primary Responsibility</th>
   </tr>
   <tr>
-    <td valign="top">
-**Executive Sponsor**
-
-    </td>
-    <td valign="top">
-Business commitment and escalation authority; champions the agent at the executive level; unblocks organizational resistance
-
-    </td>
+    <td valign="top">**Executive Sponsor**</td>
+    <td valign="top">Business commitment and escalation authority; champions the agent at the executive level; unblocks organizational resistance</td>
   </tr>
   <tr>
-    <td valign="top">
-**Adoption Lead**
-
-    </td>
-    <td valign="top">
-Owns the Adoption Strategy document; orchestrates all workstreams; accountable for adoption metrics
-
-    </td>
+    <td valign="top">**Adoption Lead**</td>
+    <td valign="top">Owns the Adoption Strategy document; orchestrates all workstreams; accountable for adoption metrics</td>
   </tr>
   <tr>
-    <td valign="top">
-**Business Lead**
-
-    </td>
-    <td valign="top">
-Process owner; defines what good looks like; owns Dimension 2 process KPIs; approves threshold values
-
-    </td>
+    <td valign="top">**Business Lead**</td>
+    <td valign="top">Process owner; defines what good looks like; owns Dimension 2 process KPIs; approves threshold values</td>
   </tr>
   <tr>
-    <td valign="top">
-**Customer IT Lead**
-
-    </td>
-    <td valign="top">
-Technical operations post-handover; owns BAIP application registrations and threshold configuration
-
-    </td>
+    <td valign="top">**Customer IT Lead**</td>
+    <td valign="top">Technical operations post-handover; owns BAIP application registrations and threshold configuration</td>
   </tr>
   <tr>
-    <td valign="top">
-**Account Executive**
-
-    </td>
-    <td valign="top">
-Commercial relationship; ensures alignment between delivery and contract commitments
-
-    </td>
+    <td valign="top">**Account Executive**</td>
+    <td valign="top">Commercial relationship; ensures alignment between delivery and contract commitments</td>
   </tr>
   <tr>
-    <td valign="top">
-**Enterprise Architect**
-
-    </td>
-    <td valign="top">
-Ensures architectural fit with customer's broader SAP landscape; reviews authorization matrix
-
-    </td>
+    <td valign="top">**Enterprise Architect**</td>
+    <td valign="top">Ensures architectural fit with customer's broader SAP landscape; reviews authorization matrix</td>
   </tr>
   <tr>
-    <td valign="top">
-**Discovery / Execution Lead**
-
-    </td>
-    <td valign="top">
-FDE engagement lead; bridges discovery intent and build execution
-
-    </td>
+    <td valign="top">**Discovery / Execution Lead**</td>
+    <td valign="top">FDE engagement lead; bridges discovery intent and build execution</td>
   </tr>
   <tr>
-    <td valign="top">
-**Product / Solution Manager**
-
-    </td>
-    <td valign="top">
-SAP product management representation; ensures productization alignment
-
-    </td>
+    <td valign="top">**Product / Solution Manager**</td>
+    <td valign="top">SAP product management representation; ensures productization alignment</td>
   </tr>
   <tr>
-    <td valign="top">
-**Test Lead**
-
-    </td>
-    <td valign="top">
-Owns QPA test strategy and UAT execution; acceptance sign-off before production go-live
-
-    </td>
+    <td valign="top">**Test Lead**</td>
+    <td valign="top">Owns QPA test strategy and UAT execution; acceptance sign-off before production go-live</td>
   </tr>
 </table>
 
@@ -1007,46 +674,19 @@ After productization handover, the CIS CoE maintains an ongoing operating rhythm
     <th valign="top">Participants</th>
   </tr>
   <tr>
-    <td valign="top">
-**Weekly (hypercare period: first 30 days)**
-
-    </td>
-    <td valign="top">
-Review any Workflow B alerts; confirm threshold baselines are stable; triage any human override rate anomalies
-
-    </td>
-    <td valign="top">
-CIS T&O + Customer IT Admin
-
-    </td>
+    <td valign="top">**Weekly (hypercare period: first 30 days)**</td>
+    <td valign="top">Review any Workflow B alerts; confirm threshold baselines are stable; triage any human override rate anomalies</td>
+    <td valign="top">CIS T&O + Customer IT Admin</td>
   </tr>
   <tr>
-    <td valign="top">
-**Monthly**
-
-    </td>
-    <td valign="top">
-Review process KPI trends; review human override rate patterns; confirm eval suite is running in CI; review audit trail summary
-
-    </td>
-    <td valign="top">
-CIS T&O + Business Lead
-
-    </td>
+    <td valign="top">**Monthly**</td>
+    <td valign="top">Review process KPI trends; review human override rate patterns; confirm eval suite is running in CI; review audit trail summary</td>
+    <td valign="top">CIS T&O + Business Lead</td>
   </tr>
   <tr>
-    <td valign="top">
-**Quarterly**
-
-    </td>
-    <td valign="top">
-Full quality review: Dimension 1–3 metrics; agent mining (if Signavio available); improvement proposals; eval suite update; Adoption Strategy adoption risks review
-
-    </td>
-    <td valign="top">
-CIS T&O + Executive Sponsor + Business Lead
-
-    </td>
+    <td valign="top">**Quarterly**</td>
+    <td valign="top">Full quality review: Dimension 1–3 metrics; agent mining (if Signavio available); improvement proposals; eval suite update; Adoption Strategy adoption risks review</td>
+    <td valign="top">CIS T&O + Executive Sponsor + Business Lead</td>
   </tr>
 </table>
 
@@ -1064,34 +704,16 @@ CIS T&O + Executive Sponsor + Business Lead
     <th valign="top">What Is Reviewed</th>
   </tr>
   <tr>
-    <td valign="top">
-**30-day**
-
-    </td>
-    <td valign="top">
-Technical stability confirmed; threshold baselines calibrated; first human override rate data available; any blocking process alignment issues surfaced
-
-    </td>
+    <td valign="top">**30-day**</td>
+    <td valign="top">Technical stability confirmed; threshold baselines calibrated; first human override rate data available; any blocking process alignment issues surfaced</td>
   </tr>
   <tr>
-    <td valign="top">
-**60-day**
-
-    </td>
-    <td valign="top">
-Process KPI trend data emerging; user adoption metrics from Joule usage; any training gaps identified via support ticket analysis
-
-    </td>
+    <td valign="top">**60-day**</td>
+    <td valign="top">Process KPI trend data emerging; user adoption metrics from Joule usage; any training gaps identified via support ticket analysis</td>
   </tr>
   <tr>
-    <td valign="top">
-**90-day**
-
-    </td>
-    <td valign="top">
-Initial business value assessment against the Expected Business Value section of the Adoption Strategy; enable track Stage 4 confirmation; decision: extend hypercare or move to standard monthly cadence
-
-    </td>
+    <td valign="top">**90-day**</td>
+    <td valign="top">Initial business value assessment against the Expected Business Value section of the Adoption Strategy; enable track Stage 4 confirmation; decision: extend hypercare or move to standard monthly cadence</td>
   </tr>
 </table>
 
@@ -1110,88 +732,34 @@ The T&O operational runbook (a required handover artifact) must include defined 
     <th valign="top">Escalation Path</th>
   </tr>
   <tr>
-    <td valign="top">
-**1. Workflow B alert: elevated human override rate**
-
-    </td>
-    <td valign="top">
-Check audit trail for the 24h window; identify which output type is being overridden; confirm it is not a data quality issue in the source system
-
-    </td>
-    <td valign="top">
-If > 40% override rate for 3+ consecutive days: CIS T&O proposes threshold or prompt adjustment
-
-    </td>
+    <td valign="top">**1. Workflow B alert: elevated human override rate**</td>
+    <td valign="top">Check audit trail for the 24h window; identify which output type is being overridden; confirm it is not a data quality issue in the source system</td>
+    <td valign="top">If > 40% override rate for 3+ consecutive days: CIS T&O proposes threshold or prompt adjustment</td>
   </tr>
   <tr>
-    <td valign="top">
-**2. Workflow B alert: token spike / runaway loop**
-
-    </td>
-    <td valign="top">
-Check Agent Hub for the specific invocation; confirm it is a runaway (not a legitimate large context); suspend the agent via Agent Hub Secure & Govern if confirmed
-
-    </td>
-    <td valign="top">
-If confirmed runaway: execute rollback procedure ([Production Operations](production-operations-f963579.md)) while root cause is investigated
-
-    </td>
+    <td valign="top">**2. Workflow B alert: token spike / runaway loop**</td>
+    <td valign="top">Check Agent Hub for the specific invocation; confirm it is a runaway (not a legitimate large context); suspend the agent via Agent Hub Secure & Govern if confirmed</td>
+    <td valign="top">If confirmed runaway: execute rollback procedure ([Production Operations](production-operations-f963579.md)) while root cause is investigated</td>
   </tr>
   <tr>
-    <td valign="top">
-**3. Quality regression post-update**
-
-    </td>
-    <td valign="top">
-Correlate regression signal with version deployment log; identify changed component; execute rollback in order: threshold → model → prompt → workflow
-
-    </td>
-    <td valign="top">
-If rollback does not restore quality: trigger new FDE sprint scoped to the regression
-
-    </td>
+    <td valign="top">**3. Quality regression post-update**</td>
+    <td valign="top">Correlate regression signal with version deployment log; identify changed component; execute rollback in order: threshold → model → prompt → workflow</td>
+    <td valign="top">If rollback does not restore quality: trigger new FDE sprint scoped to the regression</td>
   </tr>
   <tr>
-    <td valign="top">
-**4. Process KPI degradation (no version change)**
-
-    </td>
-    <td valign="top">
-Confirm the degradation in the business process layer (not just agent metrics); distinguish agent-caused from process-caused degradation
-
-    </td>
-    <td valign="top">
-If agent-caused: review eval results for the affected test cases; update eval suite; may trigger prompt or model update
-
-    </td>
+    <td valign="top">**4. Process KPI degradation (no version change)**</td>
+    <td valign="top">Confirm the degradation in the business process layer (not just agent metrics); distinguish agent-caused from process-caused degradation</td>
+    <td valign="top">If agent-caused: review eval results for the affected test cases; update eval suite; may trigger prompt or model update</td>
   </tr>
   <tr>
-    <td valign="top">
-**5. Customer requests a new capability**
-
-    </td>
-    <td valign="top">
-Assess against the continuous improvement framework: is this a configuration change, a prompt update, a Microdelivery, or a new FDE sprint?
-
-    </td>
-    <td valign="top">
-Route through the appropriate channel: in-place fix (no sprint) or formal Microdelivery / new engagement request
-
-    </td>
+    <td valign="top">**5. Customer requests a new capability**</td>
+    <td valign="top">Assess against the continuous improvement framework: is this a configuration change, a prompt update, a Microdelivery, or a new FDE sprint?</td>
+    <td valign="top">Route through the appropriate channel: in-place fix (no sprint) or formal Microdelivery / new engagement request</td>
   </tr>
   <tr>
-    <td valign="top">
-**6. Regulatory / audit requirement**
-
-    </td>
-    <td valign="top">
-Customer's compliance team requests evidence of agent decision-making for a specific transaction
-
-    </td>
-    <td valign="top">
-Retrieve audit trail records for the correlation_id in question; provide: input snapshot, verification verdicts, human decision (if any), committed value, agent version. All required fields are in the standard audit trail schema ([Precision Guardrails](precision-guardrails-c279f4e.md))
-
-    </td>
+    <td valign="top">**6. Regulatory / audit requirement**</td>
+    <td valign="top">Customer's compliance team requests evidence of agent decision-making for a specific transaction</td>
+    <td valign="top">Retrieve audit trail records for the correlation_id in question; provide: input snapshot, verification verdicts, human decision (if any), committed value, agent version. All required fields are in the standard audit trail schema ([Precision Guardrails](precision-guardrails-c279f4e.md))</td>
   </tr>
 </table>
 
@@ -1210,174 +778,72 @@ Retrieve audit trail records for the correlation_id in question; provide: input 
     <th valign="top">Key Principle</th>
   </tr>
   <tr>
-    <td valign="top">
-Core shift
-
-    </td>
-    <td valign="top">
-From reactive incident response to proactive continuous lifecycle management
-
-    </td>
+    <td valign="top">Core shift</td>
+    <td valign="top">From reactive incident response to proactive continuous lifecycle management</td>
   </tr>
   <tr>
-    <td valign="top">
-Topology A (customer tenant)
-
-    </td>
-    <td valign="top">
-CIS access is exception-based and consent-gated; supervisor acts as autonomous proxy; Workflow C initiates the access process when needed
-
-    </td>
+    <td valign="top">Topology A (customer tenant)</td>
+    <td valign="top">CIS access is exception-based and consent-gated; supervisor acts as autonomous proxy; Workflow C initiates the access process when needed</td>
   </tr>
   <tr>
-    <td valign="top">
-Topology B (SAP managed tenant)
-
-    </td>
-    <td valign="top">
-CIS is the operator; full Automation tier visibility; higher CIS operational responsibility
-
-    </td>
+    <td valign="top">Topology B (SAP managed tenant)</td>
+    <td valign="top">CIS is the operator; full Automation tier visibility; higher CIS operational responsibility</td>
   </tr>
   <tr>
-    <td valign="top">
-Supervisor as CIS proxy
-
-    </td>
-    <td valign="top">
-Supervisor handles routine autonomously; escalates to CIS only for confirmed, critical issues — reduces need for permanent CIS access
-
-    </td>
+    <td valign="top">Supervisor as CIS proxy</td>
+    <td valign="top">Supervisor handles routine autonomously; escalates to CIS only for confirmed, critical issues — reduces need for permanent CIS access</td>
   </tr>
   <tr>
-    <td valign="top">
-In-place fixes
-
-    </td>
-    <td valign="top">
-Threshold adjustment (via `$vars`, no redeploy); prompt update (inline — requires a workflow redeploy, not a new sprint); model swap (workflow edit + redeploy); supervisor rule tuning — all resolvable without a new FDE sprint
-
-    </td>
+    <td valign="top">In-place fixes</td>
+    <td valign="top">Threshold adjustment (via `$vars`, no redeploy); prompt update (inline — requires a workflow redeploy, not a new sprint); model swap (workflow edit + redeploy); supervisor rule tuning — all resolvable without a new FDE sprint</td>
   </tr>
   <tr>
-    <td valign="top">
-New sprint triggers
-
-    </td>
-    <td valign="top">
-Structural workflow flaw, data quality issue, scope expansion, persistent model drift
-
-    </td>
+    <td valign="top">New sprint triggers</td>
+    <td valign="top">Structural workflow flaw, data quality issue, scope expansion, persistent model drift</td>
   </tr>
   <tr>
-    <td valign="top">
-Continuous improvement
-
-    </td>
-    <td valign="top">
-Audit trail data → eval improvement → prompt improvement → productization; each version better than the last
-
-    </td>
+    <td valign="top">Continuous improvement</td>
+    <td valign="top">Audit trail data → eval improvement → prompt improvement → productization; each version better than the last</td>
   </tr>
   <tr>
-    <td valign="top">
-Maturity target at handover
-
-    </td>
-    <td valign="top">
-Level 2 (Monitored) minimum: supervisor deployed and operational before production handover is complete
-
-    </td>
+    <td valign="top">Maturity target at handover</td>
+    <td valign="top">Level 2 (Monitored) minimum: supervisor deployed and operational before production handover is complete</td>
   </tr>
   <tr>
-    <td valign="top">
-FDE process (Sep 2026)
-
-    </td>
-    <td valign="top">
-Nominate → Discover (~6 weeks) → Develop → Productize; Deployment phase removed; productization starts at RTC EAC
-
-    </td>
+    <td valign="top">FDE process (Sep 2026)</td>
+    <td valign="top">Nominate → Discover (~6 weeks) → Develop → Productize; Deployment phase removed; productization starts at RTC EAC</td>
   </tr>
   <tr>
-    <td valign="top">
-FDE system of record
-
-    </td>
-    <td valign="top">
-FDE on MXP (since Sep 2026); FDE Tracker (SharePoint) retired; engagement IDs are F-numbers
-
-    </td>
+    <td valign="top">FDE system of record</td>
+    <td valign="top">FDE on MXP (since Sep 2026); FDE Tracker (SharePoint) retired; engagement IDs are F-numbers</td>
   </tr>
   <tr>
-    <td valign="top">
-Adoption Strategy
-
-    </td>
-    <td valign="top">
-Required handover artifact: 7-section living document; 9 named governance roles; produced during engagement, handed over at productization (full detail in [Customer Enablement and Adoption](customer-enablement-and-adoption-ce2e74a.md))
-
-    </td>
+    <td valign="top">Adoption Strategy</td>
+    <td valign="top">Required handover artifact: 7-section living document; 9 named governance roles; produced during engagement, handed over at productization (full detail in [Customer Enablement and Adoption](customer-enablement-and-adoption-ce2e74a.md))</td>
   </tr>
   <tr>
-    <td valign="top">
-Enable track
-
-    </td>
-    <td valign="top">
-Parallel workstream to Build and Operate; 4-stage gradual release; 7-audience role-based training; Enable exit = Stage 3 minimum at handover, Stage 4 target (full detail in [Customer Enablement and Adoption](customer-enablement-and-adoption-ce2e74a.md))
-
-    </td>
+    <td valign="top">Enable track</td>
+    <td valign="top">Parallel workstream to Build and Operate; 4-stage gradual release; 7-audience role-based training; Enable exit = Stage 3 minimum at handover, Stage 4 target (full detail in [Customer Enablement and Adoption](customer-enablement-and-adoption-ce2e74a.md))</td>
   </tr>
   <tr>
-    <td valign="top">
-Post-engagement cadence
-
-    </td>
-    <td valign="top">
-Weekly hypercare (first 30 days) → monthly → quarterly; 30/60/90-day milestones; 6-scenario runbook library required
-
-    </td>
+    <td valign="top">Post-engagement cadence</td>
+    <td valign="top">Weekly hypercare (first 30 days) → monthly → quarterly; 30/60/90-day milestones; 6-scenario runbook library required</td>
   </tr>
   <tr>
-    <td valign="top">
-FDE design implication
-
-    </td>
-    <td valign="top">
-Operations model must be designed in Discovery, not added at productization
-
-    </td>
+    <td valign="top">FDE design implication</td>
+    <td valign="top">Operations model must be designed in Discovery, not added at productization</td>
   </tr>
   <tr>
-    <td valign="top">
-Customer-centric observability
-
-    </td>
-    <td valign="top">
-When CALM is deployed: agent telemetry surfaced to customer and CSM via CALM — separate from CIS-side monitoring; cannot be mandated; confirm in Discovery
-
-    </td>
+    <td valign="top">Customer-centric observability</td>
+    <td valign="top">When CALM is deployed: agent telemetry surfaced to customer and CSM via CALM — separate from CIS-side monitoring; cannot be mandated; confirm in Discovery</td>
   </tr>
   <tr>
-    <td valign="top">
-"Not validated" lifecycle state
-
-    </td>
-    <td valign="top">
-Newly deployed agents appear in AI Agent Hub as "not validated" until IT admin activates them; include activation step in productization handover checklist
-
-    </td>
+    <td valign="top">"Not validated" lifecycle state</td>
+    <td valign="top">Newly deployed agents appear in AI Agent Hub as "not validated" until IT admin activates them; include activation step in productization handover checklist</td>
   </tr>
   <tr>
-    <td valign="top">
-LeanIX
-
-    </td>
-    <td valign="top">
-Used alongside SAP AI Agent Hub for enterprise inventory governance; register agent as application component (owner, domain, integrations, deprecation class) when customer uses LeanIX
-
-    </td>
+    <td valign="top">LeanIX</td>
+    <td valign="top">Used alongside SAP AI Agent Hub for enterprise inventory governance; register agent as application component (owner, domain, integrations, deprecation class) when customer uses LeanIX</td>
   </tr>
 </table>
 

@@ -28,70 +28,35 @@ This project contains two documents serving different audiences. They share the 
 
 <table>
 <tr>
+<th valign="top"></th>
 <th valign="top">
- 
-</th>
-<th valign="top">
-Concept (`concept/`)
-</th>
-<th valign="top">
-Playbook SAP/CIS Edition (`documents/`)
-</th>
+Concept (`concept/`)</th>
+<th valign="top">Playbook SAP/CIS Edition (`documents/`)</th>
 </tr>
 <tr>
-<td valign="top">
-**Primary audience**
-</td>
-<td valign="top">
-CIS architects, CIS leadership, enterprise architects
-</td>
-<td valign="top">
-FDE delivery squad at sprint kickoff
-</td>
+<td valign="top">**Primary audience**</td>
+<td valign="top">CIS architects, CIS leadership, enterprise architects</td>
+<td valign="top">FDE delivery squad at sprint kickoff</td>
 </tr>
 <tr>
-<td valign="top">
-**What it answers**
-</td>
-<td valign="top">
-Why this design? What are the trade-offs?
-</td>
-<td valign="top">
-What do I do this week? What must be true before handover?
-</td>
+<td valign="top">**What it answers**</td>
+<td valign="top">Why this design? What are the trade-offs?</td>
+<td valign="top">What do I do this week? What must be true before handover?</td>
 </tr>
 <tr>
-<td valign="top">
-**Structure**
-</td>
-<td valign="top">
-12 chapters by topic
-</td>
-<td valign="top">
-3 delivery tracks (Build / Operate / Enable) + checklists
-</td>
+<td valign="top">**Structure**</td>
+<td valign="top">12 chapters by topic</td>
+<td valign="top">3 delivery tracks (Build / Operate / Enable) + checklists</td>
 </tr>
 <tr>
-<td valign="top">
-**Prerequisite knowledge**
-</td>
-<td valign="top">
-SAP platform familiarity
-</td>
-<td valign="top">
-Practitioner ready to run an engagement
-</td>
+<td valign="top">**Prerequisite knowledge**</td>
+<td valign="top">SAP platform familiarity</td>
+<td valign="top">Practitioner ready to run an engagement</td>
 </tr>
 <tr>
-<td valign="top">
-**Source of truth for**
-</td>
-<td valign="top">
-Architectural decisions, security posture, governance patterns
-</td>
-<td valign="top">
-Operational checklists, engagement timeline, exit criteria
-</td>
+<td valign="top">**Source of truth for**</td>
+<td valign="top">Architectural decisions, security posture, governance patterns</td>
+<td valign="top">Operational checklists, engagement timeline, exit criteria</td>
 </tr>
 </table>
 
@@ -108,158 +73,74 @@ The concept is structured as twelve topics plus an introduction. Start with [Int
 
 <table>
 <tr>
-<th valign="top">
-Topic
-</th>
-<th valign="top">
-Title
-</th>
-<th valign="top">
-What It Covers
-</th>
+<th valign="top">Topic</th>
+<th valign="top">Title</th>
+<th valign="top">What It Covers</th>
 </tr>
 <tr>
-<td valign="top">
-[Introduction](introduction-c495d02.md)
-</td>
-<td valign="top">
-Introduction
-</td>
-<td valign="top">
-Project context, 13 design questions, topic guide, role-based starting points, platform constraints
-</td>
+<td valign="top">[Introduction](introduction-c495d02.md)</td>
+<td valign="top">Introduction</td>
+<td valign="top">Project context, 13 design questions, topic guide, role-based starting points, platform constraints</td>
 </tr>
 <tr>
-<td valign="top">
-[Agent Quality Framework](agent-quality-framework-5ec914b.md)
-</td>
-<td valign="top">
-Agent Quality Framework
-</td>
-<td valign="top">
-Three-dimensional quality measurement (technical, process KPI, business outcomes); TDD/BDD and test onion approach; ten evaluation dimensions; runtime escalation path
-</td>
+<td valign="top">[Agent Quality Framework](agent-quality-framework-5ec914b.md)</td>
+<td valign="top">Agent Quality Framework</td>
+<td valign="top">Three-dimensional quality measurement (technical, process KPI, business outcomes); TDD/BDD and test onion approach; ten evaluation dimensions; runtime escalation path</td>
 </tr>
 <tr>
-<td valign="top">
-[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)
-</td>
-<td valign="top">
-Supervisor Agent Pattern
-</td>
-<td valign="top">
-Supervisor vs. worker design; nine alternatives evaluated; three supervisor workflows (inline quality relay, telemetry monitor, support relay); data protection design
-</td>
+<td valign="top">[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)</td>
+<td valign="top">Supervisor Agent Pattern</td>
+<td valign="top">Supervisor vs. worker design; nine alternatives evaluated; three supervisor workflows (inline quality relay, telemetry monitor, support relay); data protection design</td>
 </tr>
 <tr>
-<td valign="top">
-[Security and Data Protection](security-and-data-protection-27868d4.md)
-</td>
-<td valign="top">
-Security and Data Protection
-</td>
-<td valign="top">
-Agent-specific threats; three-tier AI defense model; agent identity and least-privilege; security as testable requirements; data flows and legal alignment
-</td>
+<td valign="top">[Security and Data Protection](security-and-data-protection-27868d4.md)</td>
+<td valign="top">Security and Data Protection</td>
+<td valign="top">Agent-specific threats; three-tier AI defense model; agent identity and least-privilege; security as testable requirements; data flows and legal alignment</td>
 </tr>
 <tr>
-<td valign="top">
-[Precision Guardrails](precision-guardrails-c279f4e.md)
-</td>
-<td valign="top">
-Precision Guardrails
-</td>
-<td valign="top">
-Four-layer guardrail stack for numerical outputs; domain examples; human approval thresholds; audit trail requirements
-</td>
+<td valign="top">[Precision Guardrails](precision-guardrails-c279f4e.md)</td>
+<td valign="top">Precision Guardrails</td>
+<td valign="top">Four-layer guardrail stack for numerical outputs; domain examples; human approval thresholds; audit trail requirements</td>
 </tr>
 <tr>
-<td valign="top">
-[Joule Studio Build Map](joule-studio-build-map-7de243e.md)
-</td>
-<td valign="top">
-Joule Studio Build Map
-</td>
-<td valign="top">
-Concrete implementation using Joule Studio n8n nodes; master build map table; TR1–TR14 mandatory production readiness checklist (incl. TR13 Agent Action Metering); FDE build sequence
-</td>
+<td valign="top">[Joule Studio Build Map](joule-studio-build-map-7de243e.md)</td>
+<td valign="top">Joule Studio Build Map</td>
+<td valign="top">Concrete implementation using Joule Studio n8n nodes; master build map table; TR1–TR14 mandatory production readiness checklist (incl. TR13 Agent Action Metering); FDE build sequence</td>
 </tr>
 <tr>
-<td valign="top">
-[CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md)
-</td>
-<td valign="top">
-CIS CoE Operations Model
-</td>
-<td valign="top">
-Post-productization lifecycle management; supervisor as CIS proxy; Adoption Strategy lifecycle; Enable track with 4-stage gradual release; 6-scenario runbook library; continuous improvement loop
-</td>
+<td valign="top">[CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md)</td>
+<td valign="top">CIS CoE Operations Model</td>
+<td valign="top">Post-productization lifecycle management; supervisor as CIS proxy; Adoption Strategy lifecycle; Enable track with 4-stage gradual release; 6-scenario runbook library; continuous improvement loop</td>
 </tr>
 <tr>
-<td valign="top">
-[Multi-Agent Orchestration](multi-agent-orchestration-2f6e92e.md)
-</td>
-<td valign="top">
-Multi-Agent Orchestration
-</td>
-<td valign="top">
-When and how to compose specialist agents; three topologies (flat, per-worker supervised, shared supervisor); supervisor patterns at scale
-</td>
+<td valign="top">[Multi-Agent Orchestration](multi-agent-orchestration-2f6e92e.md)</td>
+<td valign="top">Multi-Agent Orchestration</td>
+<td valign="top">When and how to compose specialist agents; three topologies (flat, per-worker supervised, shared supervisor); supervisor patterns at scale</td>
 </tr>
 <tr>
-<td valign="top">
-[Production Operations](production-operations-f963579.md)
-</td>
-<td valign="top">
-Production Operations
-</td>
-<td valign="top">
-Agent versioning (five-component version stack); rollback mechanics; AI Units billing; cost/token monitoring; dev → test → prod migration; productization triggered at RTC EAC; TR1–TR14 shipping checklist
-</td>
+<td valign="top">[Production Operations](production-operations-f963579.md)</td>
+<td valign="top">Production Operations</td>
+<td valign="top">Agent versioning (five-component version stack); rollback mechanics; AI Units billing; cost/token monitoring; dev → test → prod migration; productization triggered at RTC EAC; TR1–TR14 shipping checklist</td>
 </tr>
 <tr>
-<td valign="top">
-[Reusable Components](reusable-components-8a3dd4c.md)
-</td>
-<td valign="top">
-Reusable Components and Reference Implementations
-</td>
-<td valign="top">
-Three-layer reusability stack (deploy as-is / parameterize / engagement-specific); CIS Starter Kit definition; RAG ingest pattern; context transfer schema; cross-engagement improvement loop
-</td>
+<td valign="top">[Reusable Components](reusable-components-8a3dd4c.md)</td>
+<td valign="top">Reusable Components and Reference Implementations</td>
+<td valign="top">Three-layer reusability stack (deploy as-is / parameterize / engagement-specific); CIS Starter Kit definition; RAG ingest pattern; context transfer schema; cross-engagement improvement loop</td>
 </tr>
 <tr>
-<td valign="top">
-[Token Efficiency](token-efficiency-54fe998.md)
-</td>
-<td valign="top">
-Token Efficiency in Industry AI Delivery
-</td>
-<td valign="top">
-Two cost pools (build-time vs. runtime); SAP L0–L6 optimization framework; FDE engineer guidelines (APM, caching, tool gating, session handoff); runtime efficiency; quality–efficiency connection
-</td>
+<td valign="top">[Token Efficiency](token-efficiency-54fe998.md)</td>
+<td valign="top">Token Efficiency in Industry AI Delivery</td>
+<td valign="top">Two cost pools (build-time vs. runtime); SAP L0–L6 optimization framework; FDE engineer guidelines (APM, caching, tool gating, session handoff); runtime efficiency; quality–efficiency connection</td>
 </tr>
 <tr>
-<td valign="top">
-[Agent Evaluation](agent-evaluation-65fd098.md)
-</td>
-<td valign="top">
-Agent Evaluation in FDE Sprints
-</td>
-<td valign="top">
-Testing vs. evaluation; four-phase evaluation lifecycle; aeval framework (offline + online, TR9 mandatory); spec quality evaluation (agentic-eval, 11+1 criteria); test case DSL; Quality Flywheel mapped to sprint weeks; success rate as primary release gate
-</td>
+<td valign="top">[Agent Evaluation](agent-evaluation-65fd098.md)</td>
+<td valign="top">Agent Evaluation in FDE Sprints</td>
+<td valign="top">Testing vs. evaluation; four-phase evaluation lifecycle; aeval framework (offline + online, TR9 mandatory); spec quality evaluation (agentic-eval, 11+1 criteria); test case DSL; Quality Flywheel mapped to sprint weeks; success rate as primary release gate</td>
 </tr>
 <tr>
-<td valign="top">
-[Customer Enablement and Adoption](customer-enablement-and-adoption-ce2e74a.md)
-</td>
-<td valign="top">
-Customer Enablement and Adoption
-</td>
-<td valign="top">
-Enable track as mandatory parallel workstream; Adoption Strategy lifecycle (7 sections, 9 governance roles); 4-stage gradual release; 7-audience role-based training matrix; enablement readiness checklist; CoE support tiers
-</td>
+<td valign="top">[Customer Enablement and Adoption](customer-enablement-and-adoption-ce2e74a.md)</td>
+<td valign="top">Customer Enablement and Adoption</td>
+<td valign="top">Enable track as mandatory parallel workstream; Adoption Strategy lifecycle (7 sections, 9 governance roles); 4-stage gradual release; 7-audience role-based training matrix; enablement readiness checklist; CoE support tiers</td>
 </tr>
 </table>
 

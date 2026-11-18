@@ -65,334 +65,109 @@ The following table classifies every significant design component from the prece
     <th valign="top">Maintenance Owner</th>
   </tr>
   <tr>
-    <td valign="top">
-Supervisor Workflow C (Support Relay)
-
-    </td>
-    <td valign="top">
-[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md), [Joule Studio Build Map](joule-studio-build-map-7de243e.md)
-
-    </td>
-    <td valign="top">
-Full workflow: sanitization rules, SAP Cloud ALM ITSM Adapter API call, IT admin notification
-
-    </td>
-    <td valign="top">
-Customer tenant ID (from environment config, not hardcoded)
-
-    </td>
-    <td valign="top">
-CIS T&O
-
-    </td>
+    <td valign="top">Supervisor Workflow C (Support Relay)</td>
+    <td valign="top">[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md), [Joule Studio Build Map](joule-studio-build-map-7de243e.md)</td>
+    <td valign="top">Full workflow: sanitization rules, SAP Cloud ALM ITSM Adapter API call, IT admin notification</td>
+    <td valign="top">Customer tenant ID (from environment config, not hardcoded)</td>
+    <td valign="top">CIS T&O</td>
   </tr>
   <tr>
-    <td valign="top">
-Audit trail schema — base fields
-
-    </td>
-    <td valign="top">
-[Precision Guardrails](precision-guardrails-c279f4e.md)
-
-    </td>
-    <td valign="top">
-All 16 fields: timestamp, agent_id, agent_version, correlation_id, input_state, agent_output, stage verdicts, human_decision, human_modified_value, committed_value, delta
-
-    </td>
-    <td valign="top">
-Table name prefix per engagement
-
-    </td>
-    <td valign="top">
-CIS T&O
-
-    </td>
+    <td valign="top">Audit trail schema — base fields</td>
+    <td valign="top">[Precision Guardrails](precision-guardrails-c279f4e.md)</td>
+    <td valign="top">All 16 fields: timestamp, agent_id, agent_version, correlation_id, input_state, agent_output, stage verdicts, human_decision, human_modified_value, committed_value, delta</td>
+    <td valign="top">Table name prefix per engagement</td>
+    <td valign="top">CIS T&O</td>
   </tr>
   <tr>
-    <td valign="top">
-Audit trail schema — cost extension
-
-    </td>
-    <td valign="top">
-[Production Operations](production-operations-f963579.md)
-
-    </td>
-    <td valign="top">
-Four additional fields: input_tokens, output_tokens, total_tokens_invocation, model_used
-
-    </td>
-    <td valign="top">
-None
-
-    </td>
-    <td valign="top">
-CIS T&O
-
-    </td>
+    <td valign="top">Audit trail schema — cost extension</td>
+    <td valign="top">[Production Operations](production-operations-f963579.md)</td>
+    <td valign="top">Four additional fields: input_tokens, output_tokens, total_tokens_invocation, model_used</td>
+    <td valign="top">None</td>
+    <td valign="top">CIS T&O</td>
   </tr>
   <tr>
-    <td valign="top">
-Telemetry anomaly rule set (Workflow B rule logic)
-
-    </td>
-    <td valign="top">
-[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)
-
-    </td>
-    <td valign="top">
-All six rule types: error rate, tool call count per invocation, response latency, human override rate, verification rejection rate, identical input pattern
-
-    </td>
-    <td valign="top">
-None — rule types are domain-agnostic; threshold values are Layer 2
-
-    </td>
-    <td valign="top">
-CIS T&O
-
-    </td>
+    <td valign="top">Telemetry anomaly rule set (Workflow B rule logic)</td>
+    <td valign="top">[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)</td>
+    <td valign="top">All six rule types: error rate, tool call count per invocation, response latency, human override rate, verification rejection rate, identical input pattern</td>
+    <td valign="top">None — rule types are domain-agnostic; threshold values are Layer 2</td>
+    <td valign="top">CIS T&O</td>
   </tr>
   <tr>
-    <td valign="top">
-Sanitization rules table (what to strip vs. retain in trace exports)
-
-    </td>
-    <td valign="top">
-[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)
-
-    </td>
-    <td valign="top">
-Field-by-field retain/strip classification
-
-    </td>
-    <td valign="top">
-None
-
-    </td>
-    <td valign="top">
-CIS T&O
-
-    </td>
+    <td valign="top">Sanitization rules table (what to strip vs. retain in trace exports)</td>
+    <td valign="top">[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)</td>
+    <td valign="top">Field-by-field retain/strip classification</td>
+    <td valign="top">None</td>
+    <td valign="top">CIS T&O</td>
   </tr>
   <tr>
-    <td valign="top">
-Quality signal escalation structure (Level 0–3)
-
-    </td>
-    <td valign="top">
-[Agent Quality Framework](agent-quality-framework-5ec914b.md)
-
-    </td>
-    <td valign="top">
-Four-level structure: automated → monitored → supervised → blocked; and the logic distinguishing each level
-
-    </td>
-    <td valign="top">
-Specific threshold values and recipient IDs are Layer 2
-
-    </td>
-    <td valign="top">
-CIS T&O (structure)
-
-    </td>
+    <td valign="top">Quality signal escalation structure (Level 0–3)</td>
+    <td valign="top">[Agent Quality Framework](agent-quality-framework-5ec914b.md)</td>
+    <td valign="top">Four-level structure: automated → monitored → supervised → blocked; and the logic distinguishing each level</td>
+    <td valign="top">Specific threshold values and recipient IDs are Layer 2</td>
+    <td valign="top">CIS T&O (structure)</td>
   </tr>
   <tr>
-    <td valign="top">
-Version stack discipline (5 components)
-
-    </td>
-    <td valign="top">
-[Production Operations](production-operations-f963579.md)
-
-    </td>
-    <td valign="top">
-Definition of the five-component version stack; change classification table (Low / Medium / High / Very High risk)
-
-    </td>
-    <td valign="top">
-Applied per engagement to that engagement's specific component versions
-
-    </td>
-    <td valign="top">
-CIS T&O
-
-    </td>
+    <td valign="top">Version stack discipline (5 components)</td>
+    <td valign="top">[Production Operations](production-operations-f963579.md)</td>
+    <td valign="top">Definition of the five-component version stack; change classification table (Low / Medium / High / Very High risk)</td>
+    <td valign="top">Applied per engagement to that engagement's specific component versions</td>
+    <td valign="top">CIS T&O</td>
   </tr>
   <tr>
-    <td valign="top">
-Supervisor fail-safe rule
-
-    </td>
-    <td valign="top">
-[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)
-
-    </td>
-    <td valign="top">
-If supervisor unavailable, worker routes all outputs to sapTaskCenter — never to autonomous write-back
-
-    </td>
-    <td valign="top">
-None
-
-    </td>
-    <td valign="top">
-CIS T&O
-
-    </td>
+    <td valign="top">Supervisor fail-safe rule</td>
+    <td valign="top">[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)</td>
+    <td valign="top">If supervisor unavailable, worker routes all outputs to sapTaskCenter — never to autonomous write-back</td>
+    <td valign="top">None</td>
+    <td valign="top">CIS T&O</td>
   </tr>
   <tr>
-    <td valign="top">
-Three things never to copy between environments
-
-    </td>
-    <td valign="top">
-[Production Operations](production-operations-f963579.md)
-
-    </td>
-    <td valign="top">
-Credentials, dev/test thresholds, agent identities — all must be re-provisioned per environment
-
-    </td>
-    <td valign="top">
-None
-
-    </td>
-    <td valign="top">
-CIS T&O
-
-    </td>
+    <td valign="top">Three things never to copy between environments</td>
+    <td valign="top">[Production Operations](production-operations-f963579.md)</td>
+    <td valign="top">Credentials, dev/test thresholds, agent identities — all must be re-provisioned per environment</td>
+    <td valign="top">None</td>
+    <td valign="top">CIS T&O</td>
   </tr>
   <tr>
-    <td valign="top">
-When NOT to use multi-agent (decision table)
-
-    </td>
-    <td valign="top">
-[Multi-Agent Orchestration](multi-agent-orchestration-2f6e92e.md)
-
-    </td>
-    <td valign="top">
-Full decision table with six rows; criteria for single agent vs. multi-agent
-
-    </td>
-    <td valign="top">
-None
-
-    </td>
-    <td valign="top">
-CIS T&O
-
-    </td>
+    <td valign="top">When NOT to use multi-agent (decision table)</td>
+    <td valign="top">[Multi-Agent Orchestration](multi-agent-orchestration-2f6e92e.md)</td>
+    <td valign="top">Full decision table with six rows; criteria for single agent vs. multi-agent</td>
+    <td valign="top">None</td>
+    <td valign="top">CIS T&O</td>
   </tr>
   <tr>
-    <td valign="top">
-Multi-agent topology selection table
-
-    </td>
-    <td valign="top">
-[Multi-Agent Orchestration](multi-agent-orchestration-2f6e92e.md)
-
-    </td>
-    <td valign="top">
-Full comparison matrix: Topology 1 / 2 / 3 across five dimensions
-
-    </td>
-    <td valign="top">
-Topology choice is per engagement
-
-    </td>
-    <td valign="top">
-FDE team (guided by table)
-
-    </td>
+    <td valign="top">Multi-agent topology selection table</td>
+    <td valign="top">[Multi-Agent Orchestration](multi-agent-orchestration-2f6e92e.md)</td>
+    <td valign="top">Full comparison matrix: Topology 1 / 2 / 3 across five dimensions</td>
+    <td valign="top">Topology choice is per engagement</td>
+    <td valign="top">FDE team (guided by table)</td>
   </tr>
   <tr>
-    <td valign="top">
-Three pre-migration checklists (dev→test, test→EAC, EAC→prod)
-
-    </td>
-    <td valign="top">
-[Production Operations](production-operations-f963579.md)
-
-    </td>
-    <td valign="top">
-All checklist items across three transitions
-
-    </td>
-    <td valign="top">
-None — items are the same for every engagement
-
-    </td>
-    <td valign="top">
-CIS T&O
-
-    </td>
+    <td valign="top">Three pre-migration checklists (dev→test, test→EAC, EAC→prod)</td>
+    <td valign="top">[Production Operations](production-operations-f963579.md)</td>
+    <td valign="top">All checklist items across three transitions</td>
+    <td valign="top">None — items are the same for every engagement</td>
+    <td valign="top">CIS T&O</td>
   </tr>
   <tr>
-    <td valign="top">
-Partial failure handling rules in multi-agent (atomic commit principle)
-
-    </td>
-    <td valign="top">
-[Multi-Agent Orchestration](multi-agent-orchestration-2f6e92e.md)
-
-    </td>
-    <td valign="top">
-Rule: partial approval is not approval; all workers or none
-
-    </td>
-    <td valign="top">
-None
-
-    </td>
-    <td valign="top">
-CIS T&O
-
-    </td>
+    <td valign="top">Partial failure handling rules in multi-agent (atomic commit principle)</td>
+    <td valign="top">[Multi-Agent Orchestration](multi-agent-orchestration-2f6e92e.md)</td>
+    <td valign="top">Rule: partial approval is not approval; all workers or none</td>
+    <td valign="top">None</td>
+    <td valign="top">CIS T&O</td>
   </tr>
   <tr>
-    <td valign="top">
-Prompt injection defense system prompt template
-
-    </td>
-    <td valign="top">
-[Joule Studio Build Map](joule-studio-build-map-7de243e.md)
-
-    </td>
-    <td valign="top">
-Boilerplate instruction text
-
-    </td>
-    <td valign="top">
-Role description at the opening line
-
-    </td>
-    <td valign="top">
-FDE team
-
-    </td>
+    <td valign="top">Prompt injection defense system prompt template</td>
+    <td valign="top">[Joule Studio Build Map](joule-studio-build-map-7de243e.md)</td>
+    <td valign="top">Boilerplate instruction text</td>
+    <td valign="top">Role description at the opening line</td>
+    <td valign="top">FDE team</td>
   </tr>
   <tr>
-    <td valign="top">
-Pro-code decision table
-
-    </td>
-    <td valign="top">
-[Joule Studio Build Map](joule-studio-build-map-7de243e.md)
-
-    </td>
-    <td valign="top">
-Full table: which requirements are low-code-sufficient vs. require pro-code
-
-    </td>
-    <td valign="top">
-None
-
-    </td>
-    <td valign="top">
-CIS T&O
-
-    </td>
+    <td valign="top">Pro-code decision table</td>
+    <td valign="top">[Joule Studio Build Map](joule-studio-build-map-7de243e.md)</td>
+    <td valign="top">Full table: which requirements are low-code-sufficient vs. require pro-code</td>
+    <td valign="top">None</td>
+    <td valign="top">CIS T&O</td>
   </tr>
 </table>
 
@@ -411,334 +186,109 @@ CIS T&O
     <th valign="top">Maintenance Owner</th>
   </tr>
   <tr>
-    <td valign="top">
-Supervisor Workflow B (Telemetry Monitor) — full workflow
-
-    </td>
-    <td valign="top">
-[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md), [Joule Studio Build Map](joule-studio-build-map-7de243e.md), [Production Operations](production-operations-f963579.md)
-
-    </td>
-    <td valign="top">
-Schedule trigger, HTTP Request to SAP Cloud ALM + AI Core usage API, Code node rule structure, routing logic, IT admin alert path, cost anomaly checks, Workflow C trigger
-
-    </td>
-    <td valign="top">
-Anomaly threshold values (calibrated from EAC baseline); schedule interval; Task Center recipient IDs
-
-    </td>
-    <td valign="top">
-CIS T&O (template); FDE team (calibration)
-
-    </td>
+    <td valign="top">Supervisor Workflow B (Telemetry Monitor) — full workflow</td>
+    <td valign="top">[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md), [Joule Studio Build Map](joule-studio-build-map-7de243e.md), [Production Operations](production-operations-f963579.md)</td>
+    <td valign="top">Schedule trigger, HTTP Request to SAP Cloud ALM + AI Core usage API, Code node rule structure, routing logic, IT admin alert path, cost anomaly checks, Workflow C trigger</td>
+    <td valign="top">Anomaly threshold values (calibrated from EAC baseline); schedule interval; Task Center recipient IDs</td>
+    <td valign="top">CIS T&O (template); FDE team (calibration)</td>
   </tr>
   <tr>
-    <td valign="top">
-Supervisor Workflow A — routing skeleton
-
-    </td>
-    <td valign="top">
-[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md), [Joule Studio Build Map](joule-studio-build-map-7de243e.md)
-
-    </td>
-    <td valign="top">
-Webhook trigger, If/Switch routing (BOTH CONFIRM / BOTH REJECT / DISAGREE / low confidence), sapAgent approval signal back to worker, Task Center escalation path, audit trail write
-
-    </td>
-    <td valign="top">
-Code node verification rules (engagement-specific); LLM critic systemPrompt; approval threshold value
-
-    </td>
-    <td valign="top">
-CIS T&O (skeleton); FDE team (Code node + critic prompt)
-
-    </td>
+    <td valign="top">Supervisor Workflow A — routing skeleton</td>
+    <td valign="top">[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md), [Joule Studio Build Map](joule-studio-build-map-7de243e.md)</td>
+    <td valign="top">Webhook trigger, If/Switch routing (BOTH CONFIRM / BOTH REJECT / DISAGREE / low confidence), sapAgent approval signal back to worker, Task Center escalation path, audit trail write</td>
+    <td valign="top">Code node verification rules (engagement-specific); LLM critic systemPrompt; approval threshold value</td>
+    <td valign="top">CIS T&O (skeleton); FDE team (Code node + critic prompt)</td>
   </tr>
   <tr>
-    <td valign="top">
-Supervisor shared state store schema
-
-    </td>
-    <td valign="top">
-[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md), [Multi-Agent Orchestration](multi-agent-orchestration-2f6e92e.md)
-
-    </td>
-    <td valign="top">
-Baseline table structure (rolling metrics per agent); Pending Set table structure for multi-agent Topology 3
-
-    </td>
-    <td valign="top">
-Table name prefix per engagement; initial state is always empty per environment
-
-    </td>
-    <td valign="top">
-CIS T&O (DDL template)
-
-    </td>
+    <td valign="top">Supervisor shared state store schema</td>
+    <td valign="top">[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md), [Multi-Agent Orchestration](multi-agent-orchestration-2f6e92e.md)</td>
+    <td valign="top">Baseline table structure (rolling metrics per agent); Pending Set table structure for multi-agent Topology 3</td>
+    <td valign="top">Table name prefix per engagement; initial state is always empty per environment</td>
+    <td valign="top">CIS T&O (DDL template)</td>
   </tr>
   <tr>
-    <td valign="top">
-Four-layer guardrail stack structure
-
-    </td>
-    <td valign="top">
-[Precision Guardrails](precision-guardrails-c279f4e.md)
-
-    </td>
-    <td valign="top">
-Layer sequence (Pre-Check → Output Validation → Human Approval → Audit Trail); which layers are mandatory vs. optional per output risk level
-
-    </td>
-    <td valign="top">
-Layer 2 reference calculation service (which SAP service backs it); Layer 3 threshold values; Layer 1 constraint source
-
-    </td>
-    <td valign="top">
-FDE team (configured with process owner for thresholds)
-
-    </td>
+    <td valign="top">Four-layer guardrail stack structure</td>
+    <td valign="top">[Precision Guardrails](precision-guardrails-c279f4e.md)</td>
+    <td valign="top">Layer sequence (Pre-Check → Output Validation → Human Approval → Audit Trail); which layers are mandatory vs. optional per output risk level</td>
+    <td valign="top">Layer 2 reference calculation service (which SAP service backs it); Layer 3 threshold values; Layer 1 constraint source</td>
+    <td valign="top">FDE team (configured with process owner for thresholds)</td>
   </tr>
   <tr>
-    <td valign="top">
-sapTaskCenter customAttributes pattern
-
-    </td>
-    <td valign="top">
-[Precision Guardrails](precision-guardrails-c279f4e.md), [Joule Studio Build Map](joule-studio-build-map-7de243e.md)
-
-    </td>
-    <td valign="top">
-Six-attribute set: proposed value, reference value, deviation %, agent confidence, stage verdicts, correlation ID
-
-    </td>
-    <td valign="top">
-Attribute display labels (e.g., "Batch quantity" vs. "Pricing recommendation"); recipient IDs; priority mapping
-
-    </td>
-    <td valign="top">
-FDE team
-
-    </td>
+    <td valign="top">sapTaskCenter customAttributes pattern</td>
+    <td valign="top">[Precision Guardrails](precision-guardrails-c279f4e.md), [Joule Studio Build Map](joule-studio-build-map-7de243e.md)</td>
+    <td valign="top">Six-attribute set: proposed value, reference value, deviation %, agent confidence, stage verdicts, correlation ID</td>
+    <td valign="top">Attribute display labels (e.g., "Batch quantity" vs. "Pricing recommendation"); recipient IDs; priority mapping</td>
+    <td valign="top">FDE team</td>
   </tr>
   <tr>
-    <td valign="top">
-Worker agent base pattern (n8n workflow template)
-
-    </td>
-    <td valign="top">
-[Joule Studio Build Map](joule-studio-build-map-7de243e.md)
-
-    </td>
-    <td valign="top">
-sapOrchestration + sapMcpClient + verification node structure; routing to supervised (sapAgent callback) or unsupervised (inline)
-
-    </td>
-    <td valign="top">
-Agent task definition in systemPrompt; SAP system connections; specific MCP tools wired
-
-    </td>
-    <td valign="top">
-FDE team
-
-    </td>
+    <td valign="top">Worker agent base pattern (n8n workflow template)</td>
+    <td valign="top">[Joule Studio Build Map](joule-studio-build-map-7de243e.md)</td>
+    <td valign="top">sapOrchestration + sapMcpClient + verification node structure; routing to supervised (sapAgent callback) or unsupervised (inline)</td>
+    <td valign="top">Agent task definition in systemPrompt; SAP system connections; specific MCP tools wired</td>
+    <td valign="top">FDE team</td>
   </tr>
   <tr>
-    <td valign="top">
-Three-dimension quality framework (evaluation design)
-
-    </td>
-    <td valign="top">
-[Agent Quality Framework](agent-quality-framework-5ec914b.md)
-
-    </td>
-    <td valign="top">
-Framework structure (Technical / Process KPI / Business Outcome); Dimension 1 metric types and their Goodhart's Law guard
-
-    </td>
-    <td valign="top">
-Dimension 2 process KPIs (engagement-specific, defined in TO-BE process flow); Dimension 3 business outcome metrics
-
-    </td>
-    <td valign="top">
-FDE team (with process owner for Dimensions 2–3)
-
-    </td>
+    <td valign="top">Three-dimension quality framework (evaluation design)</td>
+    <td valign="top">[Agent Quality Framework](agent-quality-framework-5ec914b.md)</td>
+    <td valign="top">Framework structure (Technical / Process KPI / Business Outcome); Dimension 1 metric types and their Goodhart's Law guard</td>
+    <td valign="top">Dimension 2 process KPIs (engagement-specific, defined in TO-BE process flow); Dimension 3 business outcome metrics</td>
+    <td valign="top">FDE team (with process owner for Dimensions 2–3)</td>
   </tr>
   <tr>
-    <td valign="top">
-Eval test suite structure
-
-    </td>
-    <td valign="top">
-[Agent Quality Framework](agent-quality-framework-5ec914b.md)
-
-    </td>
-    <td valign="top">
-Scenario type categories (high-freq/low-risk, low-freq/high-risk, exception, novel); acceptance threshold approach per category
-
-    </td>
-    <td valign="top">
-Specific test cases; acceptance threshold values; test data strategy
-
-    </td>
-    <td valign="top">
-FDE team
-
-    </td>
+    <td valign="top">Eval test suite structure</td>
+    <td valign="top">[Agent Quality Framework](agent-quality-framework-5ec914b.md)</td>
+    <td valign="top">Scenario type categories (high-freq/low-risk, low-freq/high-risk, exception, novel); acceptance threshold approach per category</td>
+    <td valign="top">Specific test cases; acceptance threshold values; test data strategy</td>
+    <td valign="top">FDE team</td>
   </tr>
   <tr>
-    <td valign="top">
-Confidence-based routing pattern
-
-    </td>
-    <td valign="top">
-[Precision Guardrails](precision-guardrails-c279f4e.md)
-
-    </td>
-    <td valign="top">
-Pattern: confidence field in sapOrchestration outputSchema; If node routing on confidence threshold
-
-    </td>
-    <td valign="top">
-Confidence threshold value
-
-    </td>
-    <td valign="top">
-FDE team (with process owner)
-
-    </td>
+    <td valign="top">Confidence-based routing pattern</td>
+    <td valign="top">[Precision Guardrails](precision-guardrails-c279f4e.md)</td>
+    <td valign="top">Pattern: confidence field in sapOrchestration outputSchema; If node routing on confidence threshold</td>
+    <td valign="top">Confidence threshold value</td>
+    <td valign="top">FDE team (with process owner)</td>
   </tr>
   <tr>
-    <td valign="top">
-Cost monitoring extension (Workflow B)
-
-    </td>
-    <td valign="top">
-[Production Operations](production-operations-f963579.md)
-
-    </td>
-    <td valign="top">
-Token anomaly check logic; runaway detection (5× p99 threshold); daily budget alert; cost-per-committed-output trend logic
-
-    </td>
-    <td valign="top">
-Daily budget value; runaway spike threshold; alert routing
-
-    </td>
-    <td valign="top">
-CIS T&O (template); customer IT admin (budget values)
-
-    </td>
+    <td valign="top">Cost monitoring extension (Workflow B)</td>
+    <td valign="top">[Production Operations](production-operations-f963579.md)</td>
+    <td valign="top">Token anomaly check logic; runaway detection (5× p99 threshold); daily budget alert; cost-per-committed-output trend logic</td>
+    <td valign="top">Daily budget value; runaway spike threshold; alert routing</td>
+    <td valign="top">CIS T&O (template); customer IT admin (budget values)</td>
   </tr>
   <tr>
-    <td valign="top">
-Environment-agnostic configuration pattern
-
-    </td>
-    <td valign="top">
-[Production Operations](production-operations-f963579.md)
-
-    </td>
-    <td valign="top">
-Naming convention: `{{agent-name.parameter-category.parameter-name}}`; separation of BAIP credential objects vs. configuration parameters
-
-    </td>
-    <td valign="top">
-Actual parameter names and values per engagement
-
-    </td>
-    <td valign="top">
-CIS T&O (convention); FDE team (values)
-
-    </td>
+    <td valign="top">Environment-agnostic configuration pattern</td>
+    <td valign="top">[Production Operations](production-operations-f963579.md)</td>
+    <td valign="top">Naming convention: `{{agent-name.parameter-category.parameter-name}}`; separation of BAIP credential objects vs. configuration parameters</td>
+    <td valign="top">Actual parameter names and values per engagement</td>
+    <td valign="top">CIS T&O (convention); FDE team (values)</td>
   </tr>
   <tr>
-    <td valign="top">
-Rollback procedure template
-
-    </td>
-    <td valign="top">
-[Production Operations](production-operations-f963579.md)
-
-    </td>
-    <td valign="top">
-Trigger criteria (human override rate, rejection rate, KPI degradation, format failures); rollback order (threshold → model → prompt → workflow); state continuity rules (audit trail immutable, baseline reset)
-
-    </td>
-    <td valign="top">
-Authorization path per topology; specific component versions being rolled back
-
-    </td>
-    <td valign="top">
-CIS T&O
-
-    </td>
+    <td valign="top">Rollback procedure template</td>
+    <td valign="top">[Production Operations](production-operations-f963579.md)</td>
+    <td valign="top">Trigger criteria (human override rate, rejection rate, KPI degradation, format failures); rollback order (threshold → model → prompt → workflow); state continuity rules (audit trail immutable, baseline reset)</td>
+    <td valign="top">Authorization path per topology; specific component versions being rolled back</td>
+    <td valign="top">CIS T&O</td>
   </tr>
   <tr>
-    <td valign="top">
-Cross-worker consistency check pattern types
-
-    </td>
-    <td valign="top">
-[Multi-Agent Orchestration](multi-agent-orchestration-2f6e92e.md)
-
-    </td>
-    <td valign="top">
-Check categories: quantity cross-consistency, unit consistency, timeline consistency, arithmetic cross-check
-
-    </td>
-    <td valign="top">
-Specific field names, quantities, and tolerance values for this multi-agent set
-
-    </td>
-    <td valign="top">
-FDE team
-
-    </td>
+    <td valign="top">Cross-worker consistency check pattern types</td>
+    <td valign="top">[Multi-Agent Orchestration](multi-agent-orchestration-2f6e92e.md)</td>
+    <td valign="top">Check categories: quantity cross-consistency, unit consistency, timeline consistency, arithmetic cross-check</td>
+    <td valign="top">Specific field names, quantities, and tolerance values for this multi-agent set</td>
+    <td valign="top">FDE team</td>
   </tr>
   <tr>
-    <td valign="top">
-Severity tier table and operating rhythm
-
-    </td>
-    <td valign="top">
-[CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md)
-
-    </td>
-    <td valign="top">
-Four severity tiers (Critical / High / Medium / Low) with response target structure
-
-    </td>
-    <td valign="top">
-Actual SLA commitments (agreed per contract); T&O team contact details
-
-    </td>
-    <td valign="top">
-CIS T&O (with contract alignment)
-
-    </td>
+    <td valign="top">Severity tier table and operating rhythm</td>
+    <td valign="top">[CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md)</td>
+    <td valign="top">Four severity tiers (Critical / High / Medium / Low) with response target structure</td>
+    <td valign="top">Actual SLA commitments (agreed per contract); T&O team contact details</td>
+    <td valign="top">CIS T&O (with contract alignment)</td>
   </tr>
   <tr>
-    <td valign="top">
-Continuous improvement loop
-
-    </td>
-    <td valign="top">
-[CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md)
-
-    </td>
-    <td valign="top">
-Loop structure: production findings → categorize → in-place fix vs. build improvement vs. new sprint; iteration pattern analysis signal types
-
-    </td>
-    <td valign="top">
-Finding categories and escalation paths for this engagement
-
-    </td>
-    <td valign="top">
-CIS T&O
-
-    </td>
+    <td valign="top">Continuous improvement loop</td>
+    <td valign="top">[CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md)</td>
+    <td valign="top">Loop structure: production findings → categorize → in-place fix vs. build improvement vs. new sprint; iteration pattern analysis signal types</td>
+    <td valign="top">Finding categories and escalation paths for this engagement</td>
+    <td valign="top">CIS T&O</td>
   </tr>
 </table>
 
@@ -756,220 +306,76 @@ CIS T&O
     <th valign="top">Who Authors It</th>
   </tr>
   <tr>
-    <td valign="top">
-Worker agent business logic
-
-    </td>
-    <td valign="top">
-[Joule Studio Build Map](joule-studio-build-map-7de243e.md)
-
-    </td>
-    <td valign="top">
-The agent's task, SAP system connections, tools, and goal state are unique to this use case and customer
-
-    </td>
-    <td valign="top">
-FDE Application Engineer + Domain PM
-
-    </td>
+    <td valign="top">Worker agent business logic</td>
+    <td valign="top">[Joule Studio Build Map](joule-studio-build-map-7de243e.md)</td>
+    <td valign="top">The agent's task, SAP system connections, tools, and goal state are unique to this use case and customer</td>
+    <td valign="top">FDE Application Engineer + Domain PM</td>
   </tr>
   <tr>
-    <td valign="top">
-Process KPIs (Dimension 2 of quality framework)
-
-    </td>
-    <td valign="top">
-[Agent Quality Framework](agent-quality-framework-5ec914b.md)
-
-    </td>
-    <td valign="top">
-Defined in the TO-BE process flow during Discovery; entirely domain- and customer-specific
-
-    </td>
-    <td valign="top">
-FDE team + process owner
-
-    </td>
+    <td valign="top">Process KPIs (Dimension 2 of quality framework)</td>
+    <td valign="top">[Agent Quality Framework](agent-quality-framework-5ec914b.md)</td>
+    <td valign="top">Defined in the TO-BE process flow during Discovery; entirely domain- and customer-specific</td>
+    <td valign="top">FDE team + process owner</td>
   </tr>
   <tr>
-    <td valign="top">
-Workflow A Code node verification rules
-
-    </td>
-    <td valign="top">
-[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md), [Precision Guardrails](precision-guardrails-c279f4e.md)
-
-    </td>
-    <td valign="top">
-Specific range checks, unit checks, tolerance values apply only to this agent's output type
-
-    </td>
-    <td valign="top">
-FDE Application Engineer
-
-    </td>
+    <td valign="top">Workflow A Code node verification rules</td>
+    <td valign="top">[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md), [Precision Guardrails](precision-guardrails-c279f4e.md)</td>
+    <td valign="top">Specific range checks, unit checks, tolerance values apply only to this agent's output type</td>
+    <td valign="top">FDE Application Engineer</td>
   </tr>
   <tr>
-    <td valign="top">
-LLM critic systemPrompt
-
-    </td>
-    <td valign="top">
-[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md), [Precision Guardrails](precision-guardrails-c279f4e.md)
-
-    </td>
-    <td valign="top">
-What a "correct" output means is different for a batch release quantity vs. a pricing recommendation
-
-    </td>
-    <td valign="top">
-FDE Application Engineer
-
-    </td>
+    <td valign="top">LLM critic systemPrompt</td>
+    <td valign="top">[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md), [Precision Guardrails](precision-guardrails-c279f4e.md)</td>
+    <td valign="top">What a "correct" output means is different for a batch release quantity vs. a pricing recommendation</td>
+    <td valign="top">FDE Application Engineer</td>
   </tr>
   <tr>
-    <td valign="top">
-Human approval threshold values
-
-    </td>
-    <td valign="top">
-[Precision Guardrails](precision-guardrails-c279f4e.md)
-
-    </td>
-    <td valign="top">
-Business decision agreed with process owner in Discovery; not derivable from a template
-
-    </td>
-    <td valign="top">
-FDE team + process owner
-
-    </td>
+    <td valign="top">Human approval threshold values</td>
+    <td valign="top">[Precision Guardrails](precision-guardrails-c279f4e.md)</td>
+    <td valign="top">Business decision agreed with process owner in Discovery; not derivable from a template</td>
+    <td valign="top">FDE team + process owner</td>
   </tr>
   <tr>
-    <td valign="top">
-Authorization matrices (all agents)
-
-    </td>
-    <td valign="top">
-[Security and Data Protection](security-and-data-protection-27868d4.md), [Multi-Agent Orchestration](multi-agent-orchestration-2f6e92e.md)
-
-    </td>
-    <td valign="top">
-Scoped to specific SAP systems and entities this engagement accesses; differs per customer and per worker
-
-    </td>
-    <td valign="top">
-FDE team + customer IT admin
-
-    </td>
+    <td valign="top">Authorization matrices (all agents)</td>
+    <td valign="top">[Security and Data Protection](security-and-data-protection-27868d4.md), [Multi-Agent Orchestration](multi-agent-orchestration-2f6e92e.md)</td>
+    <td valign="top">Scoped to specific SAP systems and entities this engagement accesses; differs per customer and per worker</td>
+    <td valign="top">FDE team + customer IT admin</td>
   </tr>
   <tr>
-    <td valign="top">
-Anomaly detection threshold values
-
-    </td>
-    <td valign="top">
-[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)
-
-    </td>
-    <td valign="top">
-Calibrated from EAC baseline observation specific to this agent's behavior; cannot be borrowed from another agent's deployment
-
-    </td>
-    <td valign="top">
-CIS T&O (post-EAC calibration)
-
-    </td>
+    <td valign="top">Anomaly detection threshold values</td>
+    <td valign="top">[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)</td>
+    <td valign="top">Calibrated from EAC baseline observation specific to this agent's behavior; cannot be borrowed from another agent's deployment</td>
+    <td valign="top">CIS T&O (post-EAC calibration)</td>
   </tr>
   <tr>
-    <td valign="top">
-Regulatory audit trail retention period
-
-    </td>
-    <td valign="top">
-[Precision Guardrails](precision-guardrails-c279f4e.md)
-
-    </td>
-    <td valign="top">
-Confirmed with customer's compliance team; jurisdiction- and industry-specific
-
-    </td>
-    <td valign="top">
-Customer compliance team
-
-    </td>
+    <td valign="top">Regulatory audit trail retention period</td>
+    <td valign="top">[Precision Guardrails](precision-guardrails-c279f4e.md)</td>
+    <td valign="top">Confirmed with customer's compliance team; jurisdiction- and industry-specific</td>
+    <td valign="top">Customer compliance team</td>
   </tr>
   <tr>
-    <td valign="top">
-Cross-worker consistency check logic
-
-    </td>
-    <td valign="top">
-[Multi-Agent Orchestration](multi-agent-orchestration-2f6e92e.md)
-
-    </td>
-    <td valign="top">
-Specific field names, quantity relationships, and timeline logic for this multi-agent set
-
-    </td>
-    <td valign="top">
-FDE team
-
-    </td>
+    <td valign="top">Cross-worker consistency check logic</td>
+    <td valign="top">[Multi-Agent Orchestration](multi-agent-orchestration-2f6e92e.md)</td>
+    <td valign="top">Specific field names, quantity relationships, and timeline logic for this multi-agent set</td>
+    <td valign="top">FDE team</td>
   </tr>
   <tr>
-    <td valign="top">
-Business outcome metrics (Dimension 3)
-
-    </td>
-    <td valign="top">
-[Agent Quality Framework](agent-quality-framework-5ec914b.md)
-
-    </td>
-    <td valign="top">
-Financial and operational results tied to this customer's specific value case
-
-    </td>
-    <td valign="top">
-FDE team + Value Advisor
-
-    </td>
+    <td valign="top">Business outcome metrics (Dimension 3)</td>
+    <td valign="top">[Agent Quality Framework](agent-quality-framework-5ec914b.md)</td>
+    <td valign="top">Financial and operational results tied to this customer's specific value case</td>
+    <td valign="top">FDE team + Value Advisor</td>
   </tr>
   <tr>
-    <td valign="top">
-Eval test cases and test data
-
-    </td>
-    <td valign="top">
-[Agent Quality Framework](agent-quality-framework-5ec914b.md)
-
-    </td>
-    <td valign="top">
-Test scenarios must cover this agent's boundary conditions and edge cases
-
-    </td>
-    <td valign="top">
-FDE team
-
-    </td>
+    <td valign="top">Eval test cases and test data</td>
+    <td valign="top">[Agent Quality Framework](agent-quality-framework-5ec914b.md)</td>
+    <td valign="top">Test scenarios must cover this agent's boundary conditions and edge cases</td>
+    <td valign="top">FDE team</td>
   </tr>
   <tr>
-    <td valign="top">
-LLM critic test suite
-
-    </td>
-    <td valign="top">
-[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)
-
-    </td>
-    <td valign="top">
-The critic prompt's quality is engagement-specific; its test suite must match its content
-
-    </td>
-    <td valign="top">
-FDE team
-
-    </td>
+    <td valign="top">LLM critic test suite</td>
+    <td valign="top">[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)</td>
+    <td valign="top">The critic prompt's quality is engagement-specific; its test suite must match its content</td>
+    <td valign="top">FDE team</td>
   </tr>
 </table>
 
@@ -994,8 +400,7 @@ The CIS Starter Kit is the versioned set of Layer 1 and Layer 2 artifacts that C
 >     <th valign="top">Available Where</th>
 >   </tr>
 >   <tr>
->     <td valign="top">
->
+>     <td valign="top">>
 > **Workflow A skeleton** (`cis-supervisor-workflow-a-skeleton`)
 >
 >     </td>
@@ -1217,59 +622,24 @@ The CIS Starter Kit is the versioned set of Layer 1 and Layer 2 artifacts that C
   </tr>
   <tr>
     <td valign="top">
-`cis-supervisor-workflow-b-ref`
-
-    </td>
-    <td valign="top">
-Workflow B (Telemetry Monitor) with full rule set and cost extension; no engagement-specific content — **design target, not yet a standalone forkable artifact (see status table above)**
-
-    </td>
-    <td valign="top">
-When published: fork; set anomaly thresholds after EAC baseline; configure recipient IDs
-
-    </td>
+`cis-supervisor-workflow-b-ref`</td>
+    <td valign="top">Workflow B (Telemetry Monitor) with full rule set and cost extension; no engagement-specific content — **design target, not yet a standalone forkable artifact (see status table above)**</td>
+    <td valign="top">When published: fork; set anomaly thresholds after EAC baseline; configure recipient IDs</td>
   </tr>
   <tr>
-    <td valign="top">
-`cis-supervisor-workflow-c-ref`
-
-    </td>
-    <td valign="top">
-Workflow C (Support Relay) — **design target, not yet a standalone forkable artifact (see status table above)**
-
-    </td>
-    <td valign="top">
-When published: fork; verify tenant ID injection from environment config
-
-    </td>
+    <td valign="top">`cis-supervisor-workflow-c-ref`</td>
+    <td valign="top">Workflow C (Support Relay) — **design target, not yet a standalone forkable artifact (see status table above)**</td>
+    <td valign="top">When published: fork; verify tenant ID injection from environment config</td>
   </tr>
   <tr>
-    <td valign="top">
-`cis-supervisor-workflow-a-skeleton`
-
-    </td>
-    <td valign="top">
-Workflow A with routing structure, webhook trigger, sapAgent callback, Task Center escalation, audit trail write; Code node placeholder for verification rules
-
-    </td>
-    <td valign="top">
-Fork; author the Code node verification rules and LLM critic systemPrompt for this engagement
-
-    </td>
+    <td valign="top">`cis-supervisor-workflow-a-skeleton`</td>
+    <td valign="top">Workflow A with routing structure, webhook trigger, sapAgent callback, Task Center escalation, audit trail write; Code node placeholder for verification rules</td>
+    <td valign="top">Fork; author the Code node verification rules and LLM critic systemPrompt for this engagement</td>
   </tr>
   <tr>
-    <td valign="top">
-`cis-worker-agent-base`
-
-    </td>
-    <td valign="top">
-Worker agent base pattern with sapOrchestration, sapMcpClient, verification routing, and supervised/unsupervised path
-
-    </td>
-    <td valign="top">
-Fork; define task systemPrompt, wire SAP system connections, add MCP tools
-
-    </td>
+    <td valign="top">`cis-worker-agent-base`</td>
+    <td valign="top">Worker agent base pattern with sapOrchestration, sapMcpClient, verification routing, and supervised/unsupervised path</td>
+    <td valign="top">Fork; define task systemPrompt, wire SAP system connections, add MCP tools</td>
   </tr>
 </table>
 
@@ -1293,24 +663,12 @@ In multi-agent deployments ([Multi-Agent Orchestration](multi-agent-orchestratio
     <th valign="top">Description</th>
   </tr>
   <tr>
-    <td valign="top">
-`cis-audit-trail-ddl.sql`
-
-    </td>
-    <td valign="top">
-HANA Cloud DDL for the append-only audit trail table; includes all base fields and cost extension fields from [Precision Guardrails](precision-guardrails-c279f4e.md) and [Production Operations](production-operations-f963579.md)
-
-    </td>
+    <td valign="top">`cis-audit-trail-ddl.sql`</td>
+    <td valign="top">HANA Cloud DDL for the append-only audit trail table; includes all base fields and cost extension fields from [Precision Guardrails](precision-guardrails-c279f4e.md) and [Production Operations](production-operations-f963579.md)</td>
   </tr>
   <tr>
-    <td valign="top">
-`cis-shared-state-store-ddl.sql`
-
-    </td>
-    <td valign="top">
-**Design target (see status table):** HANA Cloud DDL for the supervisor shared state store (baseline table + Pending Set table for multi-agent Topology 3). The schema is specified in [Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md) / [Multi-Agent Orchestration](multi-agent-orchestration-2f6e92e.md); a standalone DDL file is not yet published
-
-    </td>
+    <td valign="top">`cis-shared-state-store-ddl.sql`</td>
+    <td valign="top">**Design target (see status table):** HANA Cloud DDL for the supervisor shared state store (baseline table + Pending Set table for multi-agent Topology 3). The schema is specified in [Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md) / [Multi-Agent Orchestration](multi-agent-orchestration-2f6e92e.md); a standalone DDL file is not yet published</td>
   </tr>
 </table>
 
@@ -1328,54 +686,24 @@ HANA Cloud DDL for the append-only audit trail table; includes all base fields a
     <th valign="top">Description</th>
   </tr>
   <tr>
-    <td valign="top">
-`cis-pre-migration-checklists.md`
-
-    </td>
-    <td valign="top">
-Three environment transition checklists ([Production Operations](production-operations-f963579.md)); used unchanged for every engagement
-
-    </td>
+    <td valign="top">`cis-pre-migration-checklists.md`</td>
+    <td valign="top">Three environment transition checklists ([Production Operations](production-operations-f963579.md)); used unchanged for every engagement</td>
   </tr>
   <tr>
-    <td valign="top">
-`cis-config-naming-convention.md`
-
-    </td>
-    <td valign="top">
-Configuration parameter naming convention and environment-agnostic wiring pattern ([Production Operations](production-operations-f963579.md))
-
-    </td>
+    <td valign="top">`cis-config-naming-convention.md`</td>
+    <td valign="top">Configuration parameter naming convention and environment-agnostic wiring pattern ([Production Operations](production-operations-f963579.md))</td>
   </tr>
   <tr>
-    <td valign="top">
-`cis-rollback-runbook-template.md`
-
-    </td>
-    <td valign="top">
-Rollback procedure template with placeholders for engagement-specific component versions and authorization contacts
-
-    </td>
+    <td valign="top">`cis-rollback-runbook-template.md`</td>
+    <td valign="top">Rollback procedure template with placeholders for engagement-specific component versions and authorization contacts</td>
   </tr>
   <tr>
-    <td valign="top">
-`cis-sanitization-rules.md`
-
-    </td>
-    <td valign="top">
-Sanitization rules table ([Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)); included by reference in the Sirius security concept documentation
-
-    </td>
+    <td valign="top">`cis-sanitization-rules.md`</td>
+    <td valign="top">Sanitization rules table ([Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)); included by reference in the Sirius security concept documentation</td>
   </tr>
   <tr>
-    <td valign="top">
-`cis-security-checklist.md`
-
-    </td>
-    <td valign="top">
-Per-workflow security checklist ([Joule Studio Build Map](joule-studio-build-map-7de243e.md)); used as a review gate before every environment transition
-
-    </td>
+    <td valign="top">`cis-security-checklist.md`</td>
+    <td valign="top">Per-workflow security checklist ([Joule Studio Build Map](joule-studio-build-map-7de243e.md)); used as a review gate before every environment transition</td>
   </tr>
 </table>
 
@@ -1392,18 +720,9 @@ Per-workflow security checklist ([Joule Studio Build Map](joule-studio-build-map
     <th valign="top">Install Command</th>
   </tr>
   <tr>
-    <td valign="top">
-`agentic-eval`
-
-    </td>
-    <td valign="top">
-11+1 Agentic Engineering Spec Quality Assessment; evaluates spec completeness, AI-readiness, code-spec alignment (C6), MCP utilization, and SAP standards compliance (C9). Run at end of Discovery and pre-EAC. HTML and Word report export.
-
-    </td>
-    <td valign="top">
-`npx skills add https://github.tools.sap/CISDeveloperEfficiencyTools/developer-efficiency-tools.git --skill agentic-eval`
-
-    </td>
+    <td valign="top">`agentic-eval`</td>
+    <td valign="top">11+1 Agentic Engineering Spec Quality Assessment; evaluates spec completeness, AI-readiness, code-spec alignment (C6), MCP utilization, and SAP standards compliance (C9). Run at end of Discovery and pre-EAC. HTML and Word report export.</td>
+    <td valign="top">`npx skills add https://github.tools.sap/CISDeveloperEfficiencyTools/developer-efficiency-tools.git --skill agentic-eval`</td>
   </tr>
 </table>
 
@@ -1441,44 +760,20 @@ Beyond the Starter Kit's cross-engagement reference artifacts, high-maturity CIS
     <th valign="top">What It Provides</th>
   </tr>
   <tr>
-    <td valign="top">
-**Version pinning**
-
-    </td>
-    <td valign="top">
-Skills are versioned; agents pin to a specific skill version rather than pulling the latest
-
-    </td>
+    <td valign="top">**Version pinning**</td>
+    <td valign="top">Skills are versioned; agents pin to a specific skill version rather than pulling the latest</td>
   </tr>
   <tr>
-    <td valign="top">
-**Approval workflows**
-
-    </td>
-    <td valign="top">
-New or updated skills require review and sign-off before they can be called in production
-
-    </td>
+    <td valign="top">**Approval workflows**</td>
+    <td valign="top">New or updated skills require review and sign-off before they can be called in production</td>
   </tr>
   <tr>
-    <td valign="top">
-**Cross-team distribution**
-
-    </td>
-    <td valign="top">
-Skills developed for one agent are discoverable and reusable by other agents in the same tenant — turning project-local patterns into tenant-wide assets
-
-    </td>
+    <td valign="top">**Cross-team distribution**</td>
+    <td valign="top">Skills developed for one agent are discoverable and reusable by other agents in the same tenant — turning project-local patterns into tenant-wide assets</td>
   </tr>
   <tr>
-    <td valign="top">
-**Compounding knowledge**
-
-    </td>
-    <td valign="top">
-Every production fix, edge case, and workaround feeds back into the registry as an updated skill; operational learning accumulates rather than being lost
-
-    </td>
+    <td valign="top">**Compounding knowledge**</td>
+    <td valign="top">Every production fix, edge case, and workaround feeds back into the registry as an updated skill; operational learning accumulates rather than being lost</td>
   </tr>
 </table>
 
@@ -1506,144 +801,54 @@ Project LightSpeed (`github.tools.sap/CIS-Solution-Acceleration/Project-Lightspe
     <th valign="top">What It Provides</th>
   </tr>
   <tr>
-    <td valign="top">
-OTel/logging middleware
-
-    </td>
-    <td valign="top">
-`references/middleware/`
-
-    </td>
-    <td valign="top">
-Drop-in Python package; 2-line setup; graceful degradation (Cloud Logging, env-OTLP, logging-only fallback); works in local dev, SAP Cloud Logging, and sovereign regions
-
-    </td>
+    <td valign="top">OTel/logging middleware</td>
+    <td valign="top">`references/middleware/`</td>
+    <td valign="top">Drop-in Python package; 2-line setup; graceful degradation (Cloud Logging, env-OTLP, logging-only fallback); works in local dev, SAP Cloud Logging, and sovereign regions</td>
   </tr>
   <tr>
-    <td valign="top">
-Supply-chain risk reference agent
-
-    </td>
-    <td valign="top">
-`references/supply-chain-risk-agent/`
-
-    </td>
-    <td valign="top">
-Reference agent implementation with live S/4HANA tooling; starting point for supply-chain domain engagements
-
-    </td>
+    <td valign="top">Supply-chain risk reference agent</td>
+    <td valign="top">`references/supply-chain-risk-agent/`</td>
+    <td valign="top">Reference agent implementation with live S/4HANA tooling; starting point for supply-chain domain engagements</td>
   </tr>
   <tr>
-    <td valign="top">
-Service technician reference agent
-
-    </td>
-    <td valign="top">
-`references/service-technician-agent/`
-
-    </td>
-    <td valign="top">
-Reference agent implementation with field service tooling; starting point for asset management domain engagements
-
-    </td>
+    <td valign="top">Service technician reference agent</td>
+    <td valign="top">`references/service-technician-agent/`</td>
+    <td valign="top">Reference agent implementation with field service tooling; starting point for asset management domain engagements</td>
   </tr>
   <tr>
-    <td valign="top">
-Maintenance planner example agent
-
-    </td>
-    <td valign="top">
-`agents/maintenance-planner/`
-
-    </td>
-    <td valign="top">
-Complete example agent with spec, code, and Joule capability bundle
-
-    </td>
+    <td valign="top">Maintenance planner example agent</td>
+    <td valign="top">`agents/maintenance-planner/`</td>
+    <td valign="top">Complete example agent with spec, code, and Joule capability bundle</td>
   </tr>
   <tr>
-    <td valign="top">
-Procurement assistant example agent
-
-    </td>
-    <td valign="top">
-`agents/procurement-assistant/`
-
-    </td>
-    <td valign="top">
-Complete example agent with spec, code, and Joule capability bundle
-
-    </td>
+    <td valign="top">Procurement assistant example agent</td>
+    <td valign="top">`agents/procurement-assistant/`</td>
+    <td valign="top">Complete example agent with spec, code, and Joule capability bundle</td>
   </tr>
   <tr>
-    <td valign="top">
-BTP Terraform modules
-
-    </td>
-    <td valign="top">
-`infra/btp/`
-
-    </td>
-    <td valign="top">
-Reusable Terraform modules: foundation stack, identity stack, joule stack; parameterized for BTP sub-account provisioning
-
-    </td>
+    <td valign="top">BTP Terraform modules</td>
+    <td valign="top">`infra/btp/`</td>
+    <td valign="top">Reusable Terraform modules: foundation stack, identity stack, joule stack; parameterized for BTP sub-account provisioning</td>
   </tr>
   <tr>
-    <td valign="top">
-S/4HANA entity catalog
-
-    </td>
-    <td valign="top">
-`catalog/s4_catalog.sqlite`
-
-    </td>
-    <td valign="top">
-Offline SQLite catalog of S/4HANA canonical objects, attributes, and APIs; enables entity grounding without an EKX connection at build time
-
-    </td>
+    <td valign="top">S/4HANA entity catalog</td>
+    <td valign="top">`catalog/s4_catalog.sqlite`</td>
+    <td valign="top">Offline SQLite catalog of S/4HANA canonical objects, attributes, and APIs; enables entity grounding without an EKX connection at build time</td>
   </tr>
   <tr>
-    <td valign="top">
-A2A Agent Toolkit
-
-    </td>
-    <td valign="top">
-`toolkits/a2a-agent-toolkit/`
-
-    </td>
-    <td valign="top">
-Agent scaffolding toolkit in TypeScript (CAP + Express) and Python (FastAPI + LangGraph) implementing the A2A inter-agent protocol
-
-    </td>
+    <td valign="top">A2A Agent Toolkit</td>
+    <td valign="top">`toolkits/a2a-agent-toolkit/`</td>
+    <td valign="top">Agent scaffolding toolkit in TypeScript (CAP + Express) and Python (FastAPI + LangGraph) implementing the A2A inter-agent protocol</td>
   </tr>
   <tr>
-    <td valign="top">
-Discovery/build skills
-
-    </td>
-    <td valign="top">
-30+ skill files across pipeline stages
-
-    </td>
-    <td valign="top">
-Reusable Claude Code skills covering all 13 pipeline stages; each skill is independently usable on other projects
-
-    </td>
+    <td valign="top">Discovery/build skills</td>
+    <td valign="top">30+ skill files across pipeline stages</td>
+    <td valign="top">Reusable Claude Code skills covering all 13 pipeline stages; each skill is independently usable on other projects</td>
   </tr>
   <tr>
-    <td valign="top">
-Engagement config template
-
-    </td>
-    <td valign="top">
-`pilot.yaml.example`
-
-    </td>
-    <td valign="top">
-Template for the BTP desired-state file (park/resume/adopt patterns); copy and parameterize per engagement
-
-    </td>
+    <td valign="top">Engagement config template</td>
+    <td valign="top">`pilot.yaml.example`</td>
+    <td valign="top">Template for the BTP desired-state file (park/resume/adopt patterns); copy and parameterize per engagement</td>
   </tr>
 </table>
 
@@ -1669,54 +874,24 @@ This distribution model is the standard for CIS CoE skill maintenance:
     <th valign="top">Mechanism</th>
   </tr>
   <tr>
-    <td valign="top">
-Install a skill
-
-    </td>
-    <td valign="top">
-`gh api` call against the repository; skill file written to `~/.claude/skills/`
-
-    </td>
+    <td valign="top">Install a skill</td>
+    <td valign="top">`gh api` call against the repository; skill file written to `~/.claude/skills/`</td>
   </tr>
   <tr>
-    <td valign="top">
-Contribute a fix or improvement
-
-    </td>
-    <td valign="top">
-PR against the source repository
-
-    </td>
+    <td valign="top">Contribute a fix or improvement</td>
+    <td valign="top">PR against the source repository</td>
   </tr>
   <tr>
-    <td valign="top">
-Enforce version consistency
-
-    </td>
-    <td valign="top">
-Pre-commit hook increments version on every change to the skill file
-
-    </td>
+    <td valign="top">Enforce version consistency</td>
+    <td valign="top">Pre-commit hook increments version on every change to the skill file</td>
   </tr>
   <tr>
-    <td valign="top">
-Pin a specific version
-
-    </td>
-    <td valign="top">
-Reference the commit SHA or tag in the install command
-
-    </td>
+    <td valign="top">Pin a specific version</td>
+    <td valign="top">Reference the commit SHA or tag in the install command</td>
   </tr>
   <tr>
-    <td valign="top">
-Audit skill contents
-
-    </td>
-    <td valign="top">
-Inspect the Markdown file directly — no binary packaging
-
-    </td>
+    <td valign="top">Audit skill contents</td>
+    <td valign="top">Inspect the Markdown file directly — no binary packaging</td>
   </tr>
 </table>
 
@@ -1749,144 +924,54 @@ The two libraries are complementary, not competing. LightSpeed uses and embeds t
     <th valign="top">What It Provides</th>
   </tr>
   <tr>
-    <td valign="top">
-A2A Agent Toolkit
-
-    </td>
-    <td valign="top">
-`toolkits/a2a-agent-toolkit/`
-
-    </td>
-    <td valign="top">
-Claude Code plugin (`sap-a2a-agent-toolkit`, v0.6.0) that scaffolds and deploys A2A agents; drives Checkpoints 1–3
-
-    </td>
+    <td valign="top">A2A Agent Toolkit</td>
+    <td valign="top">`toolkits/a2a-agent-toolkit/`</td>
+    <td valign="top">Claude Code plugin (`sap-a2a-agent-toolkit`, v0.6.0) that scaffolds and deploys A2A agents; drives Checkpoints 1–3</td>
   </tr>
   <tr>
-    <td valign="top">
-Supply-chain risk agent template
-
-    </td>
-    <td valign="top">
-`templates/supply-chain-risk-agent/`
-
-    </td>
-    <td valign="top">
-Canonical Python A2A agent starter (four-file shape: `agent.py`, `agent_executor.py`, `app.py`, `__main__.py`)
-
-    </td>
+    <td valign="top">Supply-chain risk agent template</td>
+    <td valign="top">`templates/supply-chain-risk-agent/`</td>
+    <td valign="top">Canonical Python A2A agent starter (four-file shape: `agent.py`, `agent_executor.py`, `app.py`, `__main__.py`)</td>
   </tr>
   <tr>
-    <td valign="top">
-Joule capability skill
-
-    </td>
-    <td valign="top">
-`skills/sap-joule-capability/`
-
-    </td>
-    <td valign="top">
-4-file YAML bundle structure, deploy commands, pitfall guidance for CMJ Joule registration
-
-    </td>
+    <td valign="top">Joule capability skill</td>
+    <td valign="top">`skills/sap-joule-capability/`</td>
+    <td valign="top">4-file YAML bundle structure, deploy commands, pitfall guidance for CMJ Joule registration</td>
   </tr>
   <tr>
-    <td valign="top">
-BTP deploy recipes
-
-    </td>
-    <td valign="top">
-`recipes/02-deploy-btp/`
-
-    </td>
-    <td valign="top">
-CF and Kyma deployment patterns with smoke tests
-
-    </td>
+    <td valign="top">BTP deploy recipes</td>
+    <td valign="top">`recipes/02-deploy-btp/`</td>
+    <td valign="top">CF and Kyma deployment patterns with smoke tests</td>
   </tr>
   <tr>
-    <td valign="top">
-Joule wiring recipe
-
-    </td>
-    <td valign="top">
-`recipes/03-joule/`
-
-    </td>
-    <td valign="top">
-Region availability check, `joule deploy` command, troubleshooting, cleanup
-
-    </td>
+    <td valign="top">Joule wiring recipe</td>
+    <td valign="top">`recipes/03-joule/`</td>
+    <td valign="top">Region availability check, `joule deploy` command, troubleshooting, cleanup</td>
   </tr>
   <tr>
-    <td valign="top">
-Sovereign model gateway
-
-    </td>
-    <td valign="top">
-`recipes/optional/sovereign-model-gateway/`
-
-    </td>
-    <td valign="top">
-Required for sovereign/regulated regions; OpenAI-compatible gateway as AI Core replacement
-
-    </td>
+    <td valign="top">Sovereign model gateway</td>
+    <td valign="top">`recipes/optional/sovereign-model-gateway/`</td>
+    <td valign="top">Required for sovereign/regulated regions; OpenAI-compatible gateway as AI Core replacement</td>
   </tr>
   <tr>
-    <td valign="top">
-Observability recipe
-
-    </td>
-    <td valign="top">
-`recipes/optional/observe-and-eval/`
-
-    </td>
-    <td valign="top">
-Cloud Logging binding, OTel middleware placeholder, region-specific log targets
-
-    </td>
+    <td valign="top">Observability recipe</td>
+    <td valign="top">`recipes/optional/observe-and-eval/`</td>
+    <td valign="top">Cloud Logging binding, OTel middleware placeholder, region-specific log targets</td>
   </tr>
   <tr>
-    <td valign="top">
-FDE code-first stack reference
-
-    </td>
-    <td valign="top">
-`references/fde-code-first-stack.md`
-
-    </td>
-    <td valign="top">
-North-star stack (Kyma + A2A v1.0 + SAP Cloud SDK for Python); ownership split; access checklist
-
-    </td>
+    <td valign="top">FDE code-first stack reference</td>
+    <td valign="top">`references/fde-code-first-stack.md`</td>
+    <td valign="top">North-star stack (Kyma + A2A v1.0 + SAP Cloud SDK for Python); ownership split; access checklist</td>
   </tr>
   <tr>
-    <td valign="top">
-SwissKnife pointer
-
-    </td>
-    <td valign="top">
-`references/btp-joule-a2a-pro-code-agent/`
-
-    </td>
-    <td valign="top">
-Pointer to public SAP Architecture Center reference (`SAP-samples/btp-joule-a2a-pro-code-agent`)
-
-    </td>
+    <td valign="top">SwissKnife pointer</td>
+    <td valign="top">`references/btp-joule-a2a-pro-code-agent/`</td>
+    <td valign="top">Pointer to public SAP Architecture Center reference (`SAP-samples/btp-joule-a2a-pro-code-agent`)</td>
   </tr>
   <tr>
-    <td valign="top">
-cookbookctl
-
-    </td>
-    <td valign="top">
-Root
-
-    </td>
-    <td valign="top">
-CLI coordinator for manifest-driven BTP provisioning; `pilot.yaml` desired-state model
-
-    </td>
+    <td valign="top">cookbookctl</td>
+    <td valign="top">Root</td>
+    <td valign="top">CLI coordinator for manifest-driven BTP provisioning; `pilot.yaml` desired-state model</td>
   </tr>
 </table>
 
@@ -1903,46 +988,19 @@ CLI coordinator for manifest-driven BTP provisioning; `pilot.yaml` desired-state
     <th valign="top">Output Evidence</th>
   </tr>
   <tr>
-    <td valign="top">
-**1 — Local agent**
-
-    </td>
-    <td valign="top">
-`recipes/01-scaffold-agent/`
-
-    </td>
-    <td valign="top">
-`SendMessage` returns non-error response locally
-
-    </td>
+    <td valign="top">**1 — Local agent**</td>
+    <td valign="top">`recipes/01-scaffold-agent/`</td>
+    <td valign="top">`SendMessage` returns non-error response locally</td>
   </tr>
   <tr>
-    <td valign="top">
-**2 — BTP deploy**
-
-    </td>
-    <td valign="top">
-`recipes/02-deploy-btp/`
-
-    </td>
-    <td valign="top">
-Agent Card reachable at public URL; smoke test passes
-
-    </td>
+    <td valign="top">**2 — BTP deploy**</td>
+    <td valign="top">`recipes/02-deploy-btp/`</td>
+    <td valign="top">Agent Card reachable at public URL; smoke test passes</td>
   </tr>
   <tr>
-    <td valign="top">
-**3 — Joule wiring**
-
-    </td>
-    <td valign="top">
-`recipes/03-joule/`
-
-    </td>
-    <td valign="top">
-`joule list capabilities` shows ACTIVE; Joule routes a real prompt to the agent
-
-    </td>
+    <td valign="top">**3 — Joule wiring**</td>
+    <td valign="top">`recipes/03-joule/`</td>
+    <td valign="top">`joule list capabilities` shows ACTIVE; Joule routes a real prompt to the agent</td>
   </tr>
 </table>
 
@@ -1968,144 +1026,54 @@ Discovery is where Layer 2 skeletons acquire their per-engagement content. The f
     <th valign="top">Who Owns It</th>
   </tr>
   <tr>
-    <td valign="top">
-Supervisor scope: which workflows are in scope (A only / A+B / A+B+C)?
-
-    </td>
-    <td valign="top">
-Draft Product Design Specs
-
-    </td>
-    <td valign="top">
-FDE Domain PM + Discovery Lead
-
-    </td>
+    <td valign="top">Supervisor scope: which workflows are in scope (A only / A+B / A+B+C)?</td>
+    <td valign="top">Draft Product Design Specs</td>
+    <td valign="top">FDE Domain PM + Discovery Lead</td>
   </tr>
   <tr>
-    <td valign="top">
-Multi-agent or single agent? If multi-agent: which topology (1 / 2 / 3)?
-
-    </td>
-    <td valign="top">
-Draft Product Design Specs
-
-    </td>
-    <td valign="top">
-FDE Dev Architect
-
-    </td>
+    <td valign="top">Multi-agent or single agent? If multi-agent: which topology (1 / 2 / 3)?</td>
+    <td valign="top">Draft Product Design Specs</td>
+    <td valign="top">FDE Dev Architect</td>
   </tr>
   <tr>
-    <td valign="top">
-Which SAP calculation service backs Layer 2 of the guardrail stack? (Or: does one exist at all?)
-
-    </td>
-    <td valign="top">
-Draft Product Design Specs
-
-    </td>
-    <td valign="top">
-FDE Application Engineer + P&E Expert
-
-    </td>
+    <td valign="top">Which SAP calculation service backs Layer 2 of the guardrail stack? (Or: does one exist at all?)</td>
+    <td valign="top">Draft Product Design Specs</td>
+    <td valign="top">FDE Application Engineer + P&E Expert</td>
   </tr>
   <tr>
-    <td valign="top">
-Human approval threshold values (absolute and deviation-based) for each numerical output
-
-    </td>
-    <td valign="top">
-Draft Product Design Specs
-
-    </td>
-    <td valign="top">
-FDE team + process owner
-
-    </td>
+    <td valign="top">Human approval threshold values (absolute and deviation-based) for each numerical output</td>
+    <td valign="top">Draft Product Design Specs</td>
+    <td valign="top">FDE team + process owner</td>
   </tr>
   <tr>
-    <td valign="top">
-Authorization matrix for all agents
-
-    </td>
-    <td valign="top">
-Draft Product Design Specs
-
-    </td>
-    <td valign="top">
-FDE Dev Architect + customer IT admin
-
-    </td>
+    <td valign="top">Authorization matrix for all agents</td>
+    <td valign="top">Draft Product Design Specs</td>
+    <td valign="top">FDE Dev Architect + customer IT admin</td>
   </tr>
   <tr>
-    <td valign="top">
-Regulatory audit trail retention requirement
-
-    </td>
-    <td valign="top">
-Legal agreement plan
-
-    </td>
-    <td valign="top">
-Customer compliance team (confirmed during Discovery)
-
-    </td>
+    <td valign="top">Regulatory audit trail retention requirement</td>
+    <td valign="top">Legal agreement plan</td>
+    <td valign="top">Customer compliance team (confirmed during Discovery)</td>
   </tr>
   <tr>
-    <td valign="top">
-Process KPIs (Dimension 2) for the quality framework
-
-    </td>
-    <td valign="top">
-TO-BE process flow
-
-    </td>
-    <td valign="top">
-FDE Domain PM + process owner
-
-    </td>
+    <td valign="top">Process KPIs (Dimension 2) for the quality framework</td>
+    <td valign="top">TO-BE process flow</td>
+    <td valign="top">FDE Domain PM + process owner</td>
   </tr>
   <tr>
-    <td valign="top">
-Legal agreement path for Workflow C (support relay), if in scope
-
-    </td>
-    <td valign="top">
-Legal agreement plan
-
-    </td>
-    <td valign="top">
-FDE team + SAP legal
-
-    </td>
+    <td valign="top">Legal agreement path for Workflow C (support relay), if in scope</td>
+    <td valign="top">Legal agreement plan</td>
+    <td valign="top">FDE team + SAP legal</td>
   </tr>
   <tr>
-    <td valign="top">
-Cost monitoring budget values and alert owners post-handover
-
-    </td>
-    <td valign="top">
-Production handover plan
-
-    </td>
-    <td valign="top">
-FDE Domain PM + customer IT admin
-
-    </td>
+    <td valign="top">Cost monitoring budget values and alert owners post-handover</td>
+    <td valign="top">Production handover plan</td>
+    <td valign="top">FDE Domain PM + customer IT admin</td>
   </tr>
   <tr>
-    <td valign="top">
-Eval test data strategy: synthetic vs. TEA-covered real data
-
-    </td>
-    <td valign="top">
-Eval plan
-
-    </td>
-    <td valign="top">
-FDE Application Engineer + Data Scientist
-
-    </td>
+    <td valign="top">Eval test data strategy: synthetic vs. TEA-covered real data</td>
+    <td valign="top">Eval plan</td>
+    <td valign="top">FDE Application Engineer + Data Scientist</td>
   </tr>
 </table>
 
@@ -2131,74 +1099,29 @@ Approximate effort comparison for the supervisor stack (Workflows A, B, C, share
     <th valign="top">With Starter Kit</th>
   </tr>
   <tr>
-    <td valign="top">
-Workflow C (Support Relay)
-
-    </td>
-    <td valign="top">
-1–2 days build + test
-
-    </td>
-    <td valign="top">
-~2 hours: fork, configure, verify sanitization in EAC
-
-    </td>
+    <td valign="top">Workflow C (Support Relay)</td>
+    <td valign="top">1–2 days build + test</td>
+    <td valign="top">~2 hours: fork, configure, verify sanitization in EAC</td>
   </tr>
   <tr>
-    <td valign="top">
-Workflow B (Telemetry Monitor)
-
-    </td>
-    <td valign="top">
-2–3 days build + test
-
-    </td>
-    <td valign="top">
-~1 day: fork, calibrate thresholds post-EAC baseline, test with injected anomalies
-
-    </td>
+    <td valign="top">Workflow B (Telemetry Monitor)</td>
+    <td valign="top">2–3 days build + test</td>
+    <td valign="top">~1 day: fork, calibrate thresholds post-EAC baseline, test with injected anomalies</td>
   </tr>
   <tr>
-    <td valign="top">
-Workflow A skeleton
-
-    </td>
-    <td valign="top">
-2–3 days build
-
-    </td>
-    <td valign="top">
-~1 day: fork, author Code node verification rules + critic prompt, test routing
-
-    </td>
+    <td valign="top">Workflow A skeleton</td>
+    <td valign="top">2–3 days build</td>
+    <td valign="top">~1 day: fork, author Code node verification rules + critic prompt, test routing</td>
   </tr>
   <tr>
-    <td valign="top">
-Shared state store
-
-    </td>
-    <td valign="top">
-0.5 days DDL + deploy
-
-    </td>
-    <td valign="top">
-~1 hour: deploy from DDL template, verify in each environment
-
-    </td>
+    <td valign="top">Shared state store</td>
+    <td valign="top">0.5 days DDL + deploy</td>
+    <td valign="top">~1 hour: deploy from DDL template, verify in each environment</td>
   </tr>
   <tr>
-    <td valign="top">
-Audit trail
-
-    </td>
-    <td valign="top">
-0.5 days DDL + deploy
-
-    </td>
-    <td valign="top">
-~1 hour: deploy from DDL template, verify append-only behavior
-
-    </td>
+    <td valign="top">Audit trail</td>
+    <td valign="top">0.5 days DDL + deploy</td>
+    <td valign="top">~1 hour: deploy from DDL template, verify append-only behavior</td>
   </tr>
 </table>
 
@@ -2268,58 +1191,22 @@ Examples of findings that become Starter Kit improvements:
     <th valign="top">Maintained By</th>
   </tr>
   <tr>
-    <td valign="top">
-Layer 1 — Deploy as-is
-
-    </td>
-    <td valign="top">
-Workflow C, audit trail schemas, anomaly rule set, sanitization rules, pre-migration checklists, version stack discipline, decision tables, fail-safe rules
-
-    </td>
-    <td valign="top">
-Inherited by FDE team; no sprint effort
-
-    </td>
-    <td valign="top">
-CIS T&O
-
-    </td>
+    <td valign="top">Layer 1 — Deploy as-is</td>
+    <td valign="top">Workflow C, audit trail schemas, anomaly rule set, sanitization rules, pre-migration checklists, version stack discipline, decision tables, fail-safe rules</td>
+    <td valign="top">Inherited by FDE team; no sprint effort</td>
+    <td valign="top">CIS T&O</td>
   </tr>
   <tr>
-    <td valign="top">
-Layer 2 — Parameterize and deploy
-
-    </td>
-    <td valign="top">
-Workflow B (threshold calibration), Workflow A skeleton (Code node + critic prompt authored per engagement), guardrail stack structure, quality framework, eval structure, rollback template, configuration naming convention
-
-    </td>
-    <td valign="top">
-Forked and configured during FDE Develop; parameterization decided in Discovery
-
-    </td>
-    <td valign="top">
-CIS T&O (skeleton); FDE team (per-engagement content)
-
-    </td>
+    <td valign="top">Layer 2 — Parameterize and deploy</td>
+    <td valign="top">Workflow B (threshold calibration), Workflow A skeleton (Code node + critic prompt authored per engagement), guardrail stack structure, quality framework, eval structure, rollback template, configuration naming convention</td>
+    <td valign="top">Forked and configured during FDE Develop; parameterization decided in Discovery</td>
+    <td valign="top">CIS T&O (skeleton); FDE team (per-engagement content)</td>
   </tr>
   <tr>
-    <td valign="top">
-Layer 3 — Engagement-specific
-
-    </td>
-    <td valign="top">
-Worker agent business logic, process KPIs, verification rules, threshold values, authorization matrices, regulatory requirements
-
-    </td>
-    <td valign="top">
-Built from scratch in FDE Develop
-
-    </td>
-    <td valign="top">
-FDE team (with process owner and customer IT admin)
-
-    </td>
+    <td valign="top">Layer 3 — Engagement-specific</td>
+    <td valign="top">Worker agent business logic, process KPIs, verification rules, threshold values, authorization matrices, regulatory requirements</td>
+    <td valign="top">Built from scratch in FDE Develop</td>
+    <td valign="top">FDE team (with process owner and customer IT admin)</td>
   </tr>
 </table>
 

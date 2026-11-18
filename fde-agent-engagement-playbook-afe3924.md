@@ -27,46 +27,22 @@ The scope of "run, improve and extend" differs by engagement type and should be 
     <th valign="top">Done When</th>
   </tr>
   <tr>
-    <td valign="top">
-**Build**
-</td>
-    <td valign="top">
-Deliver an agent that moves a named business KPI
-</td>
-    <td valign="top">
-FDE lead, customer product owner
-</td>
-    <td valign="top">
-Agent live in production, meeting its agreed quality bar
-</td>
+    <td valign="top">**Build**</td>
+    <td valign="top">Deliver an agent that moves a named business KPI</td>
+    <td valign="top">FDE lead, customer product owner</td>
+    <td valign="top">Agent live in production, meeting its agreed quality bar</td>
   </tr>
   <tr>
-    <td valign="top">
-**Operate**
-</td>
-    <td valign="top">
-Make the agent observable, testable, safe and changeable
-</td>
-    <td valign="top">
-FDE engineer, customer platform lead
-</td>
-    <td valign="top">
-Operational readiness checklist passed
-</td>
+    <td valign="top">**Operate**</td>
+    <td valign="top">Make the agent observable, testable, safe and changeable</td>
+    <td valign="top">FDE engineer, customer platform lead</td>
+    <td valign="top">Operational readiness checklist passed</td>
   </tr>
   <tr>
-    <td valign="top">
-**Enable**
-</td>
-    <td valign="top">
-Give the customer the skills and confidence to own it
-</td>
-    <td valign="top">
-FDE lead, customer sponsor
-</td>
-    <td valign="top">
-Customer team ships a change and handles an incident unaided
-</td>
+    <td valign="top">**Enable**</td>
+    <td valign="top">Give the customer the skills and confidence to own it</td>
+    <td valign="top">FDE lead, customer sponsor</td>
+    <td valign="top">Customer team ships a change and handles an incident unaided</td>
   </tr>
 </table>
 
@@ -104,59 +80,29 @@ Agree and record these in the statement of work:
     <th valign="top">FDE Side</th>
   </tr>
   <tr>
-    <td valign="top">
-Executive sponsor
-</td>
-    <td valign="top">
-Owns the outcome, unblocks decisions
-</td>
-    <td valign="top">
-Engagement lead
-</td>
+    <td valign="top">Executive sponsor</td>
+    <td valign="top">Owns the outcome, unblocks decisions</td>
+    <td valign="top">Engagement lead</td>
   </tr>
   <tr>
-    <td valign="top">
-Agent owner
-</td>
-    <td valign="top">
-Prioritises improvements, approves changes
-</td>
-    <td valign="top">
-FDE lead
-</td>
+    <td valign="top">Agent owner</td>
+    <td valign="top">Prioritises improvements, approves changes</td>
+    <td valign="top">FDE lead</td>
   </tr>
   <tr>
-    <td valign="top">
-Engineering
-</td>
-    <td valign="top">
-Builds, deploys, maintains
-</td>
-    <td valign="top">
-FDE engineers (pairing)
-</td>
+    <td valign="top">Engineering</td>
+    <td valign="top">Builds, deploys, maintains</td>
+    <td valign="top">FDE engineers (pairing)</td>
   </tr>
   <tr>
-    <td valign="top">
-Operations / support
-</td>
-    <td valign="top">
-Monitors, triages, runs runbooks
-</td>
-    <td valign="top">
-FDE on hypercare
-</td>
+    <td valign="top">Operations / support</td>
+    <td valign="top">Monitors, triages, runs runbooks</td>
+    <td valign="top">FDE on hypercare</td>
   </tr>
   <tr>
-    <td valign="top">
-Risk, security, compliance
-</td>
-    <td valign="top">
-Signs off guardrails, data handling, audit
-</td>
-    <td valign="top">
-FDE engineer as point of contact
-</td>
+    <td valign="top">Risk, security, compliance</td>
+    <td valign="top">Signs off guardrails, data handling, audit</td>
+    <td valign="top">FDE engineer as point of contact</td>
   </tr>
 </table>
 
@@ -223,52 +169,28 @@ Each runbook is tested by the customer team before exit.
     <th valign="top">Runbook Covers</th>
   </tr>
   <tr>
-    <td valign="top">
-Bad or unexpected outputs
-</td>
-    <td valign="top">
-Finding the run in traces, isolating prompt, tool or data cause, adding an eval case
-</td>
+    <td valign="top">Bad or unexpected outputs</td>
+    <td valign="top">Finding the run in traces, isolating prompt, tool or data cause, adding an eval case</td>
   </tr>
   <tr>
-    <td valign="top">
-Tool or upstream outage
-</td>
-    <td valign="top">
-Fallback behaviour, kill switch, customer communication
-</td>
+    <td valign="top">Tool or upstream outage</td>
+    <td valign="top">Fallback behaviour, kill switch, customer communication</td>
   </tr>
   <tr>
-    <td valign="top">
-Cost spike
-</td>
-    <td valign="top">
-Cost dashboards, loop and prompt-size checks, budget caps
-</td>
+    <td valign="top">Cost spike</td>
+    <td valign="top">Cost dashboards, loop and prompt-size checks, budget caps</td>
   </tr>
   <tr>
-    <td valign="top">
-Behaviour change request
-</td>
-    <td valign="top">
-Edit prompt or tool, run evals, deploy through CI, monitor
-</td>
+    <td valign="top">Behaviour change request</td>
+    <td valign="top">Edit prompt or tool, run evals, deploy through CI, monitor</td>
   </tr>
   <tr>
-    <td valign="top">
-Model upgrade or deprecation
-</td>
-    <td valign="top">
-Eval comparison, staged rollout, rollback
-</td>
+    <td valign="top">Model upgrade or deprecation</td>
+    <td valign="top">Eval comparison, staged rollout, rollback</td>
   </tr>
   <tr>
-    <td valign="top">
-Security or data incident
-</td>
-    <td valign="top">
-Disabling tools, preserving logs, escalation to security
-</td>
+    <td valign="top">Security or data incident</td>
+    <td valign="top">Disabling tools, preserving logs, escalation to security</td>
   </tr>
 </table>
 
@@ -306,81 +228,39 @@ In the SAP FDE model, this assessment maps to the Adoption Strategy's Governance
     <th valign="top">Format</th>
   </tr>
   <tr>
-    <td valign="top">
-Executive sponsors
-</td>
-    <td valign="top">
-What the agent does, its limits, risk posture, KPIs, reading the business dashboard
-</td>
-    <td valign="top">
-Short briefing, quarterly reviews
-</td>
+    <td valign="top">Executive sponsors</td>
+    <td valign="top">What the agent does, its limits, risk posture, KPIs, reading the business dashboard</td>
+    <td valign="top">Short briefing, quarterly reviews</td>
   </tr>
   <tr>
-    <td valign="top">
-Agent owners / product leads
-</td>
-    <td valign="top">
-Prioritising improvements, reading quality metrics, approving changes, managing scope
-</td>
-    <td valign="top">
-Workshops, shadowing FDE decisions
-</td>
+    <td valign="top">Agent owners / product leads</td>
+    <td valign="top">Prioritising improvements, reading quality metrics, approving changes, managing scope</td>
+    <td valign="top">Workshops, shadowing FDE decisions</td>
   </tr>
   <tr>
-    <td valign="top">
-Engineers / platform team
-</td>
-    <td valign="top">
-Architecture, prompt and tool changes, evals, CI/CD, model upgrades, debugging from traces
-</td>
-    <td valign="top">
-Pairing, hands-on labs on the real codebase
-</td>
+    <td valign="top">Engineers / platform team</td>
+    <td valign="top">Architecture, prompt and tool changes, evals, CI/CD, model upgrades, debugging from traces</td>
+    <td valign="top">Pairing, hands-on labs on the real codebase</td>
   </tr>
   <tr>
-    <td valign="top">
-Operators / support
-</td>
-    <td valign="top">
-Triaging bad outputs, runbooks, escalation, kill switches
-</td>
-    <td valign="top">
-Runbook walkthroughs, incident drills
-</td>
+    <td valign="top">Operators / support</td>
+    <td valign="top">Triaging bad outputs, runbooks, escalation, kill switches</td>
+    <td valign="top">Runbook walkthroughs, incident drills</td>
   </tr>
   <tr>
-    <td valign="top">
-Human-in-the-loop reviewers
-</td>
-    <td valign="top">
-What to approve or reject, giving feedback that improves the agent
-</td>
-    <td valign="top">
-Short practical sessions with real examples
-</td>
+    <td valign="top">Human-in-the-loop reviewers</td>
+    <td valign="top">What to approve or reject, giving feedback that improves the agent</td>
+    <td valign="top">Short practical sessions with real examples</td>
   </tr>
   <tr>
-    <td valign="top">
-End users
-</td>
-    <td valign="top">
-What the agent does well and badly, using it effectively, flagging problems
-</td>
-    <td valign="top">
-Short guides, in-product tips, office hours
-</td>
+    <td valign="top">End users</td>
+    <td valign="top">What the agent does well and badly, using it effectively, flagging problems</td>
+    <td valign="top">Short guides, in-product tips, office hours</td>
   </tr>
   <tr>
-    <td valign="top">
-Risk, security, compliance
-</td>
-    <td valign="top">
-Guardrails, audit logs, data handling, change approval
-</td>
-    <td valign="top">
-Review sessions, sign-off workshops
-</td>
+    <td valign="top">Risk, security, compliance</td>
+    <td valign="top">Guardrails, audit logs, data handling, change approval</td>
+    <td valign="top">Review sessions, sign-off workshops</td>
   </tr>
 </table>
 
@@ -401,48 +281,24 @@ Ownership shifts in four stages. Progression is based on demonstrated capability
     <th valign="top">Evidence to Move On</th>
   </tr>
   <tr>
-    <td valign="top">
-1. FDE builds, customer observes
-</td>
-    <td valign="top">
-FDE
-</td>
-    <td valign="top">
-Customer engineers attend design sessions and code reviews
-</td>
+    <td valign="top">1. FDE builds, customer observes</td>
+    <td valign="top">FDE</td>
+    <td valign="top">Customer engineers attend design sessions and code reviews</td>
   </tr>
   <tr>
-    <td valign="top">
-2. Pair building
-</td>
-    <td valign="top">
-Shared
-</td>
-    <td valign="top">
-Customer engineer co-authors a feature and its evals
-</td>
+    <td valign="top">2. Pair building</td>
+    <td valign="top">Shared</td>
+    <td valign="top">Customer engineer co-authors a feature and its evals</td>
   </tr>
   <tr>
-    <td valign="top">
-3. Customer leads, FDE supports
-</td>
-    <td valign="top">
-Customer
-</td>
-    <td valign="top">
-Customer ships a change through evals and CI, and handles an incident with FDE review
-</td>
+    <td valign="top">3. Customer leads, FDE supports</td>
+    <td valign="top">Customer</td>
+    <td valign="top">Customer ships a change through evals and CI, and handles an incident with FDE review</td>
   </tr>
   <tr>
-    <td valign="top">
-4. Customer independent
-</td>
-    <td valign="top">
-Customer
-</td>
-    <td valign="top">
-Customer ships and operates with no FDE involvement for an agreed period
-</td>
+    <td valign="top">4. Customer independent</td>
+    <td valign="top">Customer</td>
+    <td valign="top">Customer ships and operates with no FDE involvement for an agreed period</td>
   </tr>
 </table>
 
@@ -521,71 +377,33 @@ All three tracks run from the first week, and each phase ends at a gate with exp
     <th valign="top">Phase 4: Hand Over (Customer-Led)</th>
   </tr>
   <tr>
-    <td valign="top">
-**Build**
-</td>
-    <td valign="top">
-Scope use case; Agree KPI and quality bar
-</td>
-    <td valign="top">
-Build agent with embedded customer engineers
-</td>
-    <td valign="top">
-Go live; Fix issues found in production
-</td>
-    <td valign="top">
-Customer extends and builds next use cases
-</td>
+    <td valign="top">**Build**</td>
+    <td valign="top">Scope use case; Agree KPI and quality bar</td>
+    <td valign="top">Build agent with embedded customer engineers</td>
+    <td valign="top">Go live; Fix issues found in production</td>
+    <td valign="top">Customer extends and builds next use cases</td>
   </tr>
   <tr>
-    <td valign="top">
-**Operate**
-</td>
-    <td valign="top">
-Name owner and on-call; Map dependencies
-</td>
-    <td valign="top">
-Tracing, evals, CI/CD, guardrails; Write runbooks
-</td>
-    <td valign="top">
-Alerts to customer on-call; FDE hypercare support
-</td>
-    <td valign="top">
-Weekly, monthly, quarterly reviews; Customer on-call
-</td>
+    <td valign="top">**Operate**</td>
+    <td valign="top">Name owner and on-call; Map dependencies</td>
+    <td valign="top">Tracing, evals, CI/CD, guardrails; Write runbooks</td>
+    <td valign="top">Alerts to customer on-call; FDE hypercare support</td>
+    <td valign="top">Weekly, monthly, quarterly reviews; Customer on-call</td>
   </tr>
   <tr>
-    <td valign="top">
-**Enable**
-</td>
-    <td valign="top">
-Assess skills; Agree enablement plan
-</td>
-    <td valign="top">
-Pair building; Role-based training; Trace reviews
-</td>
-    <td valign="top">
-Customer leads changes; Incident and upgrade drills
-</td>
-    <td valign="top">
-Customer independent; 30/60/90 day checks
-</td>
+    <td valign="top">**Enable**</td>
+    <td valign="top">Assess skills; Agree enablement plan</td>
+    <td valign="top">Pair building; Role-based training; Trace reviews</td>
+    <td valign="top">Customer leads changes; Incident and upgrade drills</td>
+    <td valign="top">Customer independent; 30/60/90 day checks</td>
   </tr>
   <tr>
+    <td valign="top">**Gate**</td>
+    <td valign="top"></td>
     <td valign="top">
-**Gate**
-</td>
-    <td valign="top">
-</td>
-    <td valign="top">
-**Plan gate** — ownership agreed
-</td>
-    <td valign="top">
-**Go-live gate** — operational readiness
-</td>
-    <td valign="top">
-**Exit gate** — enablement readiness
-</td>
+**Plan gate** — ownership agreed</td>
+    <td valign="top">**Go-live gate** — operational readiness</td>
+    <td valign="top">**Exit gate** — enablement readiness</td>
   </tr>
 </table>
 
@@ -647,28 +465,16 @@ Post-hypercare operational support transfers to CIS T&O, not back to the FDE tea
     <th valign="top">Review</th>
   </tr>
   <tr>
-    <td valign="top">
-Weekly
-</td>
-    <td valign="top">
-Quality metrics, flagged runs, open incidents
-</td>
+    <td valign="top">Weekly</td>
+    <td valign="top">Quality metrics, flagged runs, open incidents</td>
   </tr>
   <tr>
-    <td valign="top">
-Monthly
-</td>
-    <td valign="top">
-Cost, eval results, backlog of improvements
-</td>
+    <td valign="top">Monthly</td>
+    <td valign="top">Cost, eval results, backlog of improvements</td>
   </tr>
   <tr>
-    <td valign="top">
-Quarterly
-</td>
-    <td valign="top">
-Model and vendor options, scope, business outcome delivered
-</td>
+    <td valign="top">Quarterly</td>
+    <td valign="top">Model and vendor options, scope, business outcome delivered</td>
   </tr>
 </table>
 

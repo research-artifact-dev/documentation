@@ -32,37 +32,19 @@ Three engagement sizes:
     <th valign="top">Approval</th>
   </tr>
   <tr>
-    <td valign="top">
-Lean FDE
-</td>
-    <td valign="top">
-&lt;90 days
-</td>
-    <td valign="top">
-Standard
-</td>
+    <td valign="top">Lean FDE</td>
+    <td valign="top">&lt;90 days</td>
+    <td valign="top">Standard</td>
   </tr>
   <tr>
-    <td valign="top">
-Standard FDE
-</td>
-    <td valign="top">
-~90 days
-</td>
-    <td valign="top">
-Standard (majority of engagements)
-</td>
+    <td valign="top">Standard FDE</td>
+    <td valign="top">~90 days</td>
+    <td valign="top">Standard (majority of engagements)</td>
   </tr>
   <tr>
-    <td valign="top">
-Large FDE
-</td>
-    <td valign="top">
-&gt;90 days
-</td>
-    <td valign="top">
-Board approval required
-</td>
+    <td valign="top">Large FDE</td>
+    <td valign="top">&gt;90 days</td>
+    <td valign="top">Board approval required</td>
   </tr>
 </table>
 
@@ -89,74 +71,34 @@ Industry AI engagements follow the **Industry AI E2E process** — a lean, five-
     <th valign="top">Key Activities</th>
   </tr>
   <tr>
-    <td valign="top">
-**Qualification**
-</td>
-    <td valign="top">
-2–4 weeks
-</td>
-    <td valign="top">
-Industry AI CRO
-</td>
-    <td valign="top">
-Domain 3iaB nomination review; customer alignment & value case; qualification gate review & IAI Head/CRO approval
-</td>
+    <td valign="top">**Qualification**</td>
+    <td valign="top">2–4 weeks</td>
+    <td valign="top">Industry AI CRO</td>
+    <td valign="top">Domain 3iaB nomination review; customer alignment & value case; qualification gate review & IAI Head/CRO approval</td>
   </tr>
   <tr>
-    <td valign="top">
-**Discovery**
-</td>
-    <td valign="top">
-2 weeks
-</td>
-    <td valign="top">
-Industry Cluster
-</td>
-    <td valign="top">
-Team staffing & discovery contracting; discovery workshop & engagement proposal
-</td>
+    <td valign="top">**Discovery**</td>
+    <td valign="top">2 weeks</td>
+    <td valign="top">Industry Cluster</td>
+    <td valign="top">Team staffing & discovery contracting; discovery workshop & engagement proposal</td>
   </tr>
   <tr>
-    <td valign="top">
-**Value Proof**
-</td>
-    <td valign="top">
-Up to 12 weeks
-</td>
-    <td valign="top">
-Industry AI FDE
-</td>
-    <td valign="top">
-Value-proof contracting; iterative MVP build (up to 11 weeks); value assessment; trafo engagement contracting
-</td>
+    <td valign="top">**Value Proof**</td>
+    <td valign="top">Up to 12 weeks</td>
+    <td valign="top">Industry AI FDE</td>
+    <td valign="top">Value-proof contracting; iterative MVP build (up to 11 weeks); value assessment; trafo engagement contracting</td>
   </tr>
   <tr>
-    <td valign="top">
-**Value Delivery & Expansion**
-</td>
-    <td valign="top">
-FDE delivery 8–10 weeks · FDE run continuous · productization varies
-</td>
-    <td valign="top">
-Industry AI FDE (delivery); Industry Cluster (productization)
-</td>
-    <td valign="top">
-Iterative build & deployment (7–9 weeks); value refinement; engagement expansion & upselling; commercialization under north-star setup
-</td>
+    <td valign="top">**Value Delivery & Expansion**</td>
+    <td valign="top">FDE delivery 8–10 weeks · FDE run continuous · productization varies</td>
+    <td valign="top">Industry AI FDE (delivery); Industry Cluster (productization)</td>
+    <td valign="top">Iterative build & deployment (7–9 weeks); value refinement; engagement expansion & upselling; commercialization under north-star setup</td>
   </tr>
   <tr>
-    <td valign="top">
-**Run as Standard**
-</td>
-    <td valign="top">
-Continuous
-</td>
-    <td valign="top">
-Industry AI FDE
-</td>
-    <td valign="top">
-Deployment of productized version; continuous run, maintenance & support
-</td>
+    <td valign="top">**Run as Standard**</td>
+    <td valign="top">Continuous</td>
+    <td valign="top">Industry AI FDE</td>
+    <td valign="top">Deployment of productized version; continuous run, maintenance & support</td>
   </tr>
 </table>
 
@@ -203,52 +145,28 @@ The **Industry AI FDE delivery pod** is a customer-facing, fast-moving, agile en
     <th valign="top">Responsibility</th>
   </tr>
   <tr>
-    <td valign="top">
-**FD Delivery Lead**
-</td>
-    <td valign="top">
-End-to-end engagement success: project setup, steering, governance, stakeholder alignment; owns value realization
-</td>
+    <td valign="top">**FD Delivery Lead**</td>
+    <td valign="top">End-to-end engagement success: project setup, steering, governance, stakeholder alignment; owns value realization</td>
   </tr>
   <tr>
-    <td valign="top">
-**FD Solution Strategist**
-</td>
-    <td valign="top">
-Definition of agentic solutions anchored in customer business/operational context and success metrics
-</td>
+    <td valign="top">**FD Solution Strategist**</td>
+    <td valign="top">Definition of agentic solutions anchored in customer business/operational context and success metrics</td>
   </tr>
   <tr>
-    <td valign="top">
-**FD AI Architect**
-</td>
-    <td valign="top">
-Prototype, value proof, and secure, scalable, enterprise-grade agentic solution architecture
-</td>
+    <td valign="top">**FD AI Architect**</td>
+    <td valign="top">Prototype, value proof, and secure, scalable, enterprise-grade agentic solution architecture</td>
   </tr>
   <tr>
-    <td valign="top">
-**FD AI Engineer** (typically ×2)
-</td>
-    <td valign="top">
-Builds the agentic solution in the customer context; bridges process, application, AI, and deployment
-</td>
+    <td valign="top">**FD AI Engineer** (typically ×2)</td>
+    <td valign="top">Builds the agentic solution in the customer context; bridges process, application, AI, and deployment</td>
   </tr>
   <tr>
-    <td valign="top">
-**FD Data Scientist & Engineer**
-</td>
-    <td valign="top">
-Makes enterprise data usable, governed, observable, and reliable; data products, retrieval, pipelines, semantic/ontology
-</td>
+    <td valign="top">**FD Data Scientist & Engineer**</td>
+    <td valign="top">Makes enterprise data usable, governed, observable, and reliable; data products, retrieval, pipelines, semantic/ontology</td>
   </tr>
   <tr>
-    <td valign="top">
-**FD DevOpsSec**
-</td>
-    <td valign="top">
-Operational backbone of agentic AI delivery; deploy, operate, and continuously improve at enterprise scale
-</td>
+    <td valign="top">**FD DevOpsSec**</td>
+    <td valign="top">Operational backbone of agentic AI delivery; deploy, operate, and continuously improve at enterprise scale</td>
   </tr>
 </table>
 
@@ -284,70 +202,34 @@ The pod is supported by **business/advisory core roles** (virtual) — CRO team 
     <th valign="top">Industry AI FDE</th>
   </tr>
   <tr>
-    <td valign="top">
-Scope
-</td>
-    <td valign="top">
-Any high-impact AI use case
-</td>
-    <td valign="top">
-One of the 7 autonomous domains
-</td>
+    <td valign="top">Scope</td>
+    <td valign="top">Any high-impact AI use case</td>
+    <td valign="top">One of the 7 autonomous domains</td>
   </tr>
   <tr>
-    <td valign="top">
-Commercial model
-</td>
-    <td valign="top">
-SAP-funded sprint → product feature
-</td>
-    <td valign="top">
-Value-based contract: flat annual subscription = 10–30% of yearly customer benefit
-</td>
+    <td valign="top">Commercial model</td>
+    <td valign="top">SAP-funded sprint → product feature</td>
+    <td valign="top">Value-based contract: flat annual subscription = 10–30% of yearly customer benefit</td>
   </tr>
   <tr>
-    <td valign="top">
-Contract structure
-</td>
-    <td valign="top">
-FBA + standard components
-</td>
-    <td valign="top">
-Single bundled contract: Services + Agents & Assistants + Data & Ontologies + Business AI Platform
-</td>
+    <td valign="top">Contract structure</td>
+    <td valign="top">FBA + standard components</td>
+    <td valign="top">Single bundled contract: Services + Agents & Assistants + Data & Ontologies + Business AI Platform</td>
   </tr>
   <tr>
-    <td valign="top">
-Scale
-</td>
-    <td valign="top">
-Varies
-</td>
-    <td valign="top">
-Transformational — E2E autonomous business processes, cross-LoB
-</td>
+    <td valign="top">Scale</td>
+    <td valign="top">Varies</td>
+    <td valign="top">Transformational — E2E autonomous business processes, cross-LoB</td>
   </tr>
   <tr>
-    <td valign="top">
-Target customers
-</td>
-    <td valign="top">
-Strategic, top-tier
-</td>
-    <td valign="top">
-~10 enterprise customers in 2026 (pilot H1, commercial H2)
-</td>
+    <td valign="top">Target customers</td>
+    <td valign="top">Strategic, top-tier</td>
+    <td valign="top">~10 enterprise customers in 2026 (pilot H1, commercial H2)</td>
   </tr>
   <tr>
-    <td valign="top">
-Technology mandate
-</td>
-    <td valign="top">
-SAP AI, Joule
-</td>
-    <td valign="top">
-Industry AI Platform, Joule, agents productized into SAP portfolio
-</td>
+    <td valign="top">Technology mandate</td>
+    <td valign="top">SAP AI, Joule</td>
+    <td valign="top">Industry AI Platform, Joule, agents productized into SAP portfolio</td>
   </tr>
 </table>
 
@@ -374,32 +256,16 @@ CIS operates two tracks side by side:
     <th valign="top">MXP End State</th>
   </tr>
   <tr>
-    <td valign="top">
-**FDE**
-</td>
-    <td valign="top">
-SAP-funded
-</td>
-    <td valign="top">
-Becomes standard SAP product
-</td>
-    <td valign="top">
-Productization → product roadmap
-</td>
+    <td valign="top">**FDE**</td>
+    <td valign="top">SAP-funded</td>
+    <td valign="top">Becomes standard SAP product</td>
+    <td valign="top">Productization → product roadmap</td>
   </tr>
   <tr>
-    <td valign="top">
-**CAIA** (Custom AI Application)
-</td>
-    <td valign="top">
-Customer-funded
-</td>
-    <td valign="top">
-Stays customer-specific
-</td>
-    <td valign="top">
-"Handed over to CAIA"
-</td>
+    <td valign="top">**CAIA** (Custom AI Application)</td>
+    <td valign="top">Customer-funded</td>
+    <td valign="top">Stays customer-specific</td>
+    <td valign="top">"Handed over to CAIA"</td>
   </tr>
 </table>
 
@@ -432,70 +298,34 @@ CIS does not run a separate FDE process — it operates within SAP's standard FD
     <th valign="top">CAIA</th>
   </tr>
   <tr>
-    <td valign="top">
-Who funds it?
-</td>
-    <td valign="top">
-SAP
-</td>
-    <td valign="top">
-Customer
-</td>
+    <td valign="top">Who funds it?</td>
+    <td valign="top">SAP</td>
+    <td valign="top">Customer</td>
   </tr>
   <tr>
-    <td valign="top">
-Does IP become SAP product?
-</td>
-    <td valign="top">
-Yes
-</td>
-    <td valign="top">
-No
-</td>
+    <td valign="top">Does IP become SAP product?</td>
+    <td valign="top">Yes</td>
+    <td valign="top">No</td>
   </tr>
   <tr>
-    <td valign="top">
-Is there a value-based contract?
-</td>
-    <td valign="top">
-Yes (Industry AI)
-</td>
-    <td valign="top">
-No
-</td>
+    <td valign="top">Is there a value-based contract?</td>
+    <td valign="top">Yes (Industry AI)</td>
+    <td valign="top">No</td>
   </tr>
   <tr>
-    <td valign="top">
-Reusable across customers?
-</td>
-    <td valign="top">
-Yes
-</td>
-    <td valign="top">
-No
-</td>
+    <td valign="top">Reusable across customers?</td>
+    <td valign="top">Yes</td>
+    <td valign="top">No</td>
   </tr>
   <tr>
-    <td valign="top">
-What does the customer sign?
-</td>
-    <td valign="top">
-FBA (+ TEA/CA as needed)
-</td>
-    <td valign="top">
-Customer-funded services contract
-</td>
+    <td valign="top">What does the customer sign?</td>
+    <td valign="top">FBA (+ TEA/CA as needed)</td>
+    <td valign="top">Customer-funded services contract</td>
   </tr>
   <tr>
-    <td valign="top">
-Triggered by...?
-</td>
-    <td valign="top">
-CRO nomination + qualification
-</td>
-    <td valign="top">
-FDE Discovery workshop finding, or direct customer request
-</td>
+    <td valign="top">Triggered by...?</td>
+    <td valign="top">CRO nomination + qualification</td>
+    <td valign="top">FDE Discovery workshop finding, or direct customer request</td>
   </tr>
 </table>
 
@@ -516,84 +346,44 @@ FDE Discovery workshop finding, or direct customer request
     <th valign="top">Definition</th>
   </tr>
   <tr>
-    <td valign="top">
-FDE
-</td>
-    <td valign="top">
-Forward Deployed Engineering — SAP-funded sprint, IP stays with SAP
-</td>
+    <td valign="top">FDE</td>
+    <td valign="top">Forward Deployed Engineering — SAP-funded sprint, IP stays with SAP</td>
   </tr>
   <tr>
-    <td valign="top">
-CAIA
-</td>
-    <td valign="top">
-Custom AI Application — customer-funded, customer-specific
-</td>
+    <td valign="top">CAIA</td>
+    <td valign="top">Custom AI Application — customer-funded, customer-specific</td>
   </tr>
   <tr>
-    <td valign="top">
-FBA
-</td>
-    <td valign="top">
-Feedback Agreement — the customer contract for FDE
-</td>
+    <td valign="top">FBA</td>
+    <td valign="top">Feedback Agreement — the customer contract for FDE</td>
   </tr>
   <tr>
-    <td valign="top">
-MXP
-</td>
-    <td valign="top">
-SAP's internal engagement tracking system
-</td>
+    <td valign="top">MXP</td>
+    <td valign="top">SAP's internal engagement tracking system</td>
   </tr>
   <tr>
-    <td valign="top">
-RTC EAC
-</td>
-    <td valign="top">
-Release-to-Customer / Early Adopter Care — first go-live with Early Adopter Care contacts; triggers Productization
-</td>
+    <td valign="top">RTC EAC</td>
+    <td valign="top">Release-to-Customer / Early Adopter Care — first go-live with Early Adopter Care contacts; triggers Productization</td>
   </tr>
   <tr>
-    <td valign="top">
-EAC
-</td>
-    <td valign="top">
-Early Adopter Care
-</td>
+    <td valign="top">EAC</td>
+    <td valign="top">Early Adopter Care</td>
   </tr>
   <tr>
-    <td valign="top">
-IBU
-</td>
-    <td valign="top">
-Industry Business Unit
-</td>
+    <td valign="top">IBU</td>
+    <td valign="top">Industry Business Unit</td>
   </tr>
   <tr>
-    <td valign="top">
-LoB
-</td>
-    <td valign="top">
-Line of Business
-</td>
+    <td valign="top">LoB</td>
+    <td valign="top">Line of Business</td>
   </tr>
   <tr>
-    <td valign="top">
-CRO Team
-</td>
-    <td valign="top">
-Industry AI CRO — owns GTM, pipeline building, qualification and commercial engagement planning (Discovery is led by the Industry Cluster)
-</td>
+    <td valign="top">CRO Team</td>
+    <td valign="top">Industry AI CRO — owns GTM, pipeline building, qualification and commercial engagement planning (Discovery is led by the Industry Cluster)</td>
   </tr>
   <tr>
-    <td valign="top">
-LOB/AppAI
-</td>
-    <td valign="top">
-Line of Business / Application AI — partners on productization and product-roadmap integration
-</td>
+    <td valign="top">LOB/AppAI</td>
+    <td valign="top">Line of Business / Application AI — partners on productization and product-roadmap integration</td>
   </tr>
 </table>
 

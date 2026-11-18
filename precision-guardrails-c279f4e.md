@@ -38,166 +38,58 @@ The following table maps representative numerical outputs to their failure modes
     <th valign="top">Consequence</th>
   </tr>
   <tr>
-    <td valign="top">
-Autonomous Regulated Manufacturing
-
-    </td>
-    <td valign="top">
-Batch release quantity (kg, units, volume)
-
-    </td>
-    <td valign="top">
-Unit confusion: kg vs. metric ton
-
-    </td>
-    <td valign="top">
-Regulatory deviation; incorrect shipment quantity; potential recall
-
-    </td>
+    <td valign="top">Autonomous Regulated Manufacturing</td>
+    <td valign="top">Batch release quantity (kg, units, volume)</td>
+    <td valign="top">Unit confusion: kg vs. metric ton</td>
+    <td valign="top">Regulatory deviation; incorrect shipment quantity; potential recall</td>
   </tr>
   <tr>
-    <td valign="top">
-Autonomous Regulated Manufacturing
-
-    </td>
-    <td valign="top">
-Deviation classification threshold
-
-    </td>
-    <td valign="top">
-Magnitude error: 0.01 misread as 0.1
-
-    </td>
-    <td valign="top">
-False deviation approval; missed genuine deviation
-
-    </td>
+    <td valign="top">Autonomous Regulated Manufacturing</td>
+    <td valign="top">Deviation classification threshold</td>
+    <td valign="top">Magnitude error: 0.01 misread as 0.1</td>
+    <td valign="top">False deviation approval; missed genuine deviation</td>
   </tr>
   <tr>
-    <td valign="top">
-Autonomous Commodity Management
-
-    </td>
-    <td valign="top">
-Hedge ratio
-
-    </td>
-    <td valign="top">
-Sign error: long/short inversion
-
-    </td>
-    <td valign="top">
-Unintended directional exposure; financial loss
-
-    </td>
+    <td valign="top">Autonomous Commodity Management</td>
+    <td valign="top">Hedge ratio</td>
+    <td valign="top">Sign error: long/short inversion</td>
+    <td valign="top">Unintended directional exposure; financial loss</td>
   </tr>
   <tr>
-    <td valign="top">
-Autonomous Commodity Management
-
-    </td>
-    <td valign="top">
-Forward contract quantity
-
-    </td>
-    <td valign="top">
-10x magnitude error
-
-    </td>
-    <td valign="top">
-Over-hedged position; locked-in losses
-
-    </td>
+    <td valign="top">Autonomous Commodity Management</td>
+    <td valign="top">Forward contract quantity</td>
+    <td valign="top">10x magnitude error</td>
+    <td valign="top">Over-hedged position; locked-in losses</td>
   </tr>
   <tr>
-    <td valign="top">
-Autonomous Revenue Growth Management
-
-    </td>
-    <td valign="top">
-Pricing recommendation
-
-    </td>
-    <td valign="top">
-Currency unit confusion (e.g., EUR vs. USD)
-
-    </td>
-    <td valign="top">
-Systematic under- or over-pricing
-
-    </td>
+    <td valign="top">Autonomous Revenue Growth Management</td>
+    <td valign="top">Pricing recommendation</td>
+    <td valign="top">Currency unit confusion (e.g., EUR vs. USD)</td>
+    <td valign="top">Systematic under- or over-pricing</td>
   </tr>
   <tr>
-    <td valign="top">
-Autonomous Revenue Growth Management
-
-    </td>
-    <td valign="top">
-Discount percentage
-
-    </td>
-    <td valign="top">
-Rounding: 0.15 applied as 15%
-
-    </td>
-    <td valign="top">
-Margin erosion at scale
-
-    </td>
+    <td valign="top">Autonomous Revenue Growth Management</td>
+    <td valign="top">Discount percentage</td>
+    <td valign="top">Rounding: 0.15 applied as 15%</td>
+    <td valign="top">Margin erosion at scale</td>
   </tr>
   <tr>
-    <td valign="top">
-Autonomous Asset Management
-
-    </td>
-    <td valign="top">
-Maintenance cost estimate
-
-    </td>
-    <td valign="top">
-Wrong order of magnitude
-
-    </td>
-    <td valign="top">
-Budget overrun; deferred maintenance misclassification
-
-    </td>
+    <td valign="top">Autonomous Asset Management</td>
+    <td valign="top">Maintenance cost estimate</td>
+    <td valign="top">Wrong order of magnitude</td>
+    <td valign="top">Budget overrun; deferred maintenance misclassification</td>
   </tr>
   <tr>
-    <td valign="top">
-Autonomous Adaptive Production
-
-    </td>
-    <td valign="top">
-Production order quantity
-
-    </td>
-    <td valign="top">
-Integer vs. float: 1.5 batches vs. 1 or 2
-
-    </td>
-    <td valign="top">
-Schedule disruption; material over-ordering
-
-    </td>
+    <td valign="top">Autonomous Adaptive Production</td>
+    <td valign="top">Production order quantity</td>
+    <td valign="top">Integer vs. float: 1.5 batches vs. 1 or 2</td>
+    <td valign="top">Schedule disruption; material over-ordering</td>
   </tr>
   <tr>
-    <td valign="top">
-Autonomous Project Delivery
-
-    </td>
-    <td valign="top">
-Milestone cost at completion
-
-    </td>
-    <td valign="top">
-Percentage vs. absolute value confusion
-
-    </td>
-    <td valign="top">
-Incorrect budget forecast; contract exposure
-
-    </td>
+    <td valign="top">Autonomous Project Delivery</td>
+    <td valign="top">Milestone cost at completion</td>
+    <td valign="top">Percentage vs. absolute value confusion</td>
+    <td valign="top">Incorrect budget forecast; contract exposure</td>
   </tr>
 </table>
 
@@ -221,32 +113,14 @@ Guardrail checks use a two-tier classification that governs whether a failing ch
     <th valign="top">Used When</th>
   </tr>
   <tr>
-    <td valign="top">
-**FAIL**
-
-    </td>
-    <td valign="top">
-Blocking — the operation is halted; the issue must be resolved before proceeding
-
-    </td>
-    <td valign="top">
-Proceeding would cause incorrect behaviour, security failure, or compliance violation
-
-    </td>
+    <td valign="top">**FAIL**</td>
+    <td valign="top">Blocking — the operation is halted; the issue must be resolved before proceeding</td>
+    <td valign="top">Proceeding would cause incorrect behaviour, security failure, or compliance violation</td>
   </tr>
   <tr>
-    <td valign="top">
-**WARN**
-
-    </td>
-    <td valign="top">
-Advisory — the operation may proceed; the finding is logged and flagged for review
-
-    </td>
-    <td valign="top">
-The condition is sub-optimal but does not prevent correct operation
-
-    </td>
+    <td valign="top">**WARN**</td>
+    <td valign="top">Advisory — the operation may proceed; the finding is logged and flagged for review</td>
+    <td valign="top">The condition is sub-optimal but does not prevent correct operation</td>
   </tr>
 </table>
 
@@ -281,60 +155,24 @@ The LLM's role in a well-designed numerical agent is to provide context, framing
     <th valign="top">Do NOT Use</th>
   </tr>
   <tr>
-    <td valign="top">
-Numerical calculation with a SAP service equivalent
-
-    </td>
-    <td valign="top">
-`sapMcpClient` → authoritative SAP service (pricing engine, batch classification, valuation model, MRP)
-
-    </td>
-    <td valign="top">
-`sapOrchestration`: LLM computing the number
-
-    </td>
+    <td valign="top">Numerical calculation with a SAP service equivalent</td>
+    <td valign="top">`sapMcpClient` → authoritative SAP service (pricing engine, batch classification, valuation model, MRP)</td>
+    <td valign="top">`sapOrchestration`: LLM computing the number</td>
   </tr>
   <tr>
-    <td valign="top">
-Lookup from a defined authoritative source
-
-    </td>
-    <td valign="top">
-`sapMcpClient` → lookup API
-
-    </td>
-    <td valign="top">
-LLM retrieval from training data or RAG
-
-    </td>
+    <td valign="top">Lookup from a defined authoritative source</td>
+    <td valign="top">`sapMcpClient` → lookup API</td>
+    <td valign="top">LLM retrieval from training data or RAG</td>
   </tr>
   <tr>
-    <td valign="top">
-Business rule evaluation with a rules engine
-
-    </td>
-    <td valign="top">
-`sapMcpClient` → rules service
-
-    </td>
-    <td valign="top">
-LLM rule interpretation
-
-    </td>
+    <td valign="top">Business rule evaluation with a rules engine</td>
+    <td valign="top">`sapMcpClient` → rules service</td>
+    <td valign="top">LLM rule interpretation</td>
   </tr>
   <tr>
-    <td valign="top">
-Contextual judgment — "does this make business sense?"
-
-    </td>
-    <td valign="top">
-`sapOrchestration` with a critic prompt
-
-    </td>
-    <td valign="top">
-Rigid rule-based check
-
-    </td>
+    <td valign="top">Contextual judgment — "does this make business sense?"</td>
+    <td valign="top">`sapOrchestration` with a critic prompt</td>
+    <td valign="top">Rigid rule-based check</td>
   </tr>
 </table>
 
@@ -410,70 +248,25 @@ ADR 011 (SAP-internal benchmark, 30 enterprise cases, 2026-07-26) provides the a
     <th valign="top">Numeric Recall</th>
   </tr>
   <tr>
-    <td valign="top">
-LLMLingua
-
-    </td>
-    <td valign="top">
-50%
-
-    </td>
-    <td valign="top">
-~50%
-
-    </td>
-    <td valign="top">
-0.989
-
-    </td>
-    <td valign="top">
-**0.914 — 9% numeric drop**
-
-    </td>
+    <td valign="top">LLMLingua</td>
+    <td valign="top">50%</td>
+    <td valign="top">~50%</td>
+    <td valign="top">0.989</td>
+    <td valign="top">**0.914 — 9% numeric drop**</td>
   </tr>
   <tr>
-    <td valign="top">
-LLMLingua
-
-    </td>
-    <td valign="top">
-25%
-
-    </td>
-    <td valign="top">
-~75%
-
-    </td>
-    <td valign="top">
-0.882 — below acceptable
-
-    </td>
-    <td valign="top">
-—
-
-    </td>
+    <td valign="top">LLMLingua</td>
+    <td valign="top">25%</td>
+    <td valign="top">~75%</td>
+    <td valign="top">0.882 — below acceptable</td>
+    <td valign="top">—</td>
   </tr>
   <tr>
-    <td valign="top">
-Caveman
-
-    </td>
-    <td valign="top">
-—
-
-    </td>
-    <td valign="top">
-~29%
-
-    </td>
-    <td valign="top">
-1.000 (lossless)
-
-    </td>
-    <td valign="top">
-**1.000**
-
-    </td>
+    <td valign="top">Caveman</td>
+    <td valign="top">—</td>
+    <td valign="top">~29%</td>
+    <td valign="top">1.000 (lossless)</td>
+    <td valign="top">**1.000**</td>
   </tr>
 </table>
 
@@ -534,88 +327,34 @@ The following deterministic checks cover the most common failure modes:
     <th valign="top">Failure Modes Caught</th>
   </tr>
   <tr>
-    <td valign="top">
-Range check
-
-    </td>
-    <td valign="top">
-Code node: `value >= min && value <= max`
-
-    </td>
-    <td valign="top">
-Out-of-range values, magnitude errors
-
-    </td>
+    <td valign="top">Range check</td>
+    <td valign="top">Code node: `value >= min && value <= max`</td>
+    <td valign="top">Out-of-range values, magnitude errors</td>
   </tr>
   <tr>
-    <td valign="top">
-Unit consistency
-
-    </td>
-    <td valign="top">
-Code node: verify output UoM matches canonical UoM from Layer 1
-
-    </td>
-    <td valign="top">
-Unit confusion
-
-    </td>
+    <td valign="top">Unit consistency</td>
+    <td valign="top">Code node: verify output UoM matches canonical UoM from Layer 1</td>
+    <td valign="top">Unit confusion</td>
   </tr>
   <tr>
-    <td valign="top">
-Sign check
-
-    </td>
-    <td valign="top">
-Code node: verify sign matches expected direction
-
-    </td>
-    <td valign="top">
-Sign errors (long/short, positive/negative)
-
-    </td>
+    <td valign="top">Sign check</td>
+    <td valign="top">Code node: verify sign matches expected direction</td>
+    <td valign="top">Sign errors (long/short, positive/negative)</td>
   </tr>
   <tr>
-    <td valign="top">
-Precision check
-
-    </td>
-    <td valign="top">
-Code node: verify decimal places match system of record expectations
-
-    </td>
-    <td valign="top">
-Rounding errors
-
-    </td>
+    <td valign="top">Precision check</td>
+    <td valign="top">Code node: verify decimal places match system of record expectations</td>
+    <td valign="top">Rounding errors</td>
   </tr>
   <tr>
-    <td valign="top">
-Cross-field consistency
-
-    </td>
-    <td valign="top">
-Code node: verify related fields are internally consistent (e.g., total = unit_price × quantity)
-
-    </td>
-    <td valign="top">
-Calculation errors
-
-    </td>
+    <td valign="top">Cross-field consistency</td>
+    <td valign="top">Code node: verify related fields are internally consistent (e.g., total = unit_price × quantity)</td>
+    <td valign="top">Calculation errors</td>
   </tr>
   <tr>
-    <td valign="top">
-Reference value comparison
-
-    </td>
-    <td valign="top">
-sapMcpClient: retrieve authoritative calculation, compare to agent output within tolerance band
-
-    </td>
-    <td valign="top">
-Magnitude errors relative to ground truth
-
-    </td>
+    <td valign="top">Reference value comparison</td>
+    <td valign="top">sapMcpClient: retrieve authoritative calculation, compare to agent output within tolerance band</td>
+    <td valign="top">Magnitude errors relative to ground truth</td>
   </tr>
 </table>
 
@@ -690,74 +429,29 @@ Both dimensions can independently trigger a human approval requirement.
     <th valign="top">Deviation Threshold</th>
   </tr>
   <tr>
-    <td valign="top">
-Regulated Manufacturing — batch quantity
-
-    </td>
-    <td valign="top">
-Any output exceeding ±10% of standard batch size
-
-    </td>
-    <td valign="top">
->5% deviation from batch classification service result
-
-    </td>
+    <td valign="top">Regulated Manufacturing — batch quantity</td>
+    <td valign="top">Any output exceeding ±10% of standard batch size</td>
+    <td valign="top">>5% deviation from batch classification service result</td>
   </tr>
   <tr>
-    <td valign="top">
-Commodity Management — hedge ratio
-
-    </td>
-    <td valign="top">
-Any position change >€500K notional
-
-    </td>
-    <td valign="top">
->2% deviation from risk model output
-
-    </td>
+    <td valign="top">Commodity Management — hedge ratio</td>
+    <td valign="top">Any position change >€500K notional</td>
+    <td valign="top">>2% deviation from risk model output</td>
   </tr>
   <tr>
-    <td valign="top">
-Revenue Growth Management — pricing
-
-    </td>
-    <td valign="top">
-Any recommendation >€100K contract value
-
-    </td>
-    <td valign="top">
->3% deviation from pricing engine
-
-    </td>
+    <td valign="top">Revenue Growth Management — pricing</td>
+    <td valign="top">Any recommendation >€100K contract value</td>
+    <td valign="top">>3% deviation from pricing engine</td>
   </tr>
   <tr>
-    <td valign="top">
-Asset Management — maintenance cost
-
-    </td>
-    <td valign="top">
-Any recommendation >€50K
-
-    </td>
-    <td valign="top">
->15% deviation from historical cost basis
-
-    </td>
+    <td valign="top">Asset Management — maintenance cost</td>
+    <td valign="top">Any recommendation >€50K</td>
+    <td valign="top">>15% deviation from historical cost basis</td>
   </tr>
   <tr>
-    <td valign="top">
-Adaptive Production — production order
-
-    </td>
-    <td valign="top">
-Any order >500 units on first-time material
-
-    </td>
-    <td valign="top">
->10% deviation from planning system
-
-    </td>
+    <td valign="top">Adaptive Production — production order</td>
+    <td valign="top">Any order >500 units on first-time material</td>
+    <td valign="top">>10% deviation from planning system</td>
   </tr>
 </table>
 
@@ -838,164 +532,68 @@ For each committed numerical output:
     <th valign="top">Content</th>
   </tr>
   <tr>
-    <td valign="top">
-`timestamp`
-
-    </td>
-    <td valign="top">
-ISO-8601 timestamp of commitment
-
-    </td>
+    <td valign="top">`timestamp`</td>
+    <td valign="top">ISO-8601 timestamp of commitment</td>
   </tr>
   <tr>
-    <td valign="top">
-`agent_id`
-
-    </td>
-    <td valign="top">
-Identity of the recommending worker agent (BAIP application registration ID); read/recommend-only, holds no write scope
-
-    </td>
+    <td valign="top">`agent_id`</td>
+    <td valign="top">Identity of the recommending worker agent (BAIP application registration ID); read/recommend-only, holds no write scope</td>
   </tr>
   <tr>
-    <td valign="top">
-`committer_id`
-
-    </td>
-    <td valign="top">
-Identity that performed the write to the system of record — the supervisor/committer; all committed writes are attributed here, not to the worker
-
-    </td>
+    <td valign="top">`committer_id`</td>
+    <td valign="top">Identity that performed the write to the system of record — the supervisor/committer; all committed writes are attributed here, not to the worker</td>
   </tr>
   <tr>
-    <td valign="top">
-`agent_version`
-
-    </td>
-    <td valign="top">
-Version of the agent workflow at time of execution
-
-    </td>
+    <td valign="top">`agent_version`</td>
+    <td valign="top">Version of the agent workflow at time of execution</td>
   </tr>
   <tr>
-    <td valign="top">
-`correlation_id`
-
-    </td>
-    <td valign="top">
-Links to BAIP harness trace for the full execution
-
-    </td>
+    <td valign="top">`correlation_id`</td>
+    <td valign="top">Links to BAIP harness trace for the full execution</td>
   </tr>
   <tr>
-    <td valign="top">
-`input_state`
-
-    </td>
-    <td valign="top">
-The data the agent had when it produced the output (snapshot)
-
-    </td>
+    <td valign="top">`input_state`</td>
+    <td valign="top">The data the agent had when it produced the output (snapshot)</td>
   </tr>
   <tr>
-    <td valign="top">
-`agent_output`
-
-    </td>
-    <td valign="top">
-The value the agent proposed, with unit
-
-    </td>
+    <td valign="top">`agent_output`</td>
+    <td valign="top">The value the agent proposed, with unit</td>
   </tr>
   <tr>
-    <td valign="top">
-`stage1_verdict`
-
-    </td>
-    <td valign="top">
-Deterministic check result (CONFIRM/REJECT/UNAVAILABLE)
-
-    </td>
+    <td valign="top">`stage1_verdict`</td>
+    <td valign="top">Deterministic check result (CONFIRM/REJECT/UNAVAILABLE)</td>
   </tr>
   <tr>
-    <td valign="top">
-`stage1_reference`
-
-    </td>
-    <td valign="top">
-The reference calculation value used for comparison
-
-    </td>
+    <td valign="top">`stage1_reference`</td>
+    <td valign="top">The reference calculation value used for comparison</td>
   </tr>
   <tr>
-    <td valign="top">
-`stage1_deviation`
-
-    </td>
-    <td valign="top">
-Deviation percentage
-
-    </td>
+    <td valign="top">`stage1_deviation`</td>
+    <td valign="top">Deviation percentage</td>
   </tr>
   <tr>
-    <td valign="top">
-`stage2_verdict`
-
-    </td>
-    <td valign="top">
-LLM critic verdict (CONFIRM/REJECT) and confidence
-
-    </td>
+    <td valign="top">`stage2_verdict`</td>
+    <td valign="top">LLM critic verdict (CONFIRM/REJECT) and confidence</td>
   </tr>
   <tr>
-    <td valign="top">
-`stage2_reason`
-
-    </td>
-    <td valign="top">
-LLM critic's stated reason
-
-    </td>
+    <td valign="top">`stage2_reason`</td>
+    <td valign="top">LLM critic's stated reason</td>
   </tr>
   <tr>
-    <td valign="top">
-`human_decision`
-
-    </td>
-    <td valign="top">
-APPROVED / REJECTED / MODIFIED (if Layer 3 was triggered)
-
-    </td>
+    <td valign="top">`human_decision`</td>
+    <td valign="top">APPROVED / REJECTED / MODIFIED (if Layer 3 was triggered)</td>
   </tr>
   <tr>
-    <td valign="top">
-`human_modified_value`
-
-    </td>
-    <td valign="top">
-If the human modified the value, the modified value
-
-    </td>
+    <td valign="top">`human_modified_value`</td>
+    <td valign="top">If the human modified the value, the modified value</td>
   </tr>
   <tr>
-    <td valign="top">
-`committed_value`
-
-    </td>
-    <td valign="top">
-The final value written to the system of record
-
-    </td>
+    <td valign="top">`committed_value`</td>
+    <td valign="top">The final value written to the system of record</td>
   </tr>
   <tr>
-    <td valign="top">
-`delta`
-
-    </td>
-    <td valign="top">
-Difference between agent output and committed value (measures human override)
-
-    </td>
+    <td valign="top">`delta`</td>
+    <td valign="top">Difference between agent output and committed value (measures human override)</td>
   </tr>
 </table>
 
@@ -1096,94 +694,34 @@ Confidence thresholds, like value thresholds, are configuration parameters owned
     <th valign="top">When It Is Required</th>
   </tr>
   <tr>
-    <td valign="top">
-Pre-check (1)
-
-    </td>
-    <td valign="top">
-Constrain agent's input space to valid ranges and approved values
-
-    </td>
-    <td valign="top">
-sapMcpClient → system of record; structured output schema
-
-    </td>
-    <td valign="top">
-Always for write-back agents operating on numerical outputs
-
-    </td>
+    <td valign="top">Pre-check (1)</td>
+    <td valign="top">Constrain agent's input space to valid ranges and approved values</td>
+    <td valign="top">sapMcpClient → system of record; structured output schema</td>
+    <td valign="top">Always for write-back agents operating on numerical outputs</td>
   </tr>
   <tr>
-    <td valign="top">
-Output validation (2)
-
-    </td>
-    <td valign="top">
-Verify numerical output against deterministic reference and/or LLM critic
-
-    </td>
-    <td valign="top">
-Code node range check + sapMcpClient reference call + sapOrchestration critic
-
-    </td>
-    <td valign="top">
-Always for write-back agents; critic optional if deterministic check available
-
-    </td>
+    <td valign="top">Output validation (2)</td>
+    <td valign="top">Verify numerical output against deterministic reference and/or LLM critic</td>
+    <td valign="top">Code node range check + sapMcpClient reference call + sapOrchestration critic</td>
+    <td valign="top">Always for write-back agents; critic optional if deterministic check available</td>
   </tr>
   <tr>
-    <td valign="top">
-Human approval (3)
-
-    </td>
-    <td valign="top">
-Gate outputs above value/deviation thresholds on explicit human sign-off
-
-    </td>
-    <td valign="top">
-sapTaskCenter with full context custom attributes
-
-    </td>
-    <td valign="top">
-For high-value or high-deviation outputs; thresholds set by process owner
-
-    </td>
+    <td valign="top">Human approval (3)</td>
+    <td valign="top">Gate outputs above value/deviation thresholds on explicit human sign-off</td>
+    <td valign="top">sapTaskCenter with full context custom attributes</td>
+    <td valign="top">For high-value or high-deviation outputs; thresholds set by process owner</td>
   </tr>
   <tr>
-    <td valign="top">
-Audit trail (4)
-
-    </td>
-    <td valign="top">
-Immutable record of every committed numerical decision
-
-    </td>
-    <td valign="top">
-Append-only HANA Cloud table; includes input, output, verdicts, human decision
-
-    </td>
-    <td valign="top">
-Always for committed outputs; retention aligned to regulatory requirements
-
-    </td>
+    <td valign="top">Audit trail (4)</td>
+    <td valign="top">Immutable record of every committed numerical decision</td>
+    <td valign="top">Append-only HANA Cloud table; includes input, output, verdicts, human decision</td>
+    <td valign="top">Always for committed outputs; retention aligned to regulatory requirements</td>
   </tr>
   <tr>
-    <td valign="top">
-Confidence routing
-
-    </td>
-    <td valign="top">
-Route low-confidence outputs to human regardless of absolute value
-
-    </td>
-    <td valign="top">
-sapOrchestration structured output with confidence field; If node routing
-
-    </td>
-    <td valign="top">
-For any output where agent uncertainty is operationally significant
-
-    </td>
+    <td valign="top">Confidence routing</td>
+    <td valign="top">Route low-confidence outputs to human regardless of absolute value</td>
+    <td valign="top">sapOrchestration structured output with confidence field; If node routing</td>
+    <td valign="top">For any output where agent uncertainty is operationally significant</td>
   </tr>
 </table>
 
@@ -1195,44 +733,20 @@ For any output where agent uncertainty is operationally significant
     <th valign="top">Key Principle</th>
   </tr>
   <tr>
-    <td valign="top">
-FAIL / WARN classification
-
-    </td>
-    <td valign="top">
-FAIL = blocking (deploy/operation aborted); WARN = advisory (proceed with logged finding); classification is a design decision per check, made in Discovery
-
-    </td>
+    <td valign="top">FAIL / WARN classification</td>
+    <td valign="top">FAIL = blocking (deploy/operation aborted); WARN = advisory (proceed with logged finding); classification is a design decision per check, made in Discovery</td>
   </tr>
   <tr>
-    <td valign="top">
-MUST rules
-
-    </td>
-    <td valign="top">
-Business invariants encoded in `golden_scenarios.yaml`; LLM-graded in eval suite; FAIL-severity MUST rule blocks deployment; authored jointly by Domain PM (content) and Dev Architect (severity + test case)
-
-    </td>
+    <td valign="top">MUST rules</td>
+    <td valign="top">Business invariants encoded in `golden_scenarios.yaml`; LLM-graded in eval suite; FAIL-severity MUST rule blocks deployment; authored jointly by Domain PM (content) and Dev Architect (severity + test case)</td>
   </tr>
   <tr>
-    <td valign="top">
-Outcome-backed escalation
-
-    </td>
-    <td valign="top">
-`outcome_confirmed_bad > 0` auto-escalates severity; configurable confirmation horizons per domain; prevents silent accumulation of repeated failure patterns
-
-    </td>
+    <td valign="top">Outcome-backed escalation</td>
+    <td valign="top">`outcome_confirmed_bad > 0` auto-escalates severity; configurable confirmation horizons per domain; prevents silent accumulation of repeated failure patterns</td>
   </tr>
   <tr>
-    <td valign="top">
-Input compression
-
-    </td>
-    <td valign="top">
-LLMLingua unsafe for numerical/financial prompts at any retention level (9% numeric drop at 50% retention); use Caveman (lossless, ~29% reduction) for all prompts containing business-critical numbers; compression defeats prompt caching on cached segments
-
-    </td>
+    <td valign="top">Input compression</td>
+    <td valign="top">LLMLingua unsafe for numerical/financial prompts at any retention level (9% numeric drop at 50% retention); use Caveman (lossless, ~29% reduction) for all prompts containing business-critical numbers; compression defeats prompt caching on cached segments</td>
   </tr>
 </table>
 
