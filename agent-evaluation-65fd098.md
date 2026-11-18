@@ -31,110 +31,90 @@ Evaluation in FDE sprints is not a single activity — it spans three distinct p
 <table>
   <tr>
     <th valign="top">
-
 Phase
 
     </th>
     <th valign="top">
-
 When
 
     </th>
     <th valign="top">
-
 Tool
 
     </th>
     <th valign="top">
-
 Purpose
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 Pre-build
 
     </td>
     <td valign="top">
-
 Before agent spec is generated
 
     </td>
     <td valign="top">
-
 G1–G4 Readiness Gates
 
     </td>
     <td valign="top">
-
 Verify discovery outputs are complete enough to build from
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Spec quality
 
     </td>
     <td valign="top">
-
 End of Discovery; pre-EAC
 
     </td>
     <td valign="top">
-
 `agentic-eval` skill (11+1 criteria)
 
     </td>
     <td valign="top">
-
 Verify spec is complete and AI-ready; verify code-spec alignment before customer go-live
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Post-build
 
     </td>
     <td valign="top">
-
 After agent code is generated, before deploy
 
     </td>
     <td valign="top">
-
 6-category eval scorecard
 
     </td>
     <td valign="top">
-
 Verify agent spec, Joule config, routing quality, and compliance with MUST rules
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Post-deployment
 
     </td>
     <td valign="top">
-
 Continuously in production
 
     </td>
     <td valign="top">
-
 Two-path feedback loop + aeval online eval
 
     </td>
     <td valign="top">
-
 Detect regressions, close learning loops, improve agent over time
 
     </td>
@@ -161,85 +141,70 @@ Before generating an agent spec, the extracted knowledge must meet four readines
 <table>
   <tr>
     <th valign="top">
-
 Gate
 
     </th>
     <th valign="top">
-
 What It Checks
 
     </th>
     <th valign="top">
-
 Pass Threshold
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 G1 — Entity Completeness
 
     </td>
     <td valign="top">
-
 Proportion of entities successfully resolved against SAP's EKX/canonical catalog
 
     </td>
     <td valign="top">
-
 ≥ 0.8
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 G2 — Goal Coverage
 
     </td>
     <td valign="top">
-
 Every extracted Capability has a parent Goal
 
     </td>
     <td valign="top">
-
 ≥ 0.8
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 G3 — Actor-Process Binding
 
     </td>
     <td valign="top">
-
 Every extracted Process has an assigned Actor
 
     </td>
     <td valign="top">
-
 ≥ 0.8
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 G4 — Integration Readiness
 
     </td>
     <td valign="top">
-
 Every Integration has an API binding
 
     </td>
     <td valign="top">
-
 ≥ 0.8
 
     </td>
@@ -266,119 +231,98 @@ After agent code is generated and before deployment, a 6-category scorecard vali
 <table>
   <tr>
     <th valign="top">
-
 Category
 
     </th>
     <th valign="top">
-
 What It Checks
 
     </th>
     <th valign="top">
-
 Method
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 A — Spec integrity
 
     </td>
     <td valign="top">
-
 `agent.spec.json` is valid, complete, and internally consistent
 
     </td>
     <td valign="top">
-
 Deterministic
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 B — Generation drift
 
     </td>
     <td valign="top">
-
 `spec_sha256` in generated code matches the source spec
 
     </td>
     <td valign="top">
-
 Deterministic
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 C — Joule config
 
     </td>
     <td valign="top">
-
 Joule capability bundle structure, naming invariants, schema validation via Joule MCP
 
     </td>
     <td valign="top">
-
 Deterministic
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 D — Routing description quality
 
     </td>
     <td valign="top">
-
 Each agent's routing description is distinctive, domain-specific, contains no personal pronouns, and does not overlap with other agents
 
     </td>
     <td valign="top">
-
 LLM-graded
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 E — MUST-rule compliance
 
     </td>
     <td valign="top">
-
 Business constraints encoded as MUST rules (from `golden_scenarios.yaml`) are satisfied
 
     </td>
     <td valign="top">
-
 LLM-graded
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 F — Coverage / completeness
 
     </td>
     <td valign="top">
-
 All required capabilities have corresponding agent behaviors
 
     </td>
     <td valign="top">
-
 LLM-graded
 
     </td>
@@ -415,85 +359,70 @@ Both paths handle the same four learning cases:
 <table>
   <tr>
     <th valign="top">
-
 Case
 
     </th>
     <th valign="top">
-
 What Happened
 
     </th>
     <th valign="top">
-
 Action
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 Case 1 — Agent wrong + human overrode correctly
 
     </td>
     <td valign="top">
-
 Agent made an error; human catch was correct
 
     </td>
     <td valign="top">
-
 Spec path: propose targeted spec fix. Memory path: add corrective memory.
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Case 2 — Both wrong
 
     </td>
     <td valign="top">
-
 Agent made an error; human override was also incorrect
 
     </td>
     <td valign="top">
-
 No spec change. Flag for human review. Do NOT propagate the override.
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Case 3 — Agent correct + human overrode incorrectly
 
     </td>
     <td valign="top">
-
 Agent was right; human override introduced an error
 
     </td>
     <td valign="top">
-
 **Critical: do NOT propose a spec change.** Flag the override as an operator training issue. Track separately.
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Case 4 — Agent correct + human agreed, outcome confirmed
 
     </td>
     <td valign="top">
-
 Agent performed correctly; outcome confirmed good
 
     </td>
     <td valign="top">
-
 Reinforce via memory path. No spec change needed.
 
     </td>
@@ -522,66 +451,54 @@ SAP's AI Golden Path draws a deliberate distinction that FDE teams should intern
 <table>
   <tr>
     <th valign="top">
-
 Activity
 
     </th>
     <th valign="top">
-
 Purpose
 
     </th>
     <th valign="top">
-
 When
 
     </th>
     <th valign="top">
-
 Owner
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 **Testing**
 
     </td>
     <td valign="top">
-
 Ongoing defect finding throughout development
 
     </td>
     <td valign="top">
-
 Continuously, throughout Develop
 
     </td>
     <td valign="top">
-
 FDE Application Engineers
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Evaluation**
 
     </td>
     <td valign="top">
-
 Milestone-based comparison: has the agent improved between versions?
 
     </td>
     <td valign="top">
-
 At sprint milestones (Week 6 MVP, Week 9 pre-deployment, each productization release)
 
     </td>
     <td valign="top">
-
 FDE Dev Architect + Domain PM
 
     </td>
@@ -635,68 +552,56 @@ The eval framework's depth depends on what tracing data is available:
 <table>
   <tr>
     <th valign="top">
-
 Tracing Mode
 
     </th>
     <th valign="top">
-
 What It Requires
 
     </th>
     <th valign="top">
-
 Metrics Available
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 **Traceless**
 
     </td>
     <td valign="top">
-
 Nothing — no OTel setup needed
 
     </td>
     <td valign="top">
-
 `output_correctness`, `rule_compliance`, `success_rate`
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Trace-enabled**
 
     </td>
     <td valign="top">
-
 OTel-compliant traces from BAF or MLflow
 
     </td>
     <td valign="top">
-
 All traceless metrics + `tool_call_correctness`, `latency_seconds`, `total_tokens`, `total_cost_usd`, `number_of_tool_calls`
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Online eval**
 
     </td>
     <td valign="top">
-
 Production traces in MLflow
 
     </td>
     <td valign="top">
-
 Per-session `success_rate`, `token_count`, `latency` — continuous monitoring
 
     </td>
@@ -716,72 +621,60 @@ The aeval OTel output uses `gen_ai.evaluation.*` attributes. Three behavioral ru
 <table>
   <tr>
     <th valign="top">
-
 Score Type
 
     </th>
     <th valign="top">
-
 OTel Behavior
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 **Numeric scores** (float, e.g., 0.85)
 
     </td>
     <td valign="top">
-
 Written to `gen_ai.evaluation.score.value` (double)
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Label/categorical scores** (string, e.g., "high")
 
     </td>
     <td valign="top">
-
 Written to `gen_ai.evaluation.score.label` — **not** to `score.value`. Do not attempt to read categorical results from `score.value`.
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Boolean scores**
 
     </td>
     <td valign="top">
-
 Both `score.value: 1.0|0.0` AND `score.label: "true"|"false"` emitted simultaneously
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **NOT_APPLICABLE scores**
 
     </td>
     <td valign="top">
-
 **Not emitted at all.** Absence in the trace is the signal — a check that did not apply to a session produces no OTel event. Do not equate "no record" with "score = 0".
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Error-skipped scores**
 
     </td>
     <td valign="top">
-
 `error.type` attribute set to one of: `JUDGE_FAILED`, `AGGREGATION_FAILED`, `TRACE_UNAVAILABLE`, `UNMAPPED_LABEL`. `score.value` and `score.label` are omitted.
 
     </td>
@@ -839,51 +732,42 @@ test_steps:
 <table>
   <tr>
     <th valign="top">
-
 Step Type
 
     </th>
     <th valign="top">
-
 When to Use
 
     </th>
     <th valign="top">
-
 What It Tests
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 `fixed_message`
 
     </td>
     <td valign="top">
-
 Scripted happy-path and boundary tests; known inputs
 
     </td>
     <td valign="top">
-
 Output correctness, tool call compliance, rule adherence on deterministic inputs
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 `dynamic_conversation`
 
     </td>
     <td valign="top">
-
 Multi-turn workflows where user wording is variable
 
     </td>
     <td valign="top">
-
 Agent's ability to guide a conversation to a goal across natural language variation
 
     </td>
@@ -922,60 +806,50 @@ The quality of the evaluation depends on the quality of the checks. Vague checks
 <table>
   <tr>
     <th valign="top">
-
 Check Quality
 
     </th>
     <th valign="top">
-
 Example
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 Vague — avoid
 
     </td>
     <td valign="top">
-
 "Agent responds helpfully about the batch"
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Specific — preferred
 
     </td>
     <td valign="top">
-
 "Agent states a quantity in kg within the range 800–1200 for this production order"
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Tool-level
 
     </td>
     <td valign="top">
-
 "Agent calls `get_batch_classification_result` with `order_id = '500012345'`"
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Safety/guardrail
 
     </td>
     <td valign="top">
-
 "Agent does not commit a quantity to the system of record without triggering the Layer 3 approval check"
 
     </td>
@@ -998,132 +872,108 @@ The evaluation framework is built incrementally. Each phase of the sprint adds a
 <table>
   <tr>
     <th valign="top">
-
 Sprint Phase
 
     </th>
     <th valign="top">
-
 Eval Maturity
 
     </th>
     <th valign="top">
-
 What to Add
 
     </th>
     <th valign="top">
-
 Tooling
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 End of Discovery — Spec quality gate
 
     </td>
     <td valign="top">
-
 Spec quality (C1–C7)
 
     </td>
     <td valign="top">
-
 Run `agentic-eval` against spec and design docs. Focus: C1–C5 spec quality + C7 AI Readiness. Scores below 6/10 on C1–C5 signal Discovery gaps to resolve before Develop; below "Agent-Ready" on C7 signals spec needs restructuring before agentic code generation is efficient
 
     </td>
     <td valign="top">
-
 `/agentic-eval` skill
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Weeks 1–3 — Prototype
 
     </td>
     <td valign="top">
-
 Traceless
 
     </td>
     <td valign="top">
-
 `agent_response` and `rule_compliance` checks on happy-path scenarios. 1 iteration per test case. Measures: `success_rate`, `output_correctness`
 
     </td>
     <td valign="top">
-
 `aeval run` locally (traceless)
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Weeks 4–6 — MVP build
 
     </td>
     <td valign="top">
-
 Trace-enabled
 
     </td>
     <td valign="top">
-
 Add `tool_call` validations as tool interfaces stabilize. 3 iterations per test case for statistical stability. Measures: + `tool_call_correctness`, `latency`, `total_tokens`
 
     </td>
     <td valign="top">
-
 `aeval run` with trace-enabled config; OTel instrumentation required
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Weeks 7–9 — Pre-deployment
 
     </td>
     <td valign="top">
-
 Full suite + code quality gate
 
     </td>
     <td valign="top">
-
 Add safety/guardrail checks, boundary conditions, and negative tests. Add `dynamic_conversation` steps for key user journeys. Integrate into CI. Run `agentic-eval` full 11+1-criteria sweep (C6 Spec-to-Code Alignment is the key metric at this point — gaps represent productization risk)
 
     </td>
     <td valign="top">
-
 `aeval` in GitHub Actions; `/agentic-eval` skill
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Weeks 10–12 — EAC
 
     </td>
     <td valign="top">
-
 Production monitoring
 
     </td>
     <td valign="top">
-
 Activate online eval — LLM-as-judge scoring against real EAC sessions using the **3-way C/I/N judge** (Complete / Incomplete / Not Applicable). Define production monitoring requirements (natural language statements). Establish baseline metrics before production go-live. The final two weeks of EAC are the **go-live baseline capture window**: record task completion rate, escalation rate, faithfulness scores, and output embedding centroid as the signed reference baseline for post-deploy drift detection.
 
     </td>
     <td valign="top">
-
 `aeval-online` or AI Core CronJob
 
     </td>
@@ -1154,96 +1004,80 @@ All other metrics are diagnostic:
 <table>
   <tr>
     <th valign="top">
-
 Metric
 
     </th>
     <th valign="top">
-
 What It Diagnoses
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 `tool_call_correctness`
 
     </td>
     <td valign="top">
-
 Agent calls the right tool with correct parameters
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 `output_correctness`
 
     </td>
     <td valign="top">
-
 Fraction of `agent_response` validations passing
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 `rule_compliance`
 
     </td>
     <td valign="top">
-
 Fraction of `rule_compliance` validations passing
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 `latency_seconds`
 
     </td>
     <td valign="top">
-
 Agent response time; p95 baseline establishes operational norms
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 `total_tokens`
 
     </td>
     <td valign="top">
-
 Token consumption per invocation; input to cost monitoring ([Token Efficiency](token-efficiency-54fe998.md))
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 `total_cost_usd`
 
     </td>
     <td valign="top">
-
 Invocation cost at AI Core pricing; input to floor pricing submission
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 `number_of_tool_calls`
 
     </td>
     <td valign="top">
-
 Tool call efficiency ([Agent Quality Framework](agent-quality-framework-5ec914b.md) Dimension 1)
 
     </td>
@@ -1301,102 +1135,84 @@ Requirements for online eval are natural language statements in three categories
 <table>
   <tr>
     <th valign="top">
-
 Dimension
 
     </th>
     <th valign="top">
-
 Offline (aeval run)
 
     </th>
     <th valign="top">
-
 Online (aeval-online)
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 Purpose
 
     </td>
     <td valign="top">
-
 Assert correctness on known scenarios
 
     </td>
     <td valign="top">
-
 Monitor quality trends on real sessions
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 When to use
 
     </td>
     <td valign="top">
-
 Before every release; in CI
 
     </td>
     <td valign="top">
-
 Continuously in production
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Can assert ground truth?
 
     </td>
     <td valign="top">
-
 Yes — scripted inputs with known expected outputs
 
     </td>
     <td valign="top">
-
 No — designed for trend detection, not ground-truth assertion
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Regression detection
 
     </td>
     <td valign="top">
-
 Yes — compare success rate across versions
 
     </td>
     <td valign="top">
-
 Yes — moving average trends surface regressions
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Coverage
 
     </td>
     <td valign="top">
-
 Scripted happy paths + boundary conditions
 
     </td>
     <td valign="top">
-
 Real user behavior including long tail
 
     </td>
@@ -1425,176 +1241,144 @@ Not all post-deploy quality degradation is the same. Recognising the drift type 
 <table>
   <tr>
     <th valign="top">
-
 Drift Type
 
     </th>
     <th valign="top">
-
 How It Manifests
 
     </th>
     <th valign="top">
-
 Key Detection Signal
 
     </th>
     <th valign="top">
-
 Corrective Action
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 Data Drift
 
     </td>
     <td valign="top">
-
 Users ask different question types; new terminology; language mix changes
 
     </td>
     <td valign="top">
-
 PSI > 0.25 on prompt-length or intent distributions; rising embedding distance from baseline centroid
 
     </td>
     <td valign="top">
-
 Re-evaluate agent scope; update retrieval corpus
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Concept Drift
 
     </td>
     <td valign="top">
-
 Policy/pricing changes; outdated knowledge; seasonal correctness shifts
 
     </td>
     <td valign="top">
-
 Declining faithfulness on frozen golden test set; rising escalation rate with stable volume
 
     </td>
     <td valign="top">
-
 Update knowledge base; refresh grounding data
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Prompt Regression
 
     </td>
     <td valign="top">
-
 Developer modifies system prompt; RAG context injection pattern changes
 
     </td>
     <td valign="top">
-
 Abrupt quality score drop correlated with a deployment event; per-prompt-version eval score regression
 
     </td>
     <td valign="top">
-
 Rollback prompt to prior version ([Production Operations](production-operations-f963579.md)); A/B test prompt changes against baseline
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Model Change Drift
 
     </td>
     <td valign="top">
-
 LLM provider silently updates the underlying model
 
     </td>
     <td valign="top">
-
 Semantic drift in output embeddings with no correlated prompt change; behaviour diff on frozen canary set across model version boundary
 
     </td>
     <td valign="top">
-
 Pin to specific model version ([Production Operations](production-operations-f963579.md)); run canary eval on model version boundary before routing production traffic
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Semantic Drift (Distributional)
 
     </td>
     <td valign="top">
-
 Responses become increasingly hedged or off-topic; aggregate semantic character shifts
 
     </td>
     <td valign="top">
-
 JSD > 0.15–0.20 on output embedding distributions; BERTScore < 0.85 vs. baseline
 
     </td>
     <td valign="top">
-
 Root-cause investigation across all other drift types first
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Retrieval Drift (RAG)
 
     </td>
     <td valign="top">
-
 Context Precision drops; answers cite stale or irrelevant chunks
 
     </td>
     <td valign="top">
-
 RAGAS Context Precision < 0.80; Context Recall < 0.75; rising "no relevant docs" rate
 
     </td>
     <td valign="top">
-
 Re-index knowledge base; refresh document corpus; audit embedding model alignment
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Volume Spike Drift
 
     </td>
     <td valign="top">
-
 Quality degrades at high query volumes due to infrastructure effects
 
     </td>
     <td valign="top">
-
 Quality metric drops correlated with throughput spikes; P99 latency > baseline
 
     </td>
     <td valign="top">
-
 Review rate limits; add query queuing; review model serving capacity
 
     </td>
@@ -1619,264 +1403,216 @@ SAP's AI Golden Path specifies evaluation dimensions with priorities. FDE sprint
 <table>
   <tr>
     <th valign="top">
-
 Dimension
 
     </th>
     <th valign="top">
-
 Priority
 
     </th>
     <th valign="top">
-
 Test Case Type
 
     </th>
     <th valign="top">
-
 Notes
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 Correctness
 
     </td>
     <td valign="top">
-
 High
 
     </td>
     <td valign="top">
-
 `agent_response_validations`
 
     </td>
     <td valign="top">
-
 Core happy-path checks
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Hallucinations
 
     </td>
     <td valign="top">
-
 High
 
     </td>
     <td valign="top">
-
 `rule_compliance` checks: "Agent does not state facts not present in retrieved data"
 
     </td>
     <td valign="top">
-
 Hard to cover fully; at minimum test known hallucination-prone outputs
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Safety guardrails
 
     </td>
     <td valign="top">
-
 High
 
     </td>
     <td valign="top">
-
 Boundary tests: inputs designed to trigger guardrails ([Precision Guardrails](precision-guardrails-c279f4e.md)); verify correct Layer 3 escalation
 
     </td>
     <td valign="top">
-
 Test that precision guardrails fire correctly on boundary inputs
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Stability
 
     </td>
     <td valign="top">
-
 High
 
     </td>
     <td valign="top">
-
 Run ≥ 3 iterations per test case; variance in success rate is the stability signal
 
     </td>
     <td valign="top">
-
 Low variance = stable; high variance = prompt or model sensitivity problem
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Summarization
 
     </td>
     <td valign="top">
-
 High
 
     </td>
     <td valign="top">
-
 `agent_response` checks on outputs involving summarization of retrieved data
 
     </td>
     <td valign="top">
-
 —
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Security
 
     </td>
     <td valign="top">
-
 High
 
     </td>
     <td valign="top">
-
 Prompt injection tests ([Security and Data Protection](security-and-data-protection-27868d4.md)); tool call boundary tests
 
     </td>
     <td valign="top">
-
 Include in MVP eval suite; not just at productization
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Memory
 
     </td>
     <td valign="top">
-
 Medium
 
     </td>
     <td valign="top">
-
 If agent uses Memory Service: check context retention across turns
 
     </td>
     <td valign="top">
-
 —
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 RAG retrieval
 
     </td>
     <td valign="top">
-
 Medium
 
     </td>
     <td valign="top">
-
 Tool call checks on grounding calls: correct documents retrieved?
 
     </td>
     <td valign="top">
-
 —
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Performance
 
     </td>
     <td valign="top">
-
 Medium
 
     </td>
     <td valign="top">
-
 `latency_seconds` tracked; p95 baseline established before EAC
 
     </td>
     <td valign="top">
-
 —
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 UI/UX
 
     </td>
     <td valign="top">
-
 Medium
 
     </td>
     <td valign="top">
-
 `agent_response` checks: tone, structure, brevity of responses
 
     </td>
     <td valign="top">
-
 —
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Digression
 
     </td>
     <td valign="top">
-
 Low
 
     </td>
     <td valign="top">
-
 `rule_compliance`: "Agent does not respond to requests outside its defined scope"
 
     </td>
     <td valign="top">
-
 —
 
     </td>
@@ -1901,66 +1637,54 @@ These are distinct, complementary dimensions:
 <table>
   <tr>
     <th valign="top">
-
 Dimension
 
     </th>
     <th valign="top">
-
 Tool
 
     </th>
     <th valign="top">
-
 What It Measures
 
     </th>
     <th valign="top">
-
 When
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 Runtime behavior
 
     </td>
     <td valign="top">
-
 `aeval`
 
     </td>
     <td valign="top">
-
 Correctness, rule compliance, tool call quality, success rate
 
     </td>
     <td valign="top">
-
 Throughout sprint; CI gate
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Spec & build quality
 
     </td>
     <td valign="top">
-
 `agentic-eval`
 
     </td>
     <td valign="top">
-
 Spec completeness, AI-readiness, code-spec alignment, SAP standards, MCP utilization
 
     </td>
     <td valign="top">
-
 End of Discovery; pre-EAC
 
     </td>
@@ -1978,286 +1702,234 @@ Both dimensions can fail independently: an agent can pass all runtime eval check
 <table>
   <tr>
     <th valign="top">
-
 Code
 
     </th>
     <th valign="top">
-
 Criterion
 
     </th>
     <th valign="top">
-
 Weight
 
     </th>
     <th valign="top">
-
 FDE Relevance
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 C1
 
     </td>
     <td valign="top">
-
 Spec Completeness
 
     </td>
     <td valign="top">
-
 10%
 
     </td>
     <td valign="top">
-
 Is the Discovery output implementable without significant clarification?
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 C2
 
     </td>
     <td valign="top">
-
 Spec Clarity
 
     </td>
     <td valign="top">
-
 10%
 
     </td>
     <td valign="top">
-
 Could two FDE engineers build essentially the same agent from this spec?
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 C3
 
     </td>
     <td valign="top">
-
 Testability
 
     </td>
     <td valign="top">
-
 10%
 
     </td>
     <td valign="top">
-
 Can test cases be derived directly from the spec?
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 C4
 
     </td>
     <td valign="top">
-
 Traceability Quality
 
     </td>
     <td valign="top">
-
 10%
 
     </td>
     <td valign="top">
-
 Requirement → code → test chain intact?
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 C5
 
     </td>
     <td valign="top">
-
 Design Thinking
 
     </td>
     <td valign="top">
-
 10%
 
     </td>
     <td valign="top">
-
 Are architecture decisions justified and alternatives considered?
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **C6**
 
     </td>
     <td valign="top">
-
 **Spec-to-Code Alignment**
 
     </td>
     <td valign="top">
-
 **15% (highest)**
 
     </td>
     <td valign="top">
-
 Does the built agent match what was specified in Discovery?
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 C7
 
     </td>
     <td valign="top">
-
 AI Readiness
 
     </td>
     <td valign="top">
-
 10%
 
     </td>
     <td valign="top">
-
 Is the spec structured for AI implementation? (Prompt-Level / Basic / Agent-Ready / Autonomous-Ready)
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 C8
 
     </td>
     <td valign="top">
-
 MCP Utilization Effectiveness
 
     </td>
     <td valign="top">
-
 10%
 
     </td>
     <td valign="top">
-
 Are MCP servers actively used — not just configured? Hard rule: no `.mcp.json` → max 5/10
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 C9
 
     </td>
     <td valign="top">
-
 SAP Standards Compliance
 
     </td>
     <td valign="top">
-
 10%
 
     </td>
     <td valign="top">
-
 CAP + Fiori + Hyperspace MCP. Hard rule: no Hyperspace → cannot reach 9–10
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 C10
 
     </td>
     <td valign="top">
-
 AI-Generated Code Quality
 
     </td>
     <td valign="top">
-
 5%
 
     </td>
     <td valign="top">
-
 Anti-patterns absent: dead code, hallucinated APIs, over-engineering
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 C11
 
     </td>
     <td valign="top">
-
 AI Generated vs. Manually Written
 
     </td>
     <td valign="top">
-
 classification
 
     </td>
     <td valign="top">
-
 Fully AI / AI + Manual / Manual + AI / Fully Manual
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 C12
 
     </td>
     <td valign="top">
-
 ATQ Skills Adoption
 
     </td>
     <td valign="top">
-
 additional
 
     </td>
     <td valign="top">
-
 CIS skills installed and actively used in the workflow?
 
     </td>
@@ -2285,102 +1957,84 @@ Run against the full project repository before customer go-live. All 11+1 criter
 <table>
   <tr>
     <th valign="top">
-
 Range
 
     </th>
     <th valign="top">
-
 Assessment
 
     </th>
     <th valign="top">
-
 FDE Implication
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 0–2
 
     </td>
     <td valign="top">
-
 Critical
 
     </td>
     <td valign="top">
-
 Not suitable for delivery; return to Discovery or major remediation
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 3–5
 
     </td>
     <td valign="top">
-
 Requires improvement
 
     </td>
     <td valign="top">
-
 Targeted remediation before EAC go-live
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 6–7
 
     </td>
     <td valign="top">
-
 Acceptable
 
     </td>
     <td valign="top">
-
 Minor improvements; document gaps in production handover package
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 8–9
 
     </td>
     <td valign="top">
-
 Strong
 
     </td>
     <td valign="top">
-
 Ready for EAC with minor improvements
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 9–10
 
     </td>
     <td valign="top">
-
 Excellent
 
     </td>
     <td valign="top">
-
 Production and Agentic Engineering ready
 
     </td>
@@ -2398,102 +2052,84 @@ The post-build scorecard and `agentic-eval` are complementary, not redundant:
 <table>
   <tr>
     <th valign="top">
-
 Scope
 
     </th>
     <th valign="top">
-
 Post-Build Scorecard
 
     </th>
     <th valign="top">
-
 `agentic-eval`
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 Spec integrity
 
     </td>
     <td valign="top">
-
 C — Joule config validation (schema, naming)
 
     </td>
     <td valign="top">
-
 C1/C2 — Spec Completeness + Clarity
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Spec-to-code alignment
 
     </td>
     <td valign="top">
-
 B — generation drift (spec_sha256 binary match)
 
     </td>
     <td valign="top">
-
 C6 — broader accumulated drift across the sprint
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 SAP standards
 
     </td>
     <td valign="top">
-
 Indirect (routing quality)
 
     </td>
     <td valign="top">
-
 C9 — explicit CAP + Fiori + Hyperspace
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Code quality
 
     </td>
     <td valign="top">
-
 Not covered
 
     </td>
     <td valign="top">
-
 C10 — AI anti-patterns
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Design rationale
 
     </td>
     <td valign="top">
-
 Not covered
 
     </td>
     <td valign="top">
-
 C5 — design thinking, alternatives evaluated
 
     </td>
@@ -2530,84 +2166,70 @@ Evaluation is not an isolated activity — it is the feedback mechanism that mak
 <table>
   <tr>
     <th valign="top">
-
 Concept Topic
 
     </th>
     <th valign="top">
-
 How Evaluation Connects
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 [Agent Quality Framework](agent-quality-framework-5ec914b.md)
 
     </td>
     <td valign="top">
-
 Success rate and diagnostic metrics from aeval are the concrete implementation of the three evaluation dimensions
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 [Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)
 
     </td>
     <td valign="top">
-
 Online eval complements supervisor real-time monitoring; they cover different failure detection windows. Feedback loop Case 3 prevents incorrect HITL overrides from corrupting the agent spec.
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 [Precision Guardrails](precision-guardrails-c279f4e.md)
 
     </td>
     <td valign="top">
-
 Boundary condition tests (at threshold, above threshold, unit-confused inputs) must be in the eval suite. Guardrail tests verify Layer 3 escalates correctly, not just that the agent produces a number. Post-build scorecard Category E validates MUST-rule compliance before every deployment.
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 [Production Operations](production-operations-f963579.md)
 
     </td>
     <td valign="top">
-
 Rollback decisions are triggered by metric regressions; online eval generates the trend data that confirms a regression is real and correlated with a deployment event. TR9 mandates both offline and online eval.
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 [Reusable Components](reusable-components-8a3dd4c.md)
 
     </td>
     <td valign="top">
-
 `agentic-eval` is a Starter Kit component; the C6 Spec-to-Code Alignment criterion reinforces the spec-first delivery discipline the Starter Kit is designed to support
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 [Token Efficiency](token-efficiency-54fe998.md)
 
     </td>
     <td valign="top">
-
 `total_tokens` and `total_cost_usd` from eval runs feed the build-time cost pool; cost per correct outcome requires both eval results and token data
 
     </td>
@@ -2655,192 +2277,160 @@ Rollback decisions are triggered by metric regressions; online eval generates th
 <table>
   <tr>
     <th valign="top">
-
 Topic
 
     </th>
     <th valign="top">
-
 Key Principle
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 Three-phase lifecycle
 
     </td>
     <td valign="top">
-
 Pre-build (G1–G4 gates) → post-build (6-category scorecard) → post-deployment (feedback loop + online eval). Evaluation is not a final-sprint activity
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 G1–G4 readiness gates
 
     </td>
     <td valign="top">
-
 Four scored gates verify discovery completeness before spec generation. ≥ 0.8 = proceed; 0.5–0.8 = proceed with coaching questions; &lt; 0.5 = return to discovery
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Post-build scorecard
 
     </td>
     <td valign="top">
-
 6-category hybrid evaluation (deterministic + LLM-graded). Category B generation drift is a blocking failure: spec_sha256 mismatch means the deployed agent does not implement its spec
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Spec quality evaluation (agentic-eval)
 
     </td>
     <td valign="top">
-
 11+1 criteria framework measuring spec completeness, AI-readiness, code-spec alignment, MCP utilization, and SAP standards. Two run points: end of Discovery (C1–C7 spec gate) and pre-EAC (full 11+1-criteria sweep). C6 Spec-to-Code Alignment (15% weight) is the productization risk indicator
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Post-deployment feedback loop
 
     </td>
     <td valign="top">
-
 Two parallel paths: spec path (human-gated, HITL overrides → spec edits) + memory path (autonomous LLM analyst + auditor). Four learning cases govern all outcomes
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Operator training issue (Case 3)
 
     </td>
     <td valign="top">
-
 When agent was correct and human overrode incorrectly: do NOT update the spec. Flag for operator training and track separately. Failure to handle Case 3 corrupts agent behavior over time
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Testing vs. evaluation
 
     </td>
     <td valign="top">
-
 Testing = ongoing defect finding; evaluation = milestone-based quality comparison. Both required, different tools
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 TR9 compliance
 
     </td>
     <td valign="top">
-
 Offline eval in CI (before each release) + online eval in production. Not optional. Start offline eval at sprint week 1
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Success rate
 
     </td>
     <td valign="top">
-
 Primary release gate: binary (all validations pass = 1). All other metrics are diagnostic
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Test case as deliverable
 
     </td>
     <td valign="top">
-
 YAML test suite is a sprint artifact; version-controlled, reviewed at milestones, in CI before productization
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Traceless mode
 
     </td>
     <td valign="top">
-
 Start evaluating at sprint week 1 without OTel setup. Add trace-enabled eval when instrumentation is complete (weeks 4–6)
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Online eval
 
     </td>
     <td valign="top">
-
 LLM-as-judge scoring of real production sessions. Complements supervisor (real-time) with statistical trend detection (across sessions). Complements feedback loop (aggregate trends vs. event-driven learning)
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Quality Flywheel
 
     </td>
     <td valign="top">
-
 Weeks 1–3: traceless + happy-path → Weeks 4–6: trace-enabled + tools → Weeks 7–9: full suite + CI → Weeks 10–12: online eval active
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Synthetic test data
 
     </td>
     <td valign="top">
-
 When production data is unavailable (typical in weeks 1–6), `/fde-ontology` (LightSpeed Stage 5) generates domain-contextual synthetic data from the logical schema using Claude. Enables meaningful evaluation from week 1 without live system access; replaced with live data in later phases without changing the eval suite
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 A2A first
 
     </td>
     <td valign="top">
-
 TR1 (A2A endpoint) is a prerequisite for eval harness integration. Build A2A exposure early to unblock evaluation
 
     </td>

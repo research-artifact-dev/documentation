@@ -29,68 +29,56 @@ The FDE Engagement Playbook introduces a three-track model that runs in parallel
 <table>
   <tr>
     <th valign="top">
-
 Track
 
     </th>
     <th valign="top">
-
 What It Delivers
 
     </th>
     <th valign="top">
-
 Owner
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 **Build**
 
     </td>
     <td valign="top">
-
 The agent: workflow, prompts, evaluation suite, infrastructure
 
     </td>
     <td valign="top">
-
 FDE Application Engineers + Dev Architect
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Operate**
 
     </td>
     <td valign="top">
-
 The monitoring layer: supervisor workflows, operational runbook, threshold calibration, CIS T&O setup
 
     </td>
     <td valign="top">
-
 FDE Dev Architect + CIS T&O
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Enable**
 
     </td>
     <td valign="top">
-
 The organizational capability: Adoption Strategy, role-based training, gradual responsibility transfer, handover readiness
 
     </td>
     <td valign="top">
-
 FDE Domain PM + Adoption Lead
 
     </td>
@@ -117,96 +105,80 @@ The Adoption Strategy (defined by the Adoption Strategy Skill v2.4 in the `book-
 <table>
   <tr>
     <th valign="top">
-
 Section
 
     </th>
     <th valign="top">
-
 Content
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 **1. AI Use Case Details**
 
     </td>
     <td valign="top">
-
 Use case description, business value hypothesis, success criteria, and measurable outcomes the deployment is expected to achieve
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **2. Expected Business Value**
 
     </td>
     <td valign="top">
-
 Quantified value case: cost reduction, time saved, error rate reduction, throughput improvement — the metrics the customer and CIS will track together
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **3. Adoption Governance & Accountability**
 
     </td>
     <td valign="top">
-
 Nine defined governance roles with named individuals, decision rights, and escalation paths. The full nine-role roster is maintained in [CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md)
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **4. Adoption Baseline & Action Plan**
 
     </td>
     <td valign="top">
-
 Five readiness areas assessed and scored: technical, data, process, user, and governance readiness. Action plan for any gap areas
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **5. Deployment Strategy + scale gate**
 
     </td>
     <td valign="top">
-
 Rollout plan: pilot group → broader rollout → full adoption. Scale gate criteria: what conditions must be met before each phase expansion
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **6. Adoption Deployment Plan**
 
     </td>
     <td valign="top">
-
 Milestone table with owners and dates: training completions, technical go-lives, readiness checkpoints
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **7. Top Adoption Risks & Mitigation**
 
     </td>
     <td valign="top">
-
 The top 5–7 adoption risks (typically: user resistance, data quality, process change management, IT capacity, regulatory) with named risk owners and mitigation actions
 
     </td>
@@ -224,60 +196,50 @@ The top 5–7 adoption risks (typically: user resistance, data quality, process 
 <table>
   <tr>
     <th valign="top">
-
 Phase
 
     </th>
     <th valign="top">
-
 What Is Produced
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 **Discovery (weeks 1–3)**
 
     </td>
     <td valign="top">
-
 Use Case Details (what the agent does, what success looks like) and Expected Business Value (quantified, measurable)
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Discovery (weeks 4–6)**
 
     </td>
     <td valign="top">
-
 Governance &amp; Accountability (nine roles named) and Top Adoption Risks (first draft)
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Develop (weeks 1–6)**
 
     </td>
     <td valign="top">
-
 Readiness Baseline, Deployment Strategy, Milestone Table — refined as agent takes shape
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **EAC + Productization**
 
     </td>
     <td valign="top">
-
 All sections reviewed, updated from EAC learnings, signed by Executive Sponsor
 
     </td>
@@ -314,110 +276,90 @@ The Enable track transfers operational responsibility to the customer using a st
 <table>
   <tr>
     <th valign="top">
-
 Stage
 
     </th>
     <th valign="top">
-
 What Happens
 
     </th>
     <th valign="top">
-
 Who Leads
 
     </th>
     <th valign="top">
-
 Evidence That Stage Is Complete
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 **Stage 1 — Demonstration**
 
     </td>
     <td valign="top">
-
 FDE team demonstrates the agent in full operational mode. Customer stakeholders observe all scenarios: normal operation, HITL approval, anomaly alert, rollback.
 
     </td>
     <td valign="top">
-
 FDE team
 
     </td>
     <td valign="top">
-
 Customer team can accurately describe agent behavior in their own words; no questions about basic operation remain
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Stage 2 — Shadowing**
 
     </td>
     <td valign="top">
-
 Customer IT admin and process owner shadow FDE team during live operations. All decisions are made by the FDE team; customer team asks questions in context.
 
     </td>
     <td valign="top">
-
 FDE team
 
     </td>
     <td valign="top">
-
 Customer team can predict FDE team's decisions before they are made 80% of the time
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Stage 3 — Reverse Shadowing**
 
     </td>
     <td valign="top">
-
 Customer team takes the wheel. FDE team observes silently. FDE team may coach after a decision, not before.
 
     </td>
     <td valign="top">
-
 Customer team
 
     </td>
     <td valign="top">
-
 Customer team completes one full operational cycle (including at least one alert or approval event) without FDE intervention
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Stage 4 — Independent Operation**
 
     </td>
     <td valign="top">
-
 Customer team operates without FDE support. FDE team is available as escalation contact only.
 
     </td>
     <td valign="top">
-
 Customer team
 
     </td>
     <td valign="top">
-
 Customer team handles three consecutive incidents or threshold adjustment requests independently; FDE team is not contacted for routine operations
 
     </td>
@@ -437,48 +379,40 @@ If the engagement timeline does not permit Stage 4 before the FDE team exits, do
 <table>
   <tr>
     <th valign="top">
-
 Stage
 
     </th>
     <th valign="top">
-
 Required Handover Activities
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 Stage 1 → 2
 
     </td>
     <td valign="top">
-
 FDE team provides: agent architecture briefing, BAIP access setup for customer IT admin, copy of operational runbook
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Stage 2 → 3
 
     </td>
     <td valign="top">
-
 FDE team delivers: threshold calibration workshop (customer IT admin sets thresholds based on EAC data), Joule Studio hands-on session (customer IT admin creates a test workflow), Workflow B alert drill (FDE injects a synthetic alert; customer team triages)
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Stage 3 → 4
 
     </td>
     <td valign="top">
-
 Customer IT admin independently completes: one prompt rollback exercise, one threshold adjustment (following the documented procedure), one full runbook walkthrough with the CIS T&O team
 
     </td>
@@ -496,136 +430,112 @@ The transition from EAC (Early Adopter Care) operation to standard production sc
 <table>
   <tr>
     <th valign="top">
-
 Criterion
 
     </th>
     <th valign="top">
-
 Standard Structure
 
     </th>
     <th valign="top">
-
 Engagement-Specific Value
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 **Stage 3 independence**
 
     </td>
     <td valign="top">
-
 Customer team has completed Stage 3 (Reverse Shadowing)
 
     </td>
     <td valign="top">
-
 Mandatory — no exception
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **HITL override rate**
 
     </td>
     <td valign="top">
-
 Override rate is below [X]% for a rolling 30-day window
 
     </td>
     <td valign="top">
-
 Set [X] with the Business Lead during Discovery; typical range 15–35% depending on process risk
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Process KPI achievement**
 
     </td>
     <td valign="top">
-
 Primary process KPI (Dimension 2) is within [Z]% of the TO-BE target
 
     </td>
     <td valign="top">
-
 [Z] = tolerance agreed with Value Advisor; typically ±10–20%
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Quality stability**
 
     </td>
     <td valign="top">
-
 aeval online eval success rate ≥ [threshold]% with no declining trend over 30 days
 
     </td>
     <td valign="top">
-
 [threshold] typically 80–90%; agreed with the Business Lead in Discovery and recorded in Adoption Strategy . Set independently — [Agent Evaluation](agent-evaluation-65fd098.md) Week-9 milestone is a qualitative stability gate, not a numeric success-rate threshold
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Incident record**
 
     </td>
     <td valign="top">
-
 Zero Critical incidents and ≤ [N] High incidents in the prior 30 days
 
     </td>
     <td valign="top">
-
 [N] typically 1–2; zero tolerance for Critical
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Model currency**
 
     </td>
     <td valign="top">
-
 No pinned model versions with an active deprecation date in the next 90 days
 
     </td>
     <td valign="top">
-
 Fixed criterion — no engagement-specific value
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Handover artifacts**
 
     </td>
     <td valign="top">
-
 All enablement artifacts present and accepted by the customer
 
     </td>
     <td valign="top">
-
 Fixed criterion — no exception
 
     </td>
@@ -650,176 +560,144 @@ Training is not one-size-fits-all. The Enable track delivers seven distinct trai
 <table>
   <tr>
     <th valign="top">
-
 Audience
 
     </th>
     <th valign="top">
-
 Depth
 
     </th>
     <th valign="top">
-
 Primary Format
 
     </th>
     <th valign="top">
-
 Key Content
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 **Executive Sponsor**
 
     </td>
     <td valign="top">
-
 Conceptual
 
     </td>
     <td valign="top">
-
 30-min briefing
 
     </td>
     <td valign="top">
-
 Business outcomes, value case progress, escalation path, what success looks like at 30/60/90 days
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Business Lead / Process Owner**
 
     </td>
     <td valign="top">
-
 Functional
 
     </td>
     <td valign="top">
-
 2-hour workshop
 
     </td>
     <td valign="top">
-
 HITL responsibilities (when to approve, reject, modify), threshold rationale, process KPI dashboard, how to request a change
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Customer IT Admin**
 
     </td>
     <td valign="top">
-
 Technical
 
     </td>
     <td valign="top">
-
 Half-day hands-on
 
     </td>
     <td valign="top">
-
 Agent architecture, BAIP registrations, Joule Studio configuration, Workflow B alert interpretation, rollback procedure (hands-on exercise), AI Agent Hub navigation
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Joule End Users**
 
     </td>
     <td valign="top">
-
 User-facing
 
     </td>
     <td valign="top">
-
 1-hour guided session + quick reference card
 
     </td>
     <td valign="top">
-
 How to invoke the agent in Joule, what to do when an approval task arrives in Task Center, how to flag a wrong answer
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **CIS T&O Operators**
 
     </td>
     <td valign="top">
-
 Operational
 
     </td>
     <td valign="top">
-
 Runbook handover session
 
     </td>
     <td valign="top">
-
 Alert escalation tree, in-place fix procedures, when to trigger a new sprint, how to access Topology A customer data with consent
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Customer Security / Compliance**
 
     </td>
     <td valign="top">
-
 Governance
 
     </td>
     <td valign="top">
-
 1-hour evidence walkthrough
 
     </td>
     <td valign="top">
-
 Authorization matrix, audit trail structure, how to pull a specific transaction record, data protection boundaries
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Customer IT Support / Help Desk**
 
     </td>
     <td valign="top">
-
 Triage
 
     </td>
     <td valign="top">
-
 Quick reference card + 30-min briefing
 
     </td>
     <td valign="top">
-
 First-line triage checklist: is this an agent issue or an SAP platform issue? Who to call. How to identify the correlation_id for escalation.
 
     </td>
@@ -837,136 +715,112 @@ All training materials must be delivered as durable artifacts, not just session 
 <table>
   <tr>
     <th valign="top">
-
 Artifact
 
     </th>
     <th valign="top">
-
 Format
 
     </th>
     <th valign="top">
-
 Owner Post-Handover
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 Executive value case summary
 
     </td>
     <td valign="top">
-
 1-page PDF
 
     </td>
     <td valign="top">
-
 Account Executive
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Business Lead HITL decision guide
 
     </td>
     <td valign="top">
-
 Laminated reference card + slide deck
 
     </td>
     <td valign="top">
-
 Business Lead
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 IT Admin operational runbook
 
     </td>
     <td valign="top">
-
 Markdown file in customer's git / Confluence
 
     </td>
     <td valign="top">
-
 Customer IT Admin + CIS T&O
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 End user quick reference card
 
     </td>
     <td valign="top">
-
 PDF, 2 pages
 
     </td>
     <td valign="top">
-
 Customer IT Admin
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 T&O runbook (6 scenarios)
 
     </td>
     <td valign="top">
-
 Markdown file
 
     </td>
     <td valign="top">
-
 CIS T&O (see [CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md))
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Security evidence guide
 
     </td>
     <td valign="top">
-
 Document in customer's compliance portal
 
     </td>
     <td valign="top">
-
 Customer Security / Compliance
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Help Desk triage card
 
     </td>
     <td valign="top">
-
 IT support ticketing system template
 
     </td>
     <td valign="top">
-
 Customer IT Support
 
     </td>
@@ -1031,102 +885,84 @@ The five readiness areas from the Adoption Strategy  are assessed during Discove
 <table>
   <tr>
     <th valign="top">
-
 Readiness Area
 
     </th>
     <th valign="top">
-
 What It Measures
 
     </th>
     <th valign="top">
-
 Enable Track Response
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 **Technical readiness**
 
     </td>
     <td valign="top">
-
 Is the customer's SAP landscape and BAIP/Joule setup suitable for the agent?
 
     </td>
     <td valign="top">
-
 Confirm in Discovery; address blocking gaps before the Develop sprint starts
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Data readiness**
 
     </td>
     <td valign="top">
-
 Is the grounding data accurate, complete, and properly governed?
 
     </td>
     <td valign="top">
-
 RAG corpus quality assessment; data owner identified; CDH access confirmed if real data used
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Process readiness**
 
     </td>
     <td valign="top">
-
 Has the TO-BE process been designed, validated, and communicated to affected staff?
 
     </td>
     <td valign="top">
-
 HITL decision procedures documented; escalation paths confirmed with process owner
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **User readiness**
 
     </td>
     <td valign="top">
-
 Do the affected users know the agent is coming and what it will change about their work?
 
     </td>
     <td valign="top">
-
 Change communication plan; end user training delivered before EAC; pilot user group identified
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Governance readiness**
 
     </td>
     <td valign="top">
-
 Are the nine adoption governance roles in place and active?
 
     </td>
     <td valign="top">
-
 Governance table complete; accountability confirmed; Adoption Strategy  finalized
 
     </td>
@@ -1144,85 +980,70 @@ The most common adoption failure mode is not technical — it is user resistance
 <table>
   <tr>
     <th valign="top">
-
 Signal
 
     </th>
     <th valign="top">
-
 Interpretation
 
     </th>
     <th valign="top">
-
 Enable Track Response
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 High human override rate within first 30 days
 
     </td>
     <td valign="top">
-
 Users are overriding without reading the agent's reasoning
 
     </td>
     <td valign="top">
-
 Review HITL decision guide training; check if users have sufficient context in Task Center
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 High override rate stable after 60 days
 
     </td>
     <td valign="top">
-
 Agent outputs are systematically wrong for a subset of cases
 
     </td>
     <td valign="top">
-
 Quality issue: trigger eval review and prompt improvement cycle
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Low agent invocation rate
 
     </td>
     <td valign="top">
-
 Users are bypassing the agent
 
     </td>
     <td valign="top">
-
 Process change management issue: confirm the agent is in the workflow path; escalate to Business Lead
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Users asking IT to disable the agent
 
     </td>
     <td valign="top">
-
 Fundamental resistance or a visible failure event
 
     </td>
     <td valign="top">
-
 Executive Sponsor escalation; temporary HITL gate tightening while root cause is addressed
 
     </td>
@@ -1244,102 +1065,84 @@ The Business Lead is the accountability owner for HITL decisions. Distinguishing
 <table>
   <tr>
     <th valign="top">
-
 Override Behavior
 
     </th>
     <th valign="top">
-
 Classification
 
     </th>
     <th valign="top">
-
 Correct Response
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 Business Lead cites specific real-world context not in the agent's data
 
     </td>
     <td valign="top">
-
 Legitimate override
 
     </td>
     <td valign="top">
-
 Log as override; review whether the missing context should be added to the agent's grounding or as a HITL decision criterion
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Business Lead cannot articulate why the agent output was wrong
 
     </td>
     <td valign="top">
-
 Likely Case 3 / operator error
 
     </td>
     <td valign="top">
-
 Flag for operator training; do NOT revise the spec; increase training depth on the Business Lead HITL decision guide
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Override rate > 30% within first 2 weeks
 
     </td>
     <td valign="top">
-
 Expected (trust calibration phase)
 
     </td>
     <td valign="top">
-
 Normal; review training completeness; re-deliver HITL decision guide as needed
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Override rate > 30% after 60 days
 
     </td>
     <td valign="top">
-
 Systematic issue
 
     </td>
     <td valign="top">
-
 Escalate: either the agent has a quality problem (trigger eval review) or the Business Lead role is not adequately staffed
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Consistent override on a specific output type
 
     </td>
     <td valign="top">
-
 Pattern signal
 
     </td>
     <td valign="top">
-
 Review whether that output type needs a tighter precision guardrail, a different approval threshold, or a separate HITL stage
 
     </td>
@@ -1404,176 +1207,144 @@ All Enable track artifacts must be present in the productization handover packag
 <table>
   <tr>
     <th valign="top">
-
 Artifact
 
     </th>
     <th valign="top">
-
 Format
 
     </th>
     <th valign="top">
-
 Produced
 
     </th>
     <th valign="top">
-
 Owner
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 Adoption Strategy (7 sections, signed)
 
     </td>
     <td valign="top">
-
 Markdown / document
 
     </td>
     <td valign="top">
-
 During engagement; final at productization
 
     </td>
     <td valign="top">
-
 Adoption Lead
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 IT Admin operational runbook
 
     </td>
     <td valign="top">
-
 Markdown
 
     </td>
     <td valign="top">
-
 During Develop; finalized at EAC
 
     </td>
     <td valign="top">
-
 CIS T&O + Customer IT Admin
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 CIS T&O runbook (6 scenarios)
 
     </td>
     <td valign="top">
-
 Markdown
 
     </td>
     <td valign="top">
-
 During Develop
 
     </td>
     <td valign="top">
-
 CIS T&O
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 7-audience training materials
 
     </td>
     <td valign="top">
-
 Mixed formats per audience
 
     </td>
     <td valign="top">
-
 During Develop; delivered before EAC
 
     </td>
     <td valign="top">
-
 FDE Domain PM
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Enable track readiness checklist
 
     </td>
     <td valign="top">
-
 Checklist
 
     </td>
     <td valign="top">
-
 At productization gate
 
     </td>
     <td valign="top">
-
 FDE Domain PM
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 30/60/90-day review schedule
 
     </td>
     <td valign="top">
-
 Calendar invites + scope
 
     </td>
     <td valign="top">
-
 At productization handover
 
     </td>
     <td valign="top">
-
 CIS T&O + Customer Adoption Lead
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Adoption risks log ( of Adoption Strategy)
 
     </td>
     <td valign="top">
-
 Living document
 
     </td>
     <td valign="top">
-
 Maintained during engagement; transferred at handover
 
     </td>
     <td valign="top">
-
 Adoption Lead → Customer Adoption Lead
 
     </td>
@@ -1592,108 +1363,90 @@ Adoption Lead → Customer Adoption Lead
 <table>
   <tr>
     <th valign="top">
-
 Aspect
 
     </th>
     <th valign="top">
-
 Key Principle
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 Enable track
 
     </td>
     <td valign="top">
-
 Mandatory parallel workstream alongside Build and Operate; begins in Discovery; Stage 3 minimum at handover, Stage 4 independence the target
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Adoption Strategy
 
     </td>
     <td valign="top">
-
 7-section living document; produced during engagement; all 9 governance roles named; required productization handover artifact
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Gradual release
 
     </td>
     <td valign="top">
-
 4-stage model: Demonstration → Shadowing → Reverse Shadowing → Independent; Stage 3 minimum at handover; Stage 4 target
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Role-based training
 
     </td>
     <td valign="top">
-
 7 distinct audiences; each gets appropriate depth and format; training materials must be durable artifacts in customer-owned systems
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Enablement checklist
 
     </td>
     <td valign="top">
-
 The checklist in this topic is the Enable track's equivalent of TR1–TR14; must be complete before productization sign-off
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Organizational readiness
 
     </td>
     <td valign="top">
-
 5 readiness areas assessed in Discovery; user resistance is the most common adoption failure mode; distinguish override-from-resistance from override-from-quality-issue
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Post-handover support
 
     </td>
     <td valign="top">
-
 Tier 1 (CIS T&O operating rhythm); Tier 2 (Microdelivery / new sprint); Tier 3 (annual governance); each with defined scope and escalation path
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Hypercare
 
     </td>
     <td valign="top">
-
 First 30 days: weekly cadence; 30-day review: technical stability; 60-day: adoption trend; 90-day: business value assessment + hypercare exit decision
 
     </td>

@@ -26,66 +26,54 @@ The central insight is that token cost in Industry AI delivery splits into two e
 <table>
   <tr>
     <th valign="top">
-
 Cost Pool
 
     </th>
     <th valign="top">
-
 What It Covers
 
     </th>
     <th valign="top">
-
 How It Is Measured
 
     </th>
     <th valign="top">
-
 Who Owns It
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 **Build-time**
 
     </td>
     <td valign="top">
-
 FDE engineers using Claude Code and AI coding tools during the sprint
 
     </td>
     <td valign="top">
-
 Hyperspace LLM Proxy — SAP-internal only
 
     </td>
     <td valign="top">
-
 CIS / FDE team
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Runtime**
 
     </td>
     <td valign="top">
-
 Deployed Industry AI agents processing business transactions for the customer
 
     </td>
     <td valign="top">
-
 BAIP AI Units + OpenTelemetry (built into BAIP harness)
 
     </td>
     <td valign="top">
-
 Customer (billing) + CIS (operational monitoring)
 
     </td>
@@ -113,136 +101,112 @@ SAP's internal Token Optimization Cheat Sheet defines seven levels of optimizati
 <table>
   <tr>
     <th valign="top">
-
 Level
 
     </th>
     <th valign="top">
-
 Name
 
     </th>
     <th valign="top">
-
 Core Action
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 L0
 
     </td>
     <td valign="top">
-
 **ELIMINATE**
 
     </td>
     <td valign="top">
-
 Use deterministic tools first; ask whether an LLM is necessary at all for this step
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 L1
 
     </td>
     <td valign="top">
-
 **INPUT CONTROL**
 
     </td>
     <td valign="top">
-
 Lean prompts; only solution-relevant MCP tools registered; only the context the agent needs for this phase
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 L2
 
     </td>
     <td valign="top">
-
 **OUTPUT CONTROL**
 
     </td>
     <td valign="top">
-
 Return diffs not rewrites; set response ceilings; suppress chain-of-thought reasoning where the trace is not needed
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 L3
 
     </td>
     <td valign="top">
-
 **CACHING**
 
     </td>
     <td valign="top">
-
 Put stable, rarely-changing content at the beginning of prompts to exploit cache reads; stable `CLAUDE.md` for build-time sessions
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 L4
 
     </td>
     <td valign="top">
-
 **MODEL ROUTING**
 
     </td>
     <td valign="top">
-
 Route by complexity: lightweight model for simple tasks, frontier model for hard reasoning; batch and async for non-urgent work
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 L5
 
     </td>
     <td valign="top">
-
 **AGENT CAPS**
 
     </td>
     <td valign="top">
-
 Manage session length; use session compaction; write handoff notes at phase boundaries
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 L6
 
     </td>
     <td valign="top">
-
 **GOVERNANCE**
 
     </td>
     <td valign="top">
-
 Track cost per correct outcome, not per token; establish measurement baselines; set accountability structures
 
     </td>
@@ -295,85 +259,70 @@ The [CIS Starter Kit](reusable-components-8a3dd4c.md) is the natural home for an
 <table>
   <tr>
     <th valign="top">
-
 Section
 
     </th>
     <th valign="top">
-
 Content
 
     </th>
     <th valign="top">
-
 Token Impact
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 Project overview
 
     </td>
     <td valign="top">
-
 One paragraph: what this engagement delivers, what it is not
 
     </td>
     <td valign="top">
-
 Prevents scope hallucination; saves correction loops
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Stack and Joule Studio conventions
 
     </td>
     <td valign="top">
-
 Framework versions, n8n node conventions, forbidden patterns
 
     </td>
     <td valign="top">
-
 Prevents non-compliant code generation
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Pointers to ADRs and specs
 
     </td>
     <td valign="top">
-
 Links to the decision records that govern this project
 
     </td>
     <td valign="top">
-
 Replaces inline context with targeted reads
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Forbidden operations
 
     </td>
     <td valign="top">
-
 "Never commit credentials"; "always route write-back through Workflow A"
 
     </td>
     <td valign="top">
-
 Eliminates unsafe completions early
 
     </td>
@@ -432,128 +381,104 @@ Two validated input compression techniques are available for reducing input toke
 <table>
   <tr>
     <th valign="top">
-
 Technique
 
     </th>
     <th valign="top">
-
 Input Reduction
 
     </th>
     <th valign="top">
-
 Quality Score
 
     </th>
     <th valign="top">
-
 Numeric Recall
 
     </th>
     <th valign="top">
-
 Latency
 
     </th>
     <th valign="top">
-
 Caching-Compatible?
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 LLMLingua (50% retention)
 
     </td>
     <td valign="top">
-
 ~50%
 
     </td>
     <td valign="top">
-
 0.989
 
     </td>
     <td valign="top">
-
 **0.914 (9% drop)**
 
     </td>
     <td valign="top">
-
 Higher
 
     </td>
     <td valign="top">
-
 **No**
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 LLMLingua (25% retention)
 
     </td>
     <td valign="top">
-
 ~75%
 
     </td>
     <td valign="top">
-
 0.882 (**FAIL**)
 
     </td>
     <td valign="top">
-
 —
 
     </td>
     <td valign="top">
-
 Higher
 
     </td>
     <td valign="top">
-
 No
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Caveman
 
     </td>
     <td valign="top">
-
 ~29%
 
     </td>
     <td valign="top">
-
 1.000 (lossless)
 
     </td>
     <td valign="top">
-
 1.000
 
     </td>
     <td valign="top">
-
 &lt; 1 second
 
     </td>
     <td valign="top">
-
 Yes
 
     </td>
@@ -584,48 +509,40 @@ Providing a structured startup context file (`AGENTS.md` or `CLAUDE.md`) at the 
 <table>
   <tr>
     <th valign="top">
-
 Metric
 
     </th>
     <th valign="top">
-
 Change with AGENTS.md
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 Median output tokens per session
 
     </td>
     <td valign="top">
-
 **−16.58%**
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Median session runtime
 
     </td>
     <td valign="top">
-
 **−28.64%**
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Total tokens (input + output)
 
     </td>
     <td valign="top">
-
 +1.29% (more upfront context)
 
     </td>
@@ -703,68 +620,56 @@ The Hyperspace LLM Proxy is not available at runtime. Any runtime efficiency wor
 <table>
   <tr>
     <th valign="top">
-
 Billing Pool
 
     </th>
     <th valign="top">
-
 What It Covers
 
     </th>
     <th valign="top">
-
 Billing Unit
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 **AI Units**
 
     </td>
     <td valign="top">
-
 Agent Actions (LLM calls + tool invocations)
 
     </td>
     <td valign="top">
-
 0.02 AI Units/Action; visible in customer's SAP AI subscription
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **BTPEA credits**
 
     </td>
     <td valign="top">
-
 BTP Enterprise Agreement credits for AppFND runtime infrastructure on BTP Kyma
 
     </td>
     <td valign="top">
-
 Separate from AI Units; charged against the customer's BTP contract
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **BDC capacity units**
 
     </td>
     <td valign="top">
-
 Business Data Cloud capacity consumed when agents read from BDC data products
 
     </td>
     <td valign="top">
-
 Charged against the customer's BDC subscription
 
     </td>
@@ -792,102 +697,84 @@ Common cases where FDE teams over-use LLM nodes:
 <table>
   <tr>
     <th valign="top">
-
 Step
 
     </th>
     <th valign="top">
-
 Often Done with LLM
 
     </th>
     <th valign="top">
-
 Better Approach
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 Format conversion (JSON → table, XML → JSON)
 
     </td>
     <td valign="top">
-
 `sapOrchestration`
 
     </td>
     <td valign="top">
-
 Code node
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Threshold comparison (value > threshold?)
 
     </td>
     <td valign="top">
-
 `sapOrchestration`
 
     </td>
     <td valign="top">
-
 Code node (If node)
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Field extraction from structured output
 
     </td>
     <td valign="top">
-
 `sapOrchestration`
 
     </td>
     <td valign="top">
-
 Code node
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 PII detection on known-structure fields
 
     </td>
     <td valign="top">
-
 `sapOrchestration`
 
     </td>
     <td valign="top">
-
 `sapDPI` with explicit config
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Routing logic (which workflow path?)
 
     </td>
     <td valign="top">
-
 AI Agent tool selection
 
     </td>
     <td valign="top">
-
 Switch node with deterministic routing key
 
     </td>
@@ -930,72 +817,60 @@ An agent that reaches the same business outcome with half the tool calls, half t
 <table>
   <tr>
     <th valign="top">
-
 Token Anomaly Signal
 
     </th>
     <th valign="top">
-
 Likely Quality Root Cause
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 Input token spike (consistent, not runaway)
 
     </td>
     <td valign="top">
-
 Context expansion creep — growing grounding data, accumulated history
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Runaway token spike (single invocation)
 
     </td>
     <td valign="top">
-
 Stuck retry loop or infinite tool call cycle
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 High cost per committed output
 
     </td>
     <td valign="top">
-
 Many failed invocations before successful write-back; high human override rate driving rework
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Gradually increasing cost per invocation
 
     </td>
     <td valign="top">
-
 Prompt drift — system prompt growing over time without audit
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 High cost per escalation
 
     </td>
     <td valign="top">
-
 Agent consuming tokens before recognizing it cannot complete the task
 
     </td>
@@ -1075,333 +950,270 @@ The following table summarizes the techniques with the strongest evidence-to-eff
 <table>
   <tr>
     <th valign="top">
-
 Technique
 
     </th>
     <th valign="top">
-
 L-Level
 
     </th>
     <th valign="top">
-
 Evidence
 
     </th>
     <th valign="top">
-
 Effort
 
     </th>
     <th valign="top">
-
 Build-Time
 
     </th>
     <th valign="top">
-
 Runtime
 
     </th>
     <th valign="top">
-
 Where in Concept
 
     </th>
   </tr>
   <tr>
     <td valign="top">
-
 Prompt caching (stable content first; calibrate TTL)
 
     </td>
     <td valign="top">
-
 L3
 
     </td>
     <td valign="top">
-
 Measured: 84% cost reduction (IBD project)
 
     </td>
     <td valign="top">
-
 Low — design convention in sapOrchestration
 
     </td>
     <td valign="top">
-
 ✓
 
     </td>
     <td valign="top">
-
 ✓
 
     </td>
     <td valign="top">
-
 This topic; [Production Operations](production-operations-f963579.md)
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 MCP / tool gating by solution type
 
     </td>
     <td valign="top">
-
 L1
 
     </td>
     <td valign="top">
-
 Estimated: ~10K tokens/turn saved
 
     </td>
     <td valign="top">
-
 Low — APM setup
 
     </td>
     <td valign="top">
-
 ✓
 
     </td>
     <td valign="top">
-
 ✓
 
     </td>
     <td valign="top">
-
 This topic; [Joule Studio Build Map](joule-studio-build-map-7de243e.md)
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Session handoff notes at phase boundaries
 
     </td>
     <td valign="top">
-
 L5
 
     </td>
     <td valign="top">
-
 Research-backed (context rot; 11/13 models degraded at 32K)
 
     </td>
     <td valign="top">
-
 Low — process convention
 
     </td>
     <td valign="top">
-
 ✓
 
     </td>
     <td valign="top">
-
 (partial)
 
     </td>
     <td valign="top">
-
 This topic
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Code node for deterministic steps (L0 applied)
 
     </td>
     <td valign="top">
-
 L0
 
     </td>
     <td valign="top">
-
 Design principle — no token cost for deterministic logic
 
     </td>
     <td valign="top">
-
 Low-Medium — requires conscious workflow review
 
     </td>
     <td valign="top">
-
 —
 
     </td>
     <td valign="top">
-
 ✓
 
     </td>
     <td valign="top">
-
 This topic; [Joule Studio Build Map](joule-studio-build-map-7de243e.md)
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Compact JSON output format in sapOrchestration
 
     </td>
     <td valign="top">
-
 L2
 
     </td>
     <td valign="top">
-
 Engineering principle
 
     </td>
     <td valign="top">
-
 Low — configuration choice
 
     </td>
     <td valign="top">
-
 ✓
 
     </td>
     <td valign="top">
-
 ✓
 
     </td>
     <td valign="top">
-
 This topic; [Joule Studio Build Map](joule-studio-build-map-7de243e.md)
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Skill / agent routing by deterministic key
 
     </td>
     <td valign="top">
-
 L1 + L5
 
     </td>
     <td valign="top">
-
 Estimated: eliminates 10K+ tokens per mis-selection
 
     </td>
     <td valign="top">
-
 Low — APM + CLAUDE.md setup
 
     </td>
     <td valign="top">
-
 ✓
 
     </td>
     <td valign="top">
-
 ✓
 
     </td>
     <td valign="top">
-
 This topic
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Per-project APM setup (CIS Starter Kit apm.yml)
 
     </td>
     <td valign="top">
-
 L1
 
     </td>
     <td valign="top">
-
 Structural — prevents anti-pattern accumulation
 
     </td>
     <td valign="top">
-
 Medium — initial setup; low thereafter
 
     </td>
     <td valign="top">
-
 ✓
 
     </td>
     <td valign="top">
-
 —
 
     </td>
     <td valign="top">
-
 This topic; [Reusable Components](reusable-components-8a3dd4c.md)
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Cost per correct outcome metric
 
     </td>
     <td valign="top">
-
 L6
 
     </td>
     <td valign="top">
-
 Aligns with value-based contract logic
 
     </td>
     <td valign="top">
-
 Medium — requires measurement instrumentation
 
     </td>
     <td valign="top">
-
 ✓
 
     </td>
     <td valign="top">
-
 ✓
 
     </td>
     <td valign="top">
-
 This topic; [Agent Quality Framework](agent-quality-framework-5ec914b.md)
 
     </td>

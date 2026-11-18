@@ -31,104 +31,68 @@ Measures how the agent performs as a reasoning and tool-use system.
 <table>
 <tr>
 <th valign="top">
-
 Metric
-
 </th>
 <th valign="top">
-
 What It Measures
-
 </th>
 <th valign="top">
-
 Why It Can Mislead in Isolation
-
 </th>
 </tr>
 <tr>
 <td valign="top">
-
 Goal completion rate
-
 </td>
 <td valign="top">
-
 Did the agent reach the intended end state?
-
 </td>
 <td valign="top">
-
 An agent can "complete" a goal incorrectly (wrong output, accepted by the evaluator)
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Tool call efficiency
-
 </td>
 <td valign="top">
-
 Did the agent reach the goal with the minimum necessary tool calls? Token cost (LLM spend per successful outcome) is the measurable financial sub-dimension of this metric — see [Token Efficiency](token-efficiency-54fe998.md)
-
 </td>
 <td valign="top">
-
 Efficient agents that cut corners may skip validation steps; conversely, minimizing token count at the expense of accuracy inverts the metric
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Self-verification results
-
 </td>
 <td valign="top">
-
 Did the agent's internal feedback loop confirm output correctness before committing?
-
 </td>
 <td valign="top">
-
 Self-verification can be fooled if the same model both generates and checks output
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Hallucination rate
-
 </td>
 <td valign="top">
-
 How often does the agent produce plausible-but-wrong factual claims?
-
 </td>
 <td valign="top">
-
 Hard to measure without ground-truth reference data
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Retry/recovery rate
-
 </td>
 <td valign="top">
-
 How often does the agent recover from a tool failure or partial result?
-
 </td>
 <td valign="top">
-
 High recovery rate may mask systemic data quality issues
-
 </td>
 </tr>
 </table>
@@ -146,74 +110,50 @@ These metrics are specific to the use case and must be defined during the FDE Di
 <table>
 <tr>
 <th valign="top">
-
 Industry AI Domain
-
 </th>
 <th valign="top">
-
 Representative Process KPI
-
 </th>
 </tr>
 <tr>
 <td valign="top">
-
 Autonomous Asset Management
-
 </td>
 <td valign="top">
-
 Mean time to resolve (MTTR) for maintenance events; false positive rate on anomaly alerts
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Autonomous Regulated Manufacturing
-
 </td>
 <td valign="top">
-
 Batch release cycle time; rework rate; deviation detection latency
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Autonomous Commodity Management
-
 </td>
 <td valign="top">
-
 Hedge ratio accuracy; position reconciliation exceptions
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Autonomous Revenue Growth Management
-
 </td>
 <td valign="top">
-
 Pricing proposal acceptance rate; margin deviation per recommendation
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Autonomous Adaptive Production
-
 </td>
 <td valign="top">
-
 Schedule adherence rate; production order exception volume
-
 </td>
 </tr>
 </table>
@@ -246,244 +186,156 @@ The evaluation activities in this topic span the full FDE lifecycle. The table b
 <table>
 <tr>
 <th valign="top">
-
 Phase
-
 </th>
 <th valign="top">
-
 Evaluation Activity
-
 </th>
 <th valign="top">
-
 Topic Reference
-
 </th>
 <th valign="top">
-
 Gate or Milestone
-
 </th>
 </tr>
 <tr>
 <td valign="top">
-
 **Discovery**
-
 </td>
 <td valign="top">
-
 G1–G4 readiness gates (entity completeness, goal coverage, actor-process binding, integration readiness)
-
 </td>
 <td valign="top">
-
 Pre-Build Readiness Gates (G1–G4)
-
 </td>
 <td valign="top">
-
 Pre-Development gate: all gates ≥ 0.8 before sprint commit
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **Discovery**
-
 </td>
 <td valign="top">
-
 RPT-1 approach-first assessment (tabular ML vs. LLM/agent)
-
 </td>
 <td valign="top">
-
 [Introduction](introduction-c495d02.md)
-
 </td>
 <td valign="top">
-
 Part of scope decision; not a scored gate
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **Development — Week 1**
-
 </td>
 <td valign="top">
-
 aeval offline in traceless mode (output correctness + rule compliance from day 1)
-
 </td>
 <td valign="top">
-
 [Agent Evaluation](agent-evaluation-65fd098.md)
-
 </td>
 <td valign="top">
-
 No gate; establishes baseline
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **Development — Week 1–5**
-
 </td>
 <td valign="top">
-
 6-category post-build scorecard (spec integrity, generation drift, Joule config, routing descriptions, MUST-rule compliance, coverage)
-
 </td>
 <td valign="top">
-
 [Agent Evaluation](agent-evaluation-65fd098.md)
-
 </td>
 <td valign="top">
-
 Iterative; category B (generation drift) is a blocking failure
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **Development — Week 6**
-
 </td>
 <td valign="top">
-
 aeval offline with full trace-enabled metrics; eval suite ≥ 3 iterations; success rate documented
-
 </td>
 <td valign="top">
-
 [Agent Evaluation](agent-evaluation-65fd098.md)
-
 </td>
 <td valign="top">
-
 **Week 6 milestone gate**: required for FDE Gate evidence package
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **Development — Week 9**
-
 </td>
 <td valign="top">
-
 Full aeval offline suite passes in CI; online eval active in EAC (Early Adopter Care); TR9 offline compliance satisfied
-
 </td>
 <td valign="top">
-
 [Agent Evaluation](agent-evaluation-65fd098.md)
-
 </td>
 <td valign="top">
-
 **Week 9 milestone gate**: required before EAC
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **EAC**
-
 </td>
 <td valign="top">
-
 Online eval active (aeval-online); anomaly detection baselines calibrated; supervisor thresholds set
-
 </td>
 <td valign="top">
-
 [Agent Evaluation](agent-evaluation-65fd098.md) / [Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)
-
 </td>
 <td valign="top">
-
 EAC operating condition
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **EAC → Productization**
-
 </td>
 <td valign="top">
-
 Scale gate criteria met: Stage 3 independence + override rate + process KPI + quality stability + zero Critical incidents
-
 </td>
 <td valign="top">
-
 [Customer Enablement and Adoption](customer-enablement-and-adoption-ce2e74a.md) Scale Gate
-
 </td>
 <td valign="top">
-
 **Productization gate**
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **Production (ongoing)**
-
 </td>
 <td valign="top">
-
 aeval online eval: statistical trend monitoring via CronJob; Workflow B anomaly detection
-
 </td>
 <td valign="top">
-
 [Agent Evaluation](agent-evaluation-65fd098.md) / [Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)
-
 </td>
 <td valign="top">
-
 Continuous; no single gate
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **Quarterly**
-
 </td>
 <td valign="top">
-
 Eval suite review; model suitability review; iteration pattern analysis
-
 </td>
 <td valign="top">
-
 [Production Operations](production-operations-f963579.md) / [CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md)
-
 </td>
 <td valign="top">
-
 Periodic governance review
-
 </td>
 </tr>
 </table>
@@ -504,87 +356,57 @@ Before committing to agent spec generation, the extracted knowledge from the dis
 <table>
 <tr>
 <th valign="top">
-
 Gate
-
 </th>
 <th valign="top">
-
 Checks
-
 </th>
 <th valign="top">
-
 Threshold
-
 </th>
 </tr>
 <tr>
 <td valign="top">
-
 G1 — Entity Completeness
-
 </td>
 <td valign="top">
-
 Proportion of extracted entities resolved against SAP canonical catalog (EKX or offline S/4 catalog)
-
 </td>
 <td valign="top">
-
 ≥ 0.8
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 G2 — Goal Coverage
-
 </td>
 <td valign="top">
-
 Every Capability has a parent Goal
-
 </td>
 <td valign="top">
-
 ≥ 0.8
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 G3 — Actor-Process Binding
-
 </td>
 <td valign="top">
-
 Every Process has an assigned Actor
-
 </td>
 <td valign="top">
-
 ≥ 0.8
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 G4 — Integration Readiness
-
 </td>
 <td valign="top">
-
 Every Integration has an API binding
-
 </td>
 <td valign="top">
-
 ≥ 0.8
-
 </td>
 </tr>
 </table>
@@ -633,62 +455,42 @@ The correct approach is to define acceptance criteria per scenario type:
 <table>
 <tr>
 <th valign="top">
-
 Scenario Type
-
 </th>
 <th valign="top">
-
 Acceptance Threshold Approach
-
 </th>
 </tr>
 <tr>
 <td valign="top">
-
 High-frequency, low-risk (read-only)
-
 </td>
 <td valign="top">
-
 Statistical threshold on a representative sample
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Low-frequency, high-risk (write to system of record)
-
 </td>
 <td valign="top">
-
 100% coverage of defined test cases; any failure blocks
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Exception/escalation paths
-
 </td>
 <td valign="top">
-
 Verify escalation fires; do NOT require resolution
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Novel/out-of-distribution inputs
-
 </td>
 <td valign="top">
-
 Verify graceful degradation; do not require correct output
-
 </td>
 </tr>
 </table>
@@ -702,158 +504,106 @@ For structured knowledge extraction from customer artifacts, CIS uses 12 canonic
 <table>
 <tr>
 <th valign="top">
-
 Type
-
 </th>
 <th valign="top">
-
 Maps To
-
 </th>
 </tr>
 <tr>
 <td valign="top">
-
 Entity
-
 </td>
 <td valign="top">
-
 Data object (SAP business object or custom)
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Actor
-
 </td>
 <td valign="top">
-
 Customer persona → one dedicated sub-agent (see [Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md))
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 BusinessObject
-
 </td>
 <td valign="top">
-
 SAP business object with API binding
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 System
-
 </td>
 <td valign="top">
-
 Backend system (SAP or third-party)
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Process
-
 </td>
 <td valign="top">
-
 Business process step
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Capability
-
 </td>
 <td valign="top">
-
 Agent capability / tool
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Rule
-
 </td>
 <td valign="top">
-
 Business rule (source for MUST rules and HITL gates)
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Relationship
-
 </td>
 <td valign="top">
-
 Entity-to-entity link
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Goal
-
 </td>
 <td valign="top">
-
 Business goal (parent of Capabilities; checked by G2)
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 KPI
-
 </td>
 <td valign="top">
-
 Measurable success metric (Dimension 2 — Process KPIs)
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Risk
-
 </td>
 <td valign="top">
-
 Risk factor (source for guardrail design — [Precision Guardrails](precision-guardrails-c279f4e.md))
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Integration
-
 </td>
 <td valign="top">
-
 System integration point (source for API binding; checked by G4)
-
 </td>
 </tr>
 </table>
@@ -879,70 +629,46 @@ Agent quality testing is organized in three concentric layers:
 <table>
 <tr>
 <th valign="top">
-
 Layer
-
 </th>
 <th valign="top">
-
 What It Tests
-
 </th>
 <th valign="top">
-
 Investment Priority
-
 </th>
 </tr>
 <tr>
 <td valign="top">
-
 **Inner — Tool-level unit tests**
-
 </td>
 <td valign="top">
-
 Each individual tool/API call returns correct data; connectors are wired correctly
-
 </td>
 <td valign="top">
-
 Low to medium — validates data plumbing
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **Middle — Agent evaluation (aeval)**
-
 </td>
 <td valign="top">
-
 The agent's reasoning, tool selection, and decision-making across defined scenarios
-
 </td>
 <td valign="top">
-
 **Highest** — mandatory for production (TR9); this is the core layer
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **Outer — Production integration tests**
-
 </td>
 <td valign="top">
-
 End-to-end behavior in the real customer environment; correct output to the system of record
-
 </td>
 <td valign="top">
-
 Medium — validates final wiring
-
 </td>
 </tr>
 </table>
@@ -958,206 +684,134 @@ The SAP AI Golden Path defines a set of evaluation dimensions for comprehensive 
 <table>
 <tr>
 <th valign="top">
-
 Dimension
-
 </th>
 <th valign="top">
-
 Priority
-
 </th>
 <th valign="top">
-
 What It Tests
-
 </th>
 </tr>
 <tr>
 <td valign="top">
-
 **Correctness**
-
 </td>
 <td valign="top">
-
 HIGH
-
 </td>
 <td valign="top">
-
 Does the agent produce the right answer for defined scenarios?
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **Hallucinations**
-
 </td>
 <td valign="top">
-
 HIGH
-
 </td>
 <td valign="top">
-
 Does the agent avoid inventing facts not present in the grounding context?
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **Safety guardrails**
-
 </td>
 <td valign="top">
-
 **HIGH**
-
 </td>
 <td valign="top">
-
 Do precision guardrails fire correctly on boundary inputs ([Precision Guardrails](precision-guardrails-c279f4e.md)); does Layer 3 escalation trigger?
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **Stability**
-
 </td>
 <td valign="top">
-
 HIGH
-
 </td>
 <td valign="top">
-
 Does the agent behave consistently across repeated identical inputs (≥ 3 iterations per case)?
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **Summarization**
-
 </td>
 <td valign="top">
-
 HIGH
-
 </td>
 <td valign="top">
-
 Does the agent correctly synthesize and summarize retrieved information?
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **Security**
-
 </td>
 <td valign="top">
-
 **HIGH**
-
 </td>
 <td valign="top">
-
 Does the agent resist prompt injection, privilege escalation, and harmful instructions?
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **Memory**
-
 </td>
 <td valign="top">
-
 MEDIUM
-
 </td>
 <td valign="top">
-
 Does the agent maintain relevant context across conversation turns?
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **RAG retrieval**
-
 </td>
 <td valign="top">
-
 MEDIUM
-
 </td>
 <td valign="top">
-
 Does RAG grounding surface the correct context for the agent's task?
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **Performance**
-
 </td>
 <td valign="top">
-
 MEDIUM
-
 </td>
 <td valign="top">
-
 Does the agent meet latency and throughput targets under load?
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **UI/UX output**
-
 </td>
 <td valign="top">
-
 MEDIUM
-
 </td>
 <td valign="top">
-
 Does the agent's output render correctly and usably in the Joule surface?
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **Digression / scope**
-
 </td>
 <td valign="top">
-
 LOW
-
 </td>
 <td valign="top">
-
 Does the agent stay within its defined scope and reject out-of-scope instructions?
-
 </td>
 </tr>
 </table>
@@ -1354,98 +1008,66 @@ The agent quality framework has direct implications for how FDE engagements are 
 <table>
 <tr>
 <th valign="top">
-
 Aspect
-
 </th>
 <th valign="top">
-
 Key Principle
-
 </th>
 </tr>
 <tr>
 <td valign="top">
-
 What to measure
-
 </td>
 <td valign="top">
-
 Three dimensions simultaneously: technical, process KPI, business outcome
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 When to measure
-
 </td>
 <td valign="top">
-
 Build-time (evals) and runtime (BAIP harness + Agent Hub observability)
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Goodhart's Law guard
-
 </td>
 <td valign="top">
-
 Multi-objective evaluation; alert on any dimension degrading
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Self-verification
-
 </td>
 <td valign="top">
-
 Inline validation before write-back; second model/rule-check for high stakes
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Human-in-the-loop
-
 </td>
 <td valign="top">
-
 First-class via `sapTaskCenter`; must be in MVP from day one
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Data protection
-
 </td>
 <td valign="top">
-
 BAIP harness telemetry stays in customer tenant by default
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 FDE integration
-
 </td>
 <td valign="top">
-
 Quality criteria in TO-BE specs; eval suite ships with agent; thresholds in production handover
-
 </td>
 </tr>
 </table>
@@ -1462,87 +1084,57 @@ SAP Signavio frames responsible AI agent adoption around four complementary pill
 <table>
 <tr>
 <th valign="top">
-
 Pillar
-
 </th>
 <th valign="top">
-
 What It Covers
-
 </th>
 <th valign="top">
-
 CIS Concept Mapping
-
 </th>
 </tr>
 <tr>
 <td valign="top">
-
 **1 — Agent Discovery**
-
 </td>
 <td valign="top">
-
 Identify the right processes and opportunities for AI agents; assess feasibility and expected value before committing
-
 </td>
 <td valign="top">
-
 FDE Discovery phases (Pre-Build Readiness Gates G1–G4; [CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md) LightSpeed Stage 1–8)
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **2 — Agent Context**
-
 </td>
 <td valign="top">
-
 Provide agents with process knowledge, compliance parameters, domain rules, and operating guidelines so they reason correctly from the start
-
 </td>
 <td valign="top">
-
 Pre-check constraints ([Precision Guardrails](precision-guardrails-c279f4e.md)); system prompt grounding ([Joule Studio Build Map](joule-studio-build-map-7de243e.md)); RAG corpus design ([Security and Data Protection](security-and-data-protection-27868d4.md))
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **3 — Agent Mining**
-
 </td>
 <td valign="top">
-
 Observe and analyze actual agent behavior in operation; detect deviations from designed process paths; identify flow variants and bottlenecks
-
 </td>
 <td valign="top">
-
 Supervisor Workflow B ([Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)); online eval statistical trends ([Agent Evaluation](agent-evaluation-65fd098.md)); Signavio agent behavior mining ([CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md) — forward-looking for Joule Studio 2.0; see Agent Behavior Mining section for GA status)
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **4 — Agent Value Impact**
-
 </td>
 <td valign="top">
-
 Quantify the business value the agent delivers: efficiency gains, cost reductions, process KPI improvements, consumed ACV
-
 </td>
 <td valign="top">
-
 Dimension 3 — Business Outcomes; value realization tracking in FDE handover; continuous improvement loop ([CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md))
-
 </td>
 </tr>
 </table>

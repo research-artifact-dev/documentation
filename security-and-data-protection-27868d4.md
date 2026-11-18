@@ -188,74 +188,50 @@ The scope of an agent's authorization should be the minimum necessary to complet
 <table>
 <tr>
 <th valign="top">
-
 Agent Type
-
 </th>
 <th valign="top">
-
 Authorization Scope
-
 </th>
 </tr>
 <tr>
 <td valign="top">
-
 Read-only analysis agent
-
 </td>
 <td valign="top">
-
 Read access to specific SAP entities; no write permissions
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Recommendation agent (no write-back)
-
 </td>
 <td valign="top">
-
 Read access; no write permissions
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Worker agent with supervised write-back
-
 </td>
 <td valign="top">
-
 Read + write to specific entities; write gated by supervisor approval
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Supervisor agent
-
 </td>
 <td valign="top">
-
 Read access to SAP Cloud ALM (telemetry/traces); write access to Task Center; no write to business entities
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Support relay agent
-
 </td>
 <td valign="top">
-
 Read access to sanitized trace data; write access to SAP Incident API only
-
 </td>
 </tr>
 </table>
@@ -277,70 +253,46 @@ The Agent Gateway enforces the intersection permission model at three distinct p
 <table>
 <tr>
 <th valign="top">
-
 PEP
-
 </th>
 <th valign="top">
-
 Where It Applies
-
 </th>
 <th valign="top">
-
 GA Status
-
 </th>
 </tr>
 <tr>
 <td valign="top">
-
 **PEP 1 — Gateway entry**
-
 </td>
 <td valign="top">
-
 Checks whether the calling user or agent has access to the target agent
-
 </td>
 <td valign="top">
-
 GA
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **PEP 2 — Agent-to-agent handoff**
-
 </td>
 <td valign="top">
-
 Checks permissions before delegating a task to a sub-agent
-
 </td>
 <td valign="top">
-
 GA
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **PEP 3 — Target API / MCP**
-
 </td>
 <td valign="top">
-
 Enforces permissions at the API or MCP tool level, after the agent call but before the SAP API or tool is reached
-
 </td>
 <td valign="top">
-
 **Roadmap — H2/2026**
-
 </td>
 </tr>
 </table>
@@ -471,156 +423,100 @@ Within the customer's tenant, data flows between agent workflows, the shared sta
 <table>
 <tr>
 <th valign="top">
-
 Data Category
-
 </th>
 <th valign="top">
-
 Examples
-
 </th>
 <th valign="top">
-
 Default Location
-
 </th>
 <th valign="top">
-
 Condition for Leaving Tenant
-
 </th>
 </tr>
 <tr>
 <td valign="top">
-
 Business process data
-
 </td>
 <td valign="top">
-
 Order numbers, material codes, quantities, prices
-
 </td>
 <td valign="top">
-
 Stays in tenant
-
 </td>
 <td valign="top">
-
 Never in standard operation
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 LLM call content
-
 </td>
 <td valign="top">
-
 Prompts, responses, reasoning traces
-
 </td>
 <td valign="top">
-
 Stays in tenant (BAIP harness)
-
 </td>
 <td valign="top">
-
 Never (unless BYOA uses external endpoint)
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Personal data
-
 </td>
 <td valign="top">
-
 Operator names, customer contact info
-
 </td>
 <td valign="top">
-
 Stays in tenant; masked before LLM via DPI
-
 </td>
 <td valign="top">
-
 Never
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Operational telemetry
-
 </td>
 <td valign="top">
-
 Traces, error codes, latency metrics
-
 </td>
 <td valign="top">
-
 Pushed to SAP Cloud ALM (SAP-operated, region-bound to your contracted data-residency region)
-
 </td>
 <td valign="top">
-
 Sanitized extract only, via Workflow C, on confirmed anomaly
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Agent configuration
-
 </td>
 <td valign="top">
-
 System prompts, workflow definitions
-
 </td>
 <td valign="top">
-
 Stays in tenant
-
 </td>
 <td valign="top">
-
 Part of productization artifact
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Evaluation results
-
 </td>
 <td valign="top">
-
 Eval run outputs, verdicts
-
 </td>
 <td valign="top">
-
 Stays in tenant
-
 </td>
 <td valign="top">
-
 Included in FDE handover package (anonymized)
-
 </td>
 </tr>
 </table>
@@ -744,98 +640,66 @@ The legal agreement required depends on the data flows the agent design creates.
 <table>
 <tr>
 <th valign="top">
-
 Data Flow
-
 </th>
 <th valign="top">
-
 Required Agreement
-
 </th>
 </tr>
 <tr>
 <td valign="top">
-
 Agent build and test using synthetic data only
-
 </td>
 <td valign="top">
-
 FBA (always required)
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Agent test using anonymized customer data in SAP-managed non-production environment
-
 </td>
 <td valign="top">
-
 TEA or FTEA
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Agent test using real customer data in SAP-managed environment
-
 </td>
 <td valign="top">
-
 TEA/FTEA (anonymized) or CA (personal/productive data)
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Agent running in customer's own BAIP environment
-
 </td>
 <td valign="top">
-
 CA minimum; Cloud Contract + SAP AI Terms for production
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Support relay (Workflow C) exporting sanitized trace to SAP support
-
 </td>
 <td valign="top">
-
 Assess with legal: CA may be required even for sanitized extracts
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 RAG grounding corpus containing customer operational data
-
 </td>
 <td valign="top">
-
 Covered by CA or Cloud Contract + SAP AI Terms
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Model calls via sapOrchestration through SAP generative AI hub
-
 </td>
 <td valign="top">
-
 Covered by Cloud Contract + SAP AI Terms (production)
-
 </td>
 </tr>
 </table>
@@ -865,191 +729,121 @@ Sovereign and regulated deployments (CN40 — China mainland data center, NS2 �
 <table>
 <tr>
 <th valign="top">
-
 BAIP Capability
-
 </th>
 <th valign="top">
-
 CN40
-
 </th>
 <th valign="top">
-
 NS2
-
 </th>
 <th valign="top">
-
 KSA
-
 </th>
 <th valign="top">
-
 What to Do If Unavailable
-
 </th>
 </tr>
 <tr>
 <td valign="top">
-
 SAP Generative AI Hub
-
 </td>
 <td valign="top">
-
 Region-specific model availability
-
 </td>
 <td valign="top">
-
 Restricted model catalog
-
 </td>
 <td valign="top">
-
 Generally available
-
 </td>
 <td valign="top">
-
 Use sovereign model gateway (`recipes/optional/sovereign-model-gateway/` in cookbook); AI Core Extended plan required
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 BAIP managed runtime (JS2.0/SMJ)
-
 </td>
 <td valign="top">
-
 Rollout in progress
-
 </td>
 <td valign="top">
-
 Not yet available
-
 </td>
 <td valign="top">
-
 Generally available
-
 </td>
 <td valign="top">
-
 customer-managed (CMJ) orchestrator + BYOA runtime required; see [CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md)
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 SAP Cloud Logging
-
 </td>
 <td valign="top">
-
 Available
-
 </td>
 <td valign="top">
-
 Region-specific configuration
-
 </td>
 <td valign="top">
-
 Available
-
 </td>
 <td valign="top">
-
 Confirm log target and retention rules with customer compliance team
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 OTel telemetry export
-
 </td>
 <td valign="top">
-
 Available
-
 </td>
 <td valign="top">
-
 Restricted external export
-
 </td>
 <td valign="top">
-
 Available
-
 </td>
 <td valign="top">
-
 Telemetry must stay within the sovereign boundary; cross-boundary export of traces violates data residency
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Agent Hub (full feature set)
-
 </td>
 <td valign="top">
-
 Partial
-
 </td>
 <td valign="top">
-
 Limited
-
 </td>
 <td valign="top">
-
 Generally available
-
 </td>
 <td valign="top">
-
 Fallback to direct BAIP API monitoring; document gaps in security concept
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 CDH (Customer Data Hub)
-
 </td>
 <td valign="top">
-
 Confirm per region
-
 </td>
 <td valign="top">
-
 Confirm per region
-
 </td>
 <td valign="top">
-
 Confirm per region
-
 </td>
 <td valign="top">
-
 CDH access confirmation is a Day 1 Discovery deliverable for any sovereign engagement involving real customer data
-
 </td>
 </tr>
 </table>
@@ -1109,178 +903,114 @@ FDE-delivered agents must satisfy the SAP product standards applicable to AI-ena
 <table>
 <tr>
 <th valign="top">
-
 SAP Standard
-
 </th>
 <th valign="top">
-
 Topic
-
 </th>
 <th valign="top">
-
 Agent Design Element
-
 </th>
 <th valign="top">
-
 Evidence Location
-
 </th>
 </tr>
 <tr>
 <td valign="top">
-
 **SEC-374**
-
 </td>
 <td valign="top">
-
 AI system prompt injection resistance
-
 </td>
 <td valign="top">
-
 Structural separation of instructions and data; `enableFiltering` with `promptShield` in `sapOrchestration` node
-
 </td>
 <td valign="top">
-
 DPCE threat model input; OTel injection-attempt counters
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **SEC-374**
-
 </td>
 <td valign="top">
-
 Zero-trust agent identity
-
 </td>
 <td valign="top">
-
 Each agent has a distinct BAIP application registration and scoped authorization set; OAuth 2.0 token exchange required at every API boundary
-
 </td>
 <td valign="top">
-
 BAIP agent registration; authorization matrix
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **SLC-41**
-
 </td>
 <td valign="top">
-
 Supply chain risk for AI dependencies
-
 </td>
 <td valign="top">
-
 EATER gate for all third-party AI tools and frameworks; LiteLLM v1.82.7–v1.82.8 active compromise example; dependency scanning
-
 </td>
 <td valign="top">
-
 EATER process records; Tech Radar cross-check
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **SLC-41**
-
 </td>
 <td valign="top">
-
 Dependency version pinning
-
 </td>
 <td valign="top">
-
 Five-component version stack; all dependencies pinned; `latest` model tag prohibited in production
-
 </td>
 <td valign="top">
-
 Version stack manifest in productization package
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **SDOL-009**
-
 </td>
 <td valign="top">
-
 Data residency for AI workloads
-
 </td>
 <td valign="top">
-
 All model inference through SAP GenAI Hub within the BAIP tenant boundary; cross-boundary exports require explicit sanitization and CA
-
 </td>
 <td valign="top">
-
 Data flow diagram; legal agreement plan
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **SDOL-009**
-
 </td>
 <td valign="top">
-
 Sovereign deployment conformance
-
 </td>
 <td valign="top">
-
 Sovereign region constraints; customer-managed (CMJ) orchestrator + BYOA runtime for CN40/NS2/KSA where BAIP/SMJ capabilities differ
-
 </td>
 <td valign="top">
-
 Deployment model decision
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **DPP-302**
-
 </td>
 <td valign="top">
-
 Customer data in development
-
 </td>
 <td valign="top">
-
 CDH (Customer Data Hub) mandatory when real customer data enters development, eval, or grounding corpus construction
-
 </td>
 <td valign="top">
-
 CDH access confirmation; PDS amendment
-
 </td>
 </tr>
 </table>
@@ -1297,230 +1027,154 @@ CDH access confirmation; PDS amendment
 <table>
 <tr>
 <th valign="top">
-
 Aspect
-
 </th>
 <th valign="top">
-
 Key Principle
-
 </th>
 </tr>
 <tr>
 <td valign="top">
-
 New attack surfaces
-
 </td>
 <td valign="top">
-
 Tool misuse via instruction, prompt injection in retrieved data, privilege amplification via delegation
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Foundation tier
-
 </td>
 <td valign="top">
-
 Automatic via BAIP harness: zero-trust, injection detection, behavioral analytics — no FDE design effort needed
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Supervision tier
-
 </td>
 <td valign="top">
-
 Must be designed: input validation, output filtering, agent identity, data protection boundaries
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Agent identity
-
 </td>
 <td valign="top">
-
 First-class BAIP principal; permission intersection (user ∩ agent), enforced at every hop; three PEPs (PEP3 H2/2026 roadmap); separate identity per workflow; least-privilege authorization matrix required
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 sapOrchestration controls
-
 </td>
 <td valign="top">
-
 `enableFiltering` (Azure Content Safety + `promptShield` for attack detection) and `enableMasking` (SAP DPI) are node-level flags — must be consciously enabled
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Prompt injection primary defense
-
 </td>
 <td valign="top">
-
 Structural separation of instructions and data; system prompt instructs agent to treat retrieved content as data only
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Data protection boundary
-
 </td>
 <td valign="top">
-
 BAIP tenant boundary is primary; intra-tenant flows are default-safe; any external export requires sanitization + legal alignment
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Sovereign AI
-
 </td>
 <td valign="top">
-
 Agent identity, lifecycle, routing bound to customer's sovereign boundary and data residency region
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Token exchange
-
 </td>
 <td valign="top">
-
 Any agent or MCP server calling SAP APIs must perform OAuth 2.0 token exchange (RFC 8693); proxying the caller's token is a hard security failure — not a configuration choice
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 MCP security
-
 </td>
 <td valign="top">
-
 Token exchange + LeanIX verification gate + protocol volatility (July 2026 RC) apply to all customer-managed MCP Gateway deployments; see [Joule Studio Build Map](joule-studio-build-map-7de243e.md)
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Security testing
-
 </td>
 <td valign="top">
-
 Prompt injection + authorization scope tests in MVP; DPCE threat model + security concept in Sirius productization
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Legal alignment
-
 </td>
 <td valign="top">
-
 FBA always; TEA for anonymized test data; CA for customer environments or personal/productive data; CA approval is a long-lead item
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Third-party tool governance
-
 </td>
 <td valign="top">
-
 EATER gate required before any non-SAP tool; LiteLLM v1.82.7/v1.82.8 supply chain compromise (March 2026) — check framework dependencies; CDH mandatory for customer data in development (DPP-302)
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 BTP K8s Secrets
-
 </td>
 <td valign="top">
-
 Secrets and consuming pods must be in the same namespace — cross-namespace `envFrom` silently empties env vars; enforce as FAIL-level deploy guardrail
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Credential file
-
 </td>
 <td valign="top">
-
 `.fde/.env` — written by provisioning, never committed; gitignore enforcement is a FAIL-level deploy check; accidental commit = credential rotation required
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Sovereign region routing
-
 </td>
 <td valign="top">
-
 CN40/NS2/KSA: AI Core unavailable; use `MODEL_GATEWAY_URL` + `--llm-provider openai-compatible`; Cloud Logging unavailable in CN40/canary — OTel middleware degrades gracefully; agent must not fail hard on missing Cloud Logging binding
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 SIEM integration
-
 </td>
 <td valign="top">
-
 Agent security events streamed in real time to organizational SIEM via SAP Cloud ALM → SIEM forwarding; Automation-tier capability; customer IT responsibility at handover; document target SIEM in security concept
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 ALS v3 NG
-
 </td>
 <td valign="top">
-
 Audit Log Service Next Generation: immutable, tenant-scoped, schema-validated event log for agent security events and identity actions; compliance-grade audit trail separate from SAP Cloud ALM OTel traces
-
 </td>
 </tr>
 </table>

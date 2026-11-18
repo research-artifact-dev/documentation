@@ -184,299 +184,189 @@ The agent writes back immediately; a queue of recent decisions is routed to huma
 <table>
 <tr>
 <th valign="top">
-
 Alternative
-
 </th>
 <th valign="top">
-
 Prevents Wrong Commits?
-
 </th>
 <th valign="top">
-
 Detects Drift?
-
 </th>
 <th valign="top">
-
 CIS Proxy?
-
 </th>
 <th valign="top">
-
 Key Constraint
-
 </th>
 </tr>
 <tr>
 <td valign="top">
-
 A: Inline self-verification
-
 </td>
 <td valign="top">
-
 Partially (worker controlled)
-
 </td>
 <td valign="top">
-
 No
-
 </td>
 <td valign="top">
-
 No
-
 </td>
 <td valign="top">
-
 Worker can bypass gate
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 B: Agent Hub governance only
-
 </td>
 <td valign="top">
-
 No
-
 </td>
 <td valign="top">
-
 No (IT-level only)
-
 </td>
 <td valign="top">
-
 No
-
 </td>
 <td valign="top">
-
 No business-logic quality visibility
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 C: Human on every output
-
 </td>
 <td valign="top">
-
 Yes
-
 </td>
 <td valign="top">
-
 No
-
 </td>
 <td valign="top">
-
 No
-
 </td>
 <td valign="top">
-
 Eliminates automation efficiency
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 D: Async batch eval
-
 </td>
 <td valign="top">
-
 No (post-hoc only)
-
 </td>
 <td valign="top">
-
 Yes (trend)
-
 </td>
 <td valign="top">
-
 No
-
 </td>
 <td valign="top">
-
 Too late for irreversible writes
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 E: Rule-based engine only
-
 </td>
 <td valign="top">
-
 Yes (known failure modes)
-
 </td>
 <td valign="top">
-
 No
-
 </td>
 <td valign="top">
-
 No
-
 </td>
 <td valign="top">
-
 Cannot catch contextual errors
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 F: Confidence gating only
-
 </td>
 <td valign="top">
-
 No (confident errors pass)
-
 </td>
 <td valign="top">
-
 No
-
 </td>
 <td valign="top">
-
 No
-
 </td>
 <td valign="top">
-
 LLM confidence scores are unreliable
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 G: Downstream reconciliation
-
 </td>
 <td valign="top">
-
 No (optimistic write)
-
 </td>
 <td valign="top">
-
 Partially
-
 </td>
 <td valign="top">
-
 No
-
 </td>
 <td valign="top">
-
 Irreversible writes cannot be corrected
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 H: Multi-model consensus
-
 </td>
 <td valign="top">
-
 Yes (for enumerable disagreements)
-
 </td>
 <td valign="top">
-
 No
-
 </td>
 <td valign="top">
-
 No
-
 </td>
 <td valign="top">
-
 N× token cost; shared systematic failures
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 I: Async human review
-
 </td>
 <td valign="top">
-
 No (post-hoc)
-
 </td>
 <td valign="top">
-
 No
-
 </td>
 <td valign="top">
-
 No
-
 </td>
 <td valign="top">
-
 Does not prevent committed errors
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **Supervisor pattern**
-
 </td>
 <td valign="top">
-
 **Yes (architecturally enforced)**
-
 </td>
 <td valign="top">
-
 **Yes**
-
 </td>
 <td valign="top">
-
 **Yes**
-
 </td>
 <td valign="top">
-
 **Build complexity; Workflow A per output type**
-
 </td>
 </tr>
 </table>
@@ -615,53 +505,35 @@ A single MasterSupervisorAgent (or equivalent orchestration supervisor) routes b
 <table>
 <tr>
 <th valign="top">
-
 Supervisor Type
-
 </th>
 <th valign="top">
-
 Function
-
 </th>
 <th valign="top">
-
 Position in Architecture
-
 </th>
 </tr>
 <tr>
 <td valign="top">
-
 Orchestration supervisor (MasterSupervisorAgent)
-
 </td>
 <td valign="top">
-
 Routes user intent to the correct specialist agent
-
 </td>
 <td valign="top">
-
 Entry point; upstream of all specialist agents
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Governance supervisor (this topic)
-
 </td>
 <td valign="top">
-
 Monitors output quality, guards write-backs, validates results
-
 </td>
 <td valign="top">
-
 Workflow A: per write-back agent (1:1); Workflow B: system-wide across all agents (1:N)
-
 </td>
 </tr>
 </table>
@@ -673,70 +545,46 @@ The governance supervisor's three workflows have different scoping rules — thi
 <table>
 <tr>
 <th valign="top">
-
 Workflow
-
 </th>
 <th valign="top">
-
 Natural Scope
-
 </th>
 <th valign="top">
-
 Relationship
-
 </th>
 </tr>
 <tr>
 <td valign="top">
-
 **Workflow A** — Inline quality relay
-
 </td>
 <td valign="top">
-
 Per write-back agent (or output type)
-
 </td>
 <td valign="top">
-
 **1:1** — each agent doing irreversible write-backs has its own Workflow A
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **Workflow B** — Telemetry monitor
-
 </td>
 <td valign="top">
-
 Entire topology
-
 </td>
 <td valign="top">
-
 **1:N** — one monitoring loop watches all agents' telemetry
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **Workflow C** — Support relay
-
 </td>
 <td valign="top">
-
 Triggered by Workflow B
-
 </td>
 <td valign="top">
-
 On-demand; inherits Workflow B's system-wide scope
-
 </td>
 </tr>
 </table>
@@ -785,156 +633,100 @@ For the supervisor pattern, `blocking: false` is the correct choice. It decouple
 <table>
 <tr>
 <th valign="top">
-
 Parameter
-
 </th>
 <th valign="top">
-
 Type
-
 </th>
 <th valign="top">
-
 Default
-
 </th>
 <th valign="top">
-
 Purpose
-
 </th>
 </tr>
 <tr>
 <td valign="top">
-
 `agentName`
-
 </td>
 <td valign="top">
-
 options
-
 </td>
 <td valign="top">
-
 —
-
 </td>
 <td valign="top">
-
 Select the SAP Agent to invoke
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 `blocking`
-
 </td>
 <td valign="top">
-
 boolean
-
 </td>
 <td valign="top">
-
 `true`
-
 </td>
 <td valign="top">
-
 `false` = fire-and-release; requires `callbackUrl`
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 `callbackUrl`
-
 </td>
 <td valign="top">
-
 string
-
 </td>
 <td valign="top">
-
 —
-
 </td>
 <td valign="top">
-
 Webhook URL for async result delivery (non-blocking only)
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 `sessionId`
-
 </td>
 <td valign="top">
-
 string
-
 </td>
 <td valign="top">
-
 —
-
 </td>
 <td valign="top">
-
 Correlates callbacks when multiple workers are in flight
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 `customContext`
-
 </td>
 <td valign="top">
-
 JSON
-
 </td>
 <td valign="top">
-
 `{}`
-
 </td>
 <td valign="top">
-
 Additional context passed to the agent
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 `timeout`
-
 </td>
 <td valign="top">
-
 number
-
 </td>
 <td valign="top">
-
 180,000ms
-
 </td>
 <td valign="top">
-
 Max 300,000ms (5 min); applies in blocking mode only
-
 </td>
 </tr>
 </table>
@@ -960,90 +752,58 @@ The three functions map to three independent Joule Studio n8n workflows:
 <table>
 <tr>
 <th valign="top">
-
 Workflow
-
 </th>
 <th valign="top">
-
 Trigger
-
 </th>
 <th valign="top">
-
 Primary Nodes
-
 </th>
 <th valign="top">
-
 Execution Frequency
-
 </th>
 </tr>
 <tr>
 <td valign="top">
-
 A — Inline Quality Relay
-
 </td>
 <td valign="top">
-
 Webhook (worker callback)
-
 </td>
 <td valign="top">
-
 Code / sapMcpClient (verify), sapOrchestration (LLM critic), If, sapTaskCenter, sapMcpClient / OData (committer write)
-
 </td>
 <td valign="top">
-
 Per worker invocation
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 B — Telemetry Monitor
-
 </td>
 <td valign="top">
-
 Schedule Trigger
-
 </td>
 <td valign="top">
-
 HTTP Request (SAP Cloud ALM pull APIs, `hm` provider), Code (rule-based classifier), If, sapTaskCenter, n8n workflow call (→ Workflow C)
-
 </td>
 <td valign="top">
-
 Periodic (5–15 min)
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 C — Support Relay
-
 </td>
 <td valign="top">
-
 Called by Workflow B
-
 </td>
 <td valign="top">
-
 Code (sanitize), HTTP Request (SAP Cloud ALM ITSM Adapter API), HTTP Request (notification)
-
 </td>
 <td valign="top">
-
 On demand (anomaly events only)
-
 </td>
 </tr>
 </table>
@@ -1129,122 +889,82 @@ Workflow C's sanitization pass should be governed by explicit rules, not LLM jud
 <table>
 <tr>
 <th valign="top">
-
 Trace Field
-
 </th>
 <th valign="top">
-
 Rule
-
 </th>
 </tr>
 <tr>
 <td valign="top">
-
 Error message / exception text
-
 </td>
 <td valign="top">
-
 Retain as-is (structural, not business data)
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Tool call name (e.g., `get_purchase_order`)
-
 </td>
 <td valign="top">
-
 Retain as-is (reveals capability, not data)
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Tool call parameters (e.g., PO number, vendor ID)
-
 </td>
 <td valign="top">
-
 **Strip** — replace with `[REDACTED]`
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 LLM response content
-
 </td>
 <td valign="top">
-
 **Strip** — may contain business data, reasoning
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 LLM system prompt
-
 </td>
 <td valign="top">
-
 **Strip** — may reveal internal business logic
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Agent session ID / correlation ID
-
 </td>
 <td valign="top">
-
 Retain (needed for support investigation)
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Timing / latency data
-
 </td>
 <td valign="top">
-
 Retain (needed for performance diagnosis)
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Agent identity (agent name, version)
-
 </td>
 <td valign="top">
-
 Retain
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Tenant ID
-
 </td>
 <td valign="top">
-
 Retain (SAP support needs this)
-
 </td>
 </tr>
 </table>
@@ -1267,86 +987,58 @@ Thresholds should be calibrated per agent, not globally. A procurement agent han
 <table>
 <tr>
 <th valign="top">
-
 Condition
-
 </th>
 <th valign="top">
-
 Action
-
 </th>
 </tr>
 <tr>
 <td valign="top">
-
 Both stages confirm
-
 </td>
 <td valign="top">
-
 Approve write-back; log to baseline
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Both stages reject
-
 </td>
 <td valign="top">
-
 Block write-back; escalate to named process owner via sapTaskCenter
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Stages disagree
-
 </td>
 <td valign="top">
-
 Block write-back; escalate with both verdicts visible to reviewer
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 LLM critic confidence below threshold (default 0.7)
-
 </td>
 <td valign="top">
-
 Treat as DISAGREE; escalate. Calibrate the threshold during the EAC phase
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Deterministic check unavailable
-
 </td>
 <td valign="top">
-
 Proceed on LLM verdict alone; log the gap
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Worker timed out / error
-
 </td>
 <td valign="top">
-
 Block write-back; escalate with error context
-
 </td>
 </tr>
 </table>
@@ -1358,121 +1050,79 @@ Block write-back; escalate with error context
 <table>
 <tr>
 <th valign="top">
-
 Signal
-
 </th>
 <th valign="top">
-
 Threshold
-
 </th>
 <th valign="top">
-
 Action
-
 </th>
 </tr>
 <tr>
 <td valign="top">
-
 Error rate
-
 </td>
 <td valign="top">
-
 > 3× rolling 7-day average for 3 consecutive periods
-
 </td>
 <td valign="top">
-
 IT admin alert
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Tool call count per invocation
-
 </td>
 <td valign="top">
-
 > 2× p95 baseline for 5 consecutive invocations
-
 </td>
 <td valign="top">
-
 IT admin alert + log investigation flag
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Response latency
-
 </td>
 <td valign="top">
-
 > 5× p95 baseline for 2 consecutive invocations
-
 </td>
 <td valign="top">
-
 IT admin alert
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Human override rate (from Task Center)
-
 </td>
 <td valign="top">
-
 > 40% over 7-day window
-
 </td>
 <td valign="top">
-
 Process owner review request
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Verification rejection rate (from Workflow A)
-
 </td>
 <td valign="top">
-
 > 20% over 24-hour window
-
 </td>
 <td valign="top">
-
 Process owner review + Workflow C candidate
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Repeated identical input pattern
-
 </td>
 <td valign="top">
-
 Same input parameters 3× within 5 minutes
-
 </td>
 <td valign="top">
-
 Possible loop — immediate IT admin alert
-
 </td>
 </tr>
 </table>
@@ -1588,134 +1238,90 @@ Workflow C creates a data flow from the customer's tenant to SAP support systems
 <table>
 <tr>
 <th valign="top">
-
 Aspect
-
 </th>
 <th valign="top">
-
 Key Principle
-
 </th>
 </tr>
 <tr>
 <td valign="top">
-
 Architectural position
-
 </td>
 <td valign="top">
-
 SAP's Supervision tier — between platform governance and individual agent transactions
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Three functions
-
 </td>
 <td valign="top">
-
 Inline quality relay (Workflow A), telemetry monitor (Workflow B), support relay (Workflow C)
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Worker-supervisor communication
-
 </td>
 <td valign="top">
-
 sapAgent non-blocking + Webhook callback; sessionId for correlation
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Verification stages
-
 </td>
 <td valign="top">
-
 Deterministic first (if available), LLM critic second; disagreement → escalate
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Data protection
-
 </td>
 <td valign="top">
-
 Business data and reasoning stay in tenant; agent telemetry is stored in SAP Cloud ALM (SAP-operated, region-bound); sanitized extracts only leave via Workflow C on confirmed anomalies
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Anomaly classifier
-
 </td>
 <td valign="top">
-
 Rule-based only — no LLM on raw trace data
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Supervisor governance
-
 </td>
 <td valign="top">
-
 Separate agent identity per workflow; least-privilege; fail-safe toward human review
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Fail-safe default
-
 </td>
 <td valign="top">
-
 If supervisor unavailable, worker routes all outputs to sapTaskCenter
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Key limitation
-
 </td>
 <td valign="top">
-
 Latency on critical path; LLM critic quality requires its own test suite
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 FDE integration
-
 </td>
 <td valign="top">
-
 Supervisor scope decided in Discovery; built in parallel with worker; included in security concept
-
 </td>
 </tr>
 </table>

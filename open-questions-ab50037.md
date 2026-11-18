@@ -74,87 +74,57 @@ The CA approval gate requires Shardul Vikram's sign-off and is not a routine app
   </tr>
   <tr>
     <td valign="top">
-
 Regulated Manufacturing — batch quantity
-
 </td>
     <td valign="top">
-
 ±10% of standard batch size
-
 </td>
     <td valign="top">
-
 &gt;5% from batch classification service
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 Commodity Management — hedge ratio
-
 </td>
     <td valign="top">
-
 &gt;€500K notional position change
-
 </td>
     <td valign="top">
-
 &gt;2% from risk model
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 Revenue Growth Management — pricing
-
 </td>
     <td valign="top">
-
 &gt;€100K contract value
-
 </td>
     <td valign="top">
-
 &gt;3% from pricing engine
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 Asset Management — maintenance cost
-
 </td>
     <td valign="top">
-
 &gt;€50K
-
 </td>
     <td valign="top">
-
 &gt;15% from historical cost basis
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 Adaptive Production — production order
-
 </td>
     <td valign="top">
-
 &gt;500 units on first-time material
-
 </td>
     <td valign="top">
-
 &gt;10% from planning system
-
 </td>
   </tr>
 </table>
@@ -205,134 +175,86 @@ The `mcpServers` hidden parameter description confirms this: *"MCP servers injec
   </tr>
   <tr>
     <td valign="top">
-
 `mcpServerName`
-
 </td>
     <td valign="top">
-
 option
-
 </td>
     <td valign="top">
-
 —
-
 </td>
     <td valign="top">
-
 MCP server; list populated at design time from live instance
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 `toolMode`
-
 </td>
     <td valign="top">
-
 option
-
 </td>
     <td valign="top">
-
 `list`
-
 </td>
     <td valign="top">
-
 `list` (design-time dropdown) or `id` (manual tool ID entry)
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 `toolFromList` / `toolById`
-
 </td>
     <td valign="top">
-
 string
-
 </td>
     <td valign="top">
-
 —
-
 </td>
     <td valign="top">
-
 Tool to invoke; fixed at design time
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 `toolArguments`
-
 </td>
     <td valign="top">
-
 JSON
-
 </td>
     <td valign="top">
-
 `{}`
-
 </td>
     <td valign="top">
-
 Arguments passed to the tool at runtime
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 `timeout`
-
 </td>
     <td valign="top">
-
 number
-
 </td>
     <td valign="top">
-
 30,000ms
-
 </td>
     <td valign="top">
-
 Max 300,000ms — **note: default is 30s, not 180s** like `sapAgent`
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 `includeMetadata`
-
 </td>
     <td valign="top">
-
 boolean
-
 </td>
     <td valign="top">
-
 false
-
 </td>
     <td valign="top">
-
 Include server info and tool details in response
-
 </td>
   </tr>
 </table>
@@ -395,70 +317,46 @@ SAP Build Code does **not** include built-in SAST or SCA. The only native securi
   </tr>
   <tr>
     <td valign="top">
-
 Malware scanning
-
 </td>
     <td valign="top">
-
 Off by default
-
 </td>
     <td valign="top">
-
 `malwareScan.scan: true` in `config.yaml`
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 SAST
-
 </td>
     <td valign="top">
-
 ✗
-
 </td>
     <td valign="top">
-
 Must be added externally
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 SCA (dependency/OSS scanning)
-
 </td>
     <td valign="top">
-
 ✗
-
 </td>
     <td valign="top">
-
 Must be added externally
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 DAST
-
 </td>
     <td valign="top">
-
 ✗
-
 </td>
     <td valign="top">
-
 Must be added externally
-
 </td>
   </tr>
 </table>
@@ -593,112 +491,72 @@ The October 2025 document describes P&E as the team leading FDE execution and Ph
   </tr>
   <tr>
     <td valign="top">
-
 `blocking`
-
 </td>
     <td valign="top">
-
 boolean
-
 </td>
     <td valign="top">
-
 `true`
-
 </td>
     <td valign="top">
-
 *"If false, you must provide a callback URL"* — confirmed
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 `callbackUrl`
-
 </td>
     <td valign="top">
-
 string
-
 </td>
     <td valign="top">
-
 —
-
 </td>
     <td valign="top">
-
 Shown only when `blocking=false`; *"URL to receive push notifications when the agent responds"*
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 `sessionId`
-
 </td>
     <td valign="top">
-
 string
-
 </td>
     <td valign="top">
-
 —
-
 </td>
     <td valign="top">
-
 For correlating callbacks when multiple workers are in flight
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 `customContext`
-
 </td>
     <td valign="top">
-
 JSON
-
 </td>
     <td valign="top">
-
 `{}`
-
 </td>
     <td valign="top">
-
 Additional context passed to the agent — relevant to authorization scope discussion in Multi-Agent Orchestration
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 `timeout`
-
 </td>
     <td valign="top">
-
 number
-
 </td>
     <td valign="top">
-
 180,000ms
-
 </td>
     <td valign="top">
-
 Max 300,000ms (5 min); applies in blocking mode
-
 </td>
   </tr>
 </table>
@@ -814,62 +672,42 @@ Valid root-level objects in n8n expressions:
   </tr>
   <tr>
     <td valign="top">
-
 `{{$json.x}}`
-
 </td>
     <td valign="top">
-
 Data from the current/previous node output
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 `{{$vars.x}}`
-
 </td>
     <td valign="top">
-
 Instance-level custom variables (string-only, set in UI)
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 `{{$env.X}}`
-
 </td>
     <td valign="top">
-
 Host environment variables (set at deployment)
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 `{{$node["Name"].json.x}}`
-
 </td>
     <td valign="top">
-
 Data from a specific named node
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 `{{$workflow.id}}`, `{{$execution.id}}`
-
 </td>
     <td valign="top">
-
 Workflow/execution metadata
-
 </td>
   </tr>
 </table>
@@ -897,68 +735,44 @@ None of these create an injectable `config` object in the expression engine.
   </tr>
   <tr>
     <td valign="top">
-
 **Option 1 — Trigger payload**
-
 </td>
     <td valign="top">
-
 Pass config in webhook/trigger JSON body; reference as `{{$json.config.x}}`
-
 </td>
     <td valign="top">
-
 Yes — fully supported
-
 </td>
     <td valign="top">
-
 Yes — caller sets values each invocation
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Option 2 — n8n `$vars`**
-
 </td>
     <td valign="top">
-
 Set static values in n8n Variables UI; reference as `{{$vars.myParam}}`
-
 </td>
     <td valign="top">
-
 Possibly restricted to what SAP exposes in UI
-
 </td>
     <td valign="top">
-
 No — static per instance
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Option 3 — Env vars (`$env`)**
-
 </td>
     <td valign="top">
-
 Inject env vars into n8n container at deployment; reference as `{{$env.MY_PARAM}}`
-
 </td>
     <td valign="top">
-
 Only on self-hosted n8n (Kyma path)
-
 </td>
     <td valign="top">
-
 No — static per deployment
-
 </td>
   </tr>
 </table>
@@ -1007,68 +821,44 @@ The proxy backend already captures per-request data (user, model, token counts, 
   </tr>
   <tr>
     <td valign="top">
-
 A — Project API key (shared)
-
 </td>
     <td valign="top">
-
 One key per engagement used by all engineers
-
 </td>
     <td valign="top">
-
 Not feasible — auth is SSO-bound, not key-bound; shared proxies prohibited
-
 </td>
     <td valign="top">
-
 Not on roadmap
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 B — Project tracking in HAI proxy backend
-
 </td>
     <td valign="top">
-
 Add project/team entities + attribution + management API to proxy
-
 </td>
     <td valign="top">
-
 Requires backend work; aligned with planned workspace features
-
 </td>
     <td valign="top">
-
 Medium-term (roadmap)
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 C — Local accounting sidecar
-
 </td>
     <td valign="top">
-
 Lightweight local HTTP middleware intercepts responses, reads token counts from Anthropic API response body, logs with project context
-
 </td>
     <td valign="top">
-
 Feasible now; project ID auto-detected from repo
-
 </td>
     <td valign="top">
-
 Near-term (CIS tooling initiative)
-
 </td>
   </tr>
 </table>
@@ -1159,121 +949,79 @@ SAP explicitly states model availability is **not uniform** across BTP regions:
   </tr>
   <tr>
     <td valign="top">
-
 eu10 (EU Frankfurt), us10 (US East)
-
 </td>
     <td valign="top">
-
 Broadest
-
 </td>
     <td valign="top">
-
 Core hyperscaler regions — most models available
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 ap10 (Sydney), ap11 (Singapore), jp10 (Tokyo)
-
 </td>
     <td valign="top">
-
 Strong
-
 </td>
     <td valign="top">
-
 AP regions documented as broad-coverage
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 eu11 (EU Frankfurt EU Access)
-
 </td>
     <td valign="top">
-
 Partial
-
 </td>
     <td valign="top">
-
 EU data residency enforced — models must run on EU Azure/AWS; not all providers comply
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 eu20, eu30
-
 </td>
     <td valign="top">
-
 Unconfirmed
-
 </td>
     <td valign="top">
-
 Likely partial; not explicitly confirmed in public docs
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 us21, us30
-
 </td>
     <td valign="top">
-
 Unconfirmed
-
 </td>
     <td valign="top">
-
 Not mapped to model entitlements in public sources
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 br10 (Brazil), in30 (India)
-
 </td>
     <td valign="top">
-
 Likely partial
-
 </td>
     <td valign="top">
-
 Secondary regions; sources flag as potentially having reduced catalogs
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 China
-
 </td>
     <td valign="top">
-
 Not available
-
 </td>
     <td valign="top">
-
 SAP AI Core / GenAI Hub not available in China BTP regions
-
 </td>
   </tr>
 </table>

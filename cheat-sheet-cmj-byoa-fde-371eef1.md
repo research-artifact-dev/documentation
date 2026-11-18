@@ -27,53 +27,35 @@ November 2026 framing for FDE delivery path decisions. "CMJ vs SMJ" is not a sin
   </tr>
   <tr>
     <td valign="top">
-
 Build surface
-
 </td>
     <td valign="top">
-
 Joule Studio 2.0 (n8n canvas / CLI)
-
 </td>
     <td valign="top">
-
 BYOA (LangGraph/AG2/CAP/CrewAI on customer BTP subaccount)
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 Registers to
-
 </td>
     <td valign="top">
-
 SMJ managed runtime (automatic)
-
 </td>
     <td valign="top">
-
 SMJ Agent Gateway via A2A
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 When to choose
-
 </td>
     <td valign="top">
-
 Simple skills, citizen-dev, rapid POC
-
 </td>
     <td valign="top">
-
 Complex / stateful agents with productization intent (the standard FDE case)
-
 </td>
   </tr>
 </table>
@@ -102,74 +84,50 @@ GA is **not binary** — it is layered. Do not represent the JS2.0 custom-agent 
   </tr>
   <tr>
     <td valign="top">
-
 SMJ / THE BOX orchestrator
-
 </td>
     <td valign="top">
-
 **GA since 2026-06-01**
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 Joule Studio 2.0 build environment
-
 </td>
     <td valign="top">
-
 **Phased GA** (fair-use limits apply)
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 Custom-agent managed runtime on SMJ
-
 </td>
     <td valign="top">
-
 **EAC-gated / select customers only**, free through Dec 2026 — *not broadly GA*
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 Outbound A2A (agent registered + surfaced in Joule)
-
 </td>
     <td valign="top">
-
 Available, limited / unidirectional
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 Bidirectional A2A for the managed-runtime BYOA path (Joule ↔ your custom agent)
-
 </td>
     <td valign="top">
-
 **Transitional — not GA** (SAP Architecture Center "transitional state")
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 Inbound / external→SAP A2A (a third party invokes an SAP agent via ARD / Agent Gateway Consumer)
-
 </td>
     <td valign="top">
-
 **Transitional — not GA** (Architecture Center); the *intended future* mechanism, part of the same transitional state as bidirectional above; **H1 2027 target**
-
 </td>
   </tr>
 </table>
@@ -204,87 +162,57 @@ Workflow when the custom-agent runtime is Joule Studio 2.0 on the SMJ orchestrat
   </tr>
   <tr>
     <td valign="top">
-
 OAuth2 / IAS authentication
-
 </td>
     <td valign="top">
-
 FDE team wires manually
-
 </td>
     <td valign="top">
-
 Automatic
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 OpenTelemetry harness (TR12)
-
 </td>
     <td valign="top">
-
 Manual — OTel to SAP Cloud ALM (or a self-managed collector in sovereign regions)
-
 </td>
     <td valign="top">
-
 Automatic
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 Agent identity + BAIP registration
-
 </td>
     <td valign="top">
-
 Manual capability bundle
-
 </td>
     <td valign="top">
-
 Automatic
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 Joule Work surface integration
-
 </td>
     <td valign="top">
-
 Manual `joule deploy`
-
 </td>
     <td valign="top">
-
 Automatic
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 AI Agent Hub registry entry
-
 </td>
     <td valign="top">
-
 Not automatic
-
 </td>
     <td valign="top">
-
 Automatic (IT admin activates)
-
 </td>
   </tr>
 </table>
@@ -326,62 +254,42 @@ Under the hood: Joule calls an HTTPS endpoint on the customer's BTP subaccount (
   </tr>
   <tr>
     <td valign="top">
-
 **Auth** (OAuth2 CC or IAS)
-
 </td>
     <td valign="top">
-
 Joule must authenticate to call the agent
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Public Agent Card endpoint**
-
 </td>
     <td valign="top">
-
 Joule reads `/.well-known/agent.json` during registration — must be publicly reachable
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 **A2A registration / capability bundle**
-
 </td>
     <td valign="top">
-
 Registers the agent to SMJ (via A2A) or, for a CMJ orchestrator, the 4-file `joule deploy` bundle
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Observability**
-
 </td>
     <td valign="top">
-
 Not automatic — wire OTel to **SAP Cloud ALM** (or a self-managed OTLP collector in sovereign regions such as NS2 where Cloud ALM is unavailable)
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Regional orchestrator check**
-
 </td>
     <td valign="top">
-
 If SMJ is not available in-region, a CMJ orchestrator (separate prerequisite) is required
-
 </td>
   </tr>
 </table>
@@ -400,53 +308,35 @@ If SMJ is not available in-region, a CMJ orchestrator (separate prerequisite) is
   </tr>
   <tr>
     <td valign="top">
-
 **1 — Local agent**
-
 </td>
     <td valign="top">
-
 Scaffold agent; answer real A2A messages with mock/test data
-
 </td>
     <td valign="top">
-
 `SendMessage` returns a valid response locally
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 **2 — Deploy to BTP**
-
 </td>
     <td valign="top">
-
 Push to Cloud Foundry or Kyma; public HTTPS endpoint live
-
 </td>
     <td valign="top">
-
 Agent Card reachable at public URL; smoke test passes over HTTPS
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 **3 — Register to Joule**
-
 </td>
     <td valign="top">
-
 Register to SMJ Agent Gateway via A2A (or `joule deploy` for a CMJ orchestrator); test from Joule sidebar
-
 </td>
     <td valign="top">
-
 Capability shows ACTIVE; Joule routes a real prompt to the agent
-
 </td>
   </tr>
 </table>
@@ -473,87 +363,57 @@ Capability shows ACTIVE; Joule routes a real prompt to the agent
   </tr>
   <tr>
     <td valign="top">
-
 Writes the agent
-
 </td>
     <td valign="top">
-
 FDE team
-
 </td>
     <td valign="top">
-
 FDE team
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 Manages the Joule/BAIP account
-
 </td>
     <td valign="top">
-
 SAP (customer subscribes to SMJ)
-
 </td>
     <td valign="top">
-
 SAP (SMJ); customer IT only if a CMJ orchestrator is used
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 Wires auth, observability, Joule registration
-
 </td>
     <td valign="top">
-
 **Automatic (managed runtime)**
-
 </td>
     <td valign="top">
-
 FDE team (manual)
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 Operates post-handover
-
 </td>
     <td valign="top">
-
 Customer IT + CIS T&O (via supervisor mechanism)
-
 </td>
     <td valign="top">
-
 Customer IT + CIS T&O (via supervisor mechanism)
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 IP & productization
-
 </td>
     <td valign="top">
-
 SAP — standard FDE model, no change
-
 </td>
     <td valign="top">
-
 SAP — standard FDE model, no change
-
 </td>
   </tr>
 </table>
@@ -597,98 +457,66 @@ Productized (any path):         FDE productizes → agent becomes SAP standard
   </tr>
   <tr>
     <td valign="top">
-
 SMJ orchestrator
-
 </td>
     <td valign="top">
-
 **GA since 2026-06-01** — default for all new engagements
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 Joule Studio 2.0 build environment
-
 </td>
     <td valign="top">
-
 **Phased GA** (fair-use limits)
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 JS2.0 custom-agent managed runtime
-
 </td>
     <td valign="top">
-
 **EAC-gated / select customers**, free through Dec 2026 — not broadly GA; full managed-runtime deployment is an H1 2027 target
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 CMJ (customer-managed orchestrator)
-
 </td>
     <td valign="top">
-
 **Deprecated** — migration target; use only where SMJ is unavailable in-region or for in-progress engagements; document the reason
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 BYOA (pro-code runtime)
-
 </td>
     <td valign="top">
-
 **Standard** runtime for productization-intent agents — registers to SMJ via A2A; **not a fallback**
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 Bidirectional A2A (managed-runtime BYOA path)
-
 </td>
     <td valign="top">
-
 **Transitional — not GA** (Architecture Center); architect for outbound + async callbacks
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 Inbound / external→SAP A2A (ARD / Agent Gateway Consumer)
-
 </td>
     <td valign="top">
-
 **Transitional — not GA** (Architecture Center); intended future mechanism; **H1 2027 target**
-
 </td>
   </tr>
   <tr>
     <td valign="top">
-
 Formal IAI/CIS guidance on delivery path
-
 </td>
     <td valign="top">
-
 Effective guidance = SMJ orchestrator default; BYOA/JS2.0 runtime by complexity; CMJ only when specifically needed. Monitor the IAI/CIS alignment channel for formal policy confirmation
-
 </td>
   </tr>
 </table>

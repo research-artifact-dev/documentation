@@ -50,310 +50,198 @@ The concept answers the **core design questions** that arise in every high-stake
 <table>
 <tr>
 <th valign="top">
-
 \#
-
 </th>
 <th valign="top">
-
 Design Question
-
 </th>
 <th valign="top">
-
 Topic
-
 </th>
 <th valign="top">
-
 Key Areas
-
 </th>
 </tr>
 <tr>
 <td valign="top">
-
 1
-
 </td>
 <td valign="top">
-
 How do we ensure an agent works correctly — at build time and at runtime?
-
 </td>
 <td valign="top">
-
 [Agent Quality Framework](agent-quality-framework-5ec914b.md)
-
 </td>
 <td valign="top">
-
 Three evaluation dimensions; build-time quality; runtime quality; iteration signals
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 2
-
 </td>
 <td valign="top">
-
 How do we handle failures autonomously: self-correct vs. escalate?
-
 </td>
 <td valign="top">
-
 [Agent Quality Framework](agent-quality-framework-5ec914b.md), [Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)
-
 </td>
 <td valign="top">
-
 Escalation path; supervisor functions; escalation thresholds
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 3
-
 </td>
 <td valign="top">
-
 Does a supervisor agent pattern make sense within SAP's architecture?
-
 </td>
 <td valign="top">
-
 [Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)
-
 </td>
 <td valign="top">
-
 Supervision tier; alternatives; three functions; architecture
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 4
-
 </td>
 <td valign="top">
-
 How do we protect customer data while still enabling operational monitoring?
-
 </td>
 <td valign="top">
-
 [Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md), [Security and Data Protection](security-and-data-protection-27868d4.md)
-
 </td>
 <td valign="top">
-
 Data protection design; data protection architecture; Sovereign AI; legal alignment
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 5
-
 </td>
 <td valign="top">
-
 How do we address security at development time AND at runtime?
-
 </td>
 <td valign="top">
-
 [Security and Data Protection](security-and-data-protection-27868d4.md)
-
 </td>
 <td valign="top">
-
 Development-time security; runtime security; agent identity; prompt injection
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 6
-
 </td>
 <td valign="top">
-
 How do we enforce precision guardrails for business-critical numerical outputs?
-
 </td>
 <td valign="top">
-
 [Precision Guardrails](precision-guardrails-c279f4e.md)
-
 </td>
 <td valign="top">
-
 Guardrail stack; four layers; confidence and uncertainty
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 7
-
 </td>
 <td valign="top">
-
 How do we manage agent lifecycle after productization: monitor, maintain, and continuously improve?
-
 </td>
 <td valign="top">
-
 [CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md)
-
 </td>
 <td valign="top">
-
 Lifecycle shift; supervisor as CIS proxy; operating rhythm; continuous improvement loop
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 8
-
 </td>
 <td valign="top">
-
 When does an Industry AI use case require multiple specialist agents, and how do we orchestrate and govern them safely?
-
 </td>
 <td valign="top">
-
 [Multi-Agent Orchestration](multi-agent-orchestration-2f6e92e.md)
-
 </td>
 <td valign="top">
-
 When multi-agent; SAP orchestration model; three topologies; quality extension; supervisor extension
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 9
-
 </td>
 <td valign="top">
-
 How do we version, roll back, and migrate agents across environments without service disruption?
-
 </td>
 <td valign="top">
-
 [Production Operations](production-operations-f963579.md)
-
 </td>
 <td valign="top">
-
 Versioning strategy; rollback mechanics; environment migration
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 10
-
 </td>
 <td valign="top">
-
 Which design components can be reused across engagements, and what constitutes a CIS Starter Kit for efficient delivery at scale?
-
 </td>
 <td valign="top">
-
 [Reusable Components](reusable-components-8a3dd4c.md)
-
 </td>
 <td valign="top">
-
 Three-layer reusability stack; component-by-component analysis; CIS Starter Kit
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 11
-
 </td>
 <td valign="top">
-
 How do we manage token efficiency across FDE build-time and Industry AI runtime to maintain a sustainable cost per correct outcome?
-
 </td>
 <td valign="top">
-
 [Token Efficiency](token-efficiency-54fe998.md)
-
 </td>
 <td valign="top">
-
 L0–L6 framework; build-time guidelines (FDE engineers); runtime efficiency (deployed agents); quality–efficiency connection
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 12
-
 </td>
 <td valign="top">
-
 How do we evaluate agent quality systematically across an FDE sprint — from first prototype through to production monitoring?
-
 </td>
 <td valign="top">
-
 [Agent Evaluation](agent-evaluation-65fd098.md)
-
 </td>
 <td valign="top">
-
 Test case DSL; Quality Flywheel (sprint weeks); online evaluation in production; evaluation dimensions checklist
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 13
-
 </td>
 <td valign="top">
-
 How do we ensure customer organizations are actually able to adopt and sustain the agent after the FDE team departs?
-
 </td>
 <td valign="top">
-
 [Customer Enablement and Adoption](customer-enablement-and-adoption-ce2e74a.md)
-
 </td>
 <td valign="top">
-
 Adoption Strategy lifecycle; gradual release (4 stages); role-based training (7 audiences); enablement readiness checklist
-
 </td>
 </tr>
 </table>
@@ -370,223 +258,145 @@ Each topic is self-contained but builds on the previous. [Agent Quality Framewor
 <table>
 <tr>
 <th valign="top">
-
 Topic
-
 </th>
 <th valign="top">
-
 What It Covers
-
 </th>
 <th valign="top">
-
 Primary Audience
-
 </th>
 </tr>
 <tr>
 <td valign="top">
-
 [Agent Quality Framework](agent-quality-framework-5ec914b.md)
-
 </td>
 <td valign="top">
-
 How to measure agent quality across three dimensions (technical, process KPI, business outcomes); build-time and runtime quality; the escalation path
-
 </td>
 <td valign="top">
-
 All
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 [Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)
-
 </td>
 <td valign="top">
-
 When and how to deploy a supervisor agent; three supervisor functions; worker-supervisor communication; data protection design
-
 </td>
 <td valign="top">
-
 FDE architects, BAIP developers
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 [Security and Data Protection](security-and-data-protection-27868d4.md)
-
 </td>
 <td valign="top">
-
 Agent-specific security threats; the three-tier defense model; agent identity and least-privilege; data flows and legal alignment
-
 </td>
 <td valign="top">
-
 FDE architects, security reviewers
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 [Precision Guardrails](precision-guardrails-c279f4e.md)
-
 </td>
 <td valign="top">
-
 The four-layer guardrail stack for numerical outputs; domain examples; human approval thresholds; audit trail requirements
-
 </td>
 <td valign="top">
-
 FDE architects, process owners, compliance
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 [Joule Studio Build Map](joule-studio-build-map-7de243e.md)
-
 </td>
 <td valign="top">
-
 Concrete implementation of all design concepts using Joule Studio low-code (n8n) nodes; master build map table; FDE build sequence
-
 </td>
 <td valign="top">
-
 FDE application engineers, dev architects
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 [CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md)
-
 </td>
 <td valign="top">
-
 Lifecycle management after productization; supervisor as autonomous CIS proxy; operating rhythm, severity tiers, and continuous improvement loop; CoE maturity levels
-
 </td>
 <td valign="top">
-
 FDE PMs, CIS T&O leads, customer IT admins
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 [Multi-Agent Orchestration](multi-agent-orchestration-2f6e92e.md)
-
 </td>
 <td valign="top">
-
 When and how to compose multiple specialist agents; three orchestration topologies (flat, per-worker supervised, shared supervisor); supervisor patterns at scale
-
 </td>
 <td valign="top">
-
 FDE architects, dev architects
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 [Production Operations](production-operations-f963579.md)
-
 </td>
 <td valign="top">
-
 Agent versioning and rollback (five-component version stack); cost and token monitoring; AI Units billing model; environment migration (dev → test → prod); FDE delivery constraints
-
 </td>
 <td valign="top">
-
 FDE dev architects, CIS T&O leads
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 [Reusable Components](reusable-components-8a3dd4c.md)
-
 </td>
 <td valign="top">
-
 Three-layer reusability stack (deploy as-is / parameterize / engagement-specific); component-by-component analysis; CIS Starter Kit definition; APM per-project setup; Discovery parameterization guide
-
 </td>
 <td valign="top">
-
 FDE architects, CIS T&O leads
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 [Token Efficiency](token-efficiency-54fe998.md)
-
 </td>
 <td valign="top">
-
 Two cost pools (build-time FDE engineers vs. runtime deployed agents); SAP L0–L6 optimization framework; build-time engineer guidelines (APM, caching, MCP gating, session handoff); runtime efficiency (Joule Studio design choices, supervisor as efficiency gate); quality–efficiency connection
-
 </td>
 <td valign="top">
-
 FDE dev architects, FDE Application Engineers, CIS T&O leads
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 [Agent Evaluation](agent-evaluation-65fd098.md)
-
 </td>
 <td valign="top">
-
 Testing vs. evaluation distinction; SAP aeval framework (offline CI + online production monitoring, TR9 mandatory); test case DSL as a sprint deliverable; Quality Flywheel mapped to sprint weeks 1–12; success rate as primary release gate; evaluation dimensions checklist
-
 </td>
 <td valign="top">
-
 All — FDE Application Engineers and Dev Architects especially
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 [Customer Enablement and Adoption](customer-enablement-and-adoption-ce2e74a.md)
-
 </td>
 <td valign="top">
-
 The Enable track as a mandatory parallel workstream; Adoption Strategy as formal handover artifact (7 sections, 9 governance roles); four-stage gradual release of responsibility; role-based training for 7 audiences; enablement readiness checklist; CoE post-handover support model
-
 </td>
 <td valign="top">
-
 FDE Domain PMs, FDE Application Engineers, CIS T&O leads, customer Adoption Leads
-
 </td>
 </tr>
 </table>
@@ -627,172 +437,112 @@ For agents built low-code in Joule Studio 2.0 on SMJ, SAP's BAIP managed agent r
 <table>
 <tr>
 <th valign="top">
-
 Check
-
 </th>
 <th valign="top">
-
 Question to Ask
-
 </th>
 <th valign="top">
-
 Blocking If
-
 </th>
 </tr>
 <tr>
 <td valign="top">
-
 Cloud deployment
-
 </td>
 <td valign="top">
-
 Is the SAP landscape on RISE with SAP or GROW with SAP?
-
 </td>
 <td valign="top">
-
 On-premise or Private Cloud with no RISE commitment → agent delivery is premature
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Clean core
-
 </td>
 <td valign="top">
-
 Are there custom ABAP modifications in the systems the agent will access?
-
 </td>
 <td valign="top">
-
 Significant custom ABAP → integration complexity may exceed sprint scope
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Joule access
-
 </td>
 <td valign="top">
-
 Is Joule provisioned and accessible to end users in the target system?
-
 </td>
 <td valign="top">
-
 Joule not provisioned → Joule Work integration cannot be validated in the sprint
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 AI Core Extended plan
-
 </td>
 <td valign="top">
-
 Can AI Core Extended be provisioned in the customer's BTP subaccount?
-
 </td>
 <td valign="top">
-
 Not available in the customer's region → GenAI hub access blocked; sovereign model gateway required (see [Joule Studio Build Map](joule-studio-build-map-7de243e.md))
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 BAIP region coverage
-
 </td>
 <td valign="top">
-
 Does BAIP (Business AI Platform) / SMJ cover the customer's BTP region?
-
 </td>
 <td valign="top">
-
 SMJ not available in-region → customer-managed (CMJ) orchestrator + BYOA runtime required; confirm per [CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md)
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 S/4HANA API exposure
-
 </td>
 <td valign="top">
-
 Are the relevant SAP APIs (e.g., S/4HANA OData services) accessible from BTP with proper OAuth 2.0 configuration?
-
 </td>
 <td valign="top">
-
 APIs not exposed → agent tool calls cannot be tested; plan for BTP connectivity setup in Week 0
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Customer IT admin commitment
-
 </td>
 <td valign="top">
-
 Is a dedicated customer IT admin available for the sprint?
-
 </td>
 <td valign="top">
-
 No IT admin → BAIP registration, Joule configuration, and threshold calibration cannot proceed
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Data access
-
 </td>
 <td valign="top">
-
 What test data is available? Is CDH (Customer Data Hub) needed?
-
 </td>
 <td valign="top">
-
 No test data access before Week 3 → eval suite start is delayed; confirm CDH access if real data is required
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Regulatory constraints
-
 </td>
 <td valign="top">
-
 Is this a sovereign or regulated deployment (CN40, NS2, KSA)?
-
 </td>
 <td valign="top">
-
 Sovereign deployment → confirm BAIP/Joule availability per [Security and Data Protection](security-and-data-protection-27868d4.md) before sprint commit
-
 </td>
 </tr>
 </table>
@@ -808,104 +558,68 @@ If three or more checks are unresolved at the end of Discovery, escalate to the 
 <table>
 <tr>
 <th valign="top">
-
 Question
-
 </th>
 <th valign="top">
-
 RPT-1 Likely Right If...
-
 </th>
 <th valign="top">
-
 LLM/Agent Likely Right If...
-
 </th>
 </tr>
 <tr>
 <td valign="top">
-
 Is the core task classification or regression on structured tabular data?
-
 </td>
 <td valign="top">
-
 Yes — the input is rows/columns from SAP entities (materials, orders, equipment)
-
 </td>
 <td valign="top">
-
 No — the task requires understanding natural language, context, or unstructured content
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Is there historical labeled data available or constructible?
-
 </td>
 <td valign="top">
-
 Yes — at least hundreds of examples exist or can be synthesized from transaction history
-
 </td>
 <td valign="top">
-
 No — labeled examples are scarce; the task is inherently context-dependent
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Does the output map to one of: category, score, quantity, flag?
-
 </td>
 <td valign="top">
-
 Yes — a single predicted value drives the downstream action
-
 </td>
 <td valign="top">
-
 No — the output requires natural language explanation, multi-step reasoning, or coordinating multiple tool calls
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Can accuracy be validated deterministically?
-
 </td>
 <td valign="top">
-
 Yes — a confusion matrix or RMSE against held-out data is the right eval
-
 </td>
 <td valign="top">
-
 No — correctness requires semantic judgment; LLM-as-judge or human eval is needed
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 Does the use case appear in an Industry AI domain?
-
 </td>
 <td valign="top">
-
 Autonomous Asset Management (failure prediction), Autonomous Commodity Management (price forecasting), Autonomous Regulated Manufacturing (batch classification) — all have strong RPT-1 fit for the quantitative sub-tasks
-
 </td>
 <td valign="top">
-
 Use cases centered on planning, explanation, or cross-system coordination require the agent layer
-
 </td>
 </tr>
 </table>
@@ -928,74 +642,50 @@ The following five engineering principles, as implemented in Project LightSpeed,
 <table>
 <tr>
 <th valign="top">
-
 Principle
-
 </th>
 <th valign="top">
-
 Description
-
 </th>
 </tr>
 <tr>
 <td valign="top">
-
 **Artifact-Driven**
-
 </td>
 <td valign="top">
-
 Every stage produces a versioned, hashed artifact — knowledge never lives only in a conversation
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **Knowledge-Grounded**
-
 </td>
 <td valign="top">
-
 All facts are resolved against SAP's canonical entity catalog before being used in agent design
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **Human-in-the-Loop**
-
 </td>
 <td valign="top">
-
 Approval gates at topology decisions, spec changes, and deploy steps
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **Composable**
-
 </td>
 <td valign="top">
-
 Each stage produces independent artifacts; stages can be re-run without restarting
-
 </td>
 </tr>
 <tr>
 <td valign="top">
-
 **Production-First**
-
 </td>
 <td valign="top">
-
 Deploy guardrails, OTel observability, and A2A compliance from the first prototype
-
 </td>
 </tr>
 </table>

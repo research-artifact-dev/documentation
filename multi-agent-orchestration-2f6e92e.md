@@ -34,72 +34,60 @@ Multi-agent adds latency (inter-agent communication overhead), complexity (more 
   </tr>
   <tr>
     <td valign="top">
-
 Complex single-domain workflow with many tool calls
 
     </td>
     <td valign="top">
-
 Single agent with well-structured prompts and self-verification
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Different data retrieval steps, same authorization scope
 
     </td>
     <td valign="top">
-
 Single agent with multiple sapMcpClient tools
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Sequential steps where step B always follows step A
 
     </td>
     <td valign="top">
-
 Single workflow with explicit nodes; no multi-agent needed
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Parallel sub-tasks requiring different authorization scopes
 
     </td>
     <td valign="top">
-
 Multi-agent: each worker holds only the scope it needs
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Sub-task outputs need independent quality verification before aggregation
 
     </td>
     <td valign="top">
-
 Multi-agent: each worker has its own verification layer
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Sub-tasks use genuinely different models (e.g., tabular vs. reasoning)
 
     </td>
     <td valign="top">
-
 Multi-agent: model selection per worker without conflict
 
     </td>
@@ -145,60 +133,50 @@ In a multi-agent topology, this constraint is load-bearing: if any worker agent 
   </tr>
   <tr>
     <td valign="top">
-
 **Who initiates**
 
     </td>
     <td valign="top">
-
 FDE AI Architect files the ORD registration request; the BAIP/Agent Hub team or SAP platform operator processes it
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **When to initiate**
 
     </td>
     <td valign="top">
-
 In Discovery — confirm before the Development sprint starts; lead time can be 3–10 business days depending on the tenant configuration
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Minimum information required**
 
     </td>
     <td valign="top">
-
 Agent name, `sap.agt*` namespace identifier, `sap:ai:v1` policy level, BAIP application registration ID, SAP BTP subaccount
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Contact**
 
     </td>
     <td valign="top">
-
 Raise via the standard BAIP platform request channel; if the tenant is customer-managed, coordinate with the customer IT admin for the registration
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **If registration is delayed**
 
     </td>
     <td valign="top">
-
 Integration testing with multi-agent routing can proceed in a SAP-managed test tenant while customer tenant registration is pending — do not defer integration testing until the production tenant is ready
 
     </td>
@@ -302,51 +280,42 @@ The Pending Set table tracks which worker callbacks have arrived for a given orc
   </tr>
   <tr>
     <td valign="top">
-
 **Callback timeout** — a worker does not return within the expected window
 
     </td>
     <td valign="top">
-
 Workflow B scheduled check queries the Pending Set for entries where `timeout_at` has passed and `status = 'pending'`
 
     </td>
     <td valign="top">
-
 Escalate to `sapTaskCenter` with a "worker timeout" reason code; include the partial results from workers that did return. Human approver decides: proceed with partial results, retry the timed-out worker, or abort the orchestration. Do NOT silently hold the orchestrator indefinitely.
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Callback with error payload** — worker returns but signals a failure
 
     </td>
     <td valign="top">
-
 Worker payload includes `status: 'error'` or an error code in the callback body
 
     </td>
     <td valign="top">
-
 Classify as rejection (same path as supervisor rejection): pause the full worker set; escalate to `sapTaskCenter` with the error details; do not commit any partial results until a human approver resolves the error
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 **Orphan cleanup** — a Pending Set entry is never resolved (e.g., all workers returned but supervisor never released the orchestrator callback due to a mid-flight failure)
 
     </td>
     <td valign="top">
-
 Workflow B scheduled check queries for Pending Set entries past their `timeout_at` with `status != 'complete'`
 
     </td>
     <td valign="top">
-
 Treat as orphan: log with the orchestration's `sessionId`; escalate to `sapTaskCenter` with an "orphan cleanup" reason; notify CIS T&O. Do not delete the Pending Set entry until a human operator has reviewed and resolved it
 
     </td>
@@ -370,110 +339,90 @@ The Workflow B scheduled check that drives orphan detection should run every 5�
   </tr>
   <tr>
     <td valign="top">
-
 Individual worker outputs independently committed
 
     </td>
     <td valign="top">
-
 No
 
     </td>
     <td valign="top">
-
 Yes
 
     </td>
     <td valign="top">
-
 No
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Cross-worker consistency is the primary concern
 
     </td>
     <td valign="top">
-
 No
 
     </td>
     <td valign="top">
-
 Partial
 
     </td>
     <td valign="top">
-
 Yes
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 FDE build complexity
 
     </td>
     <td valign="top">
-
 Low
 
     </td>
     <td valign="top">
-
 High
 
     </td>
     <td valign="top">
-
 Medium
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Escalation granularity
 
     </td>
     <td valign="top">
-
 Aggregate only
 
     </td>
     <td valign="top">
-
 Per-worker + aggregate
 
     </td>
     <td valign="top">
-
 Aggregate, with per-worker evidence
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Supervisor build effort
 
     </td>
     <td valign="top">
-
 None (orchestrator handles)
 
     </td>
     <td valign="top">
-
 3× [Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md) supervisor stack
 
     </td>
     <td valign="top">
-
 1× [Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md) supervisor stack (extended)
 
     </td>
@@ -533,51 +482,42 @@ Workers can be invoked in parallel (all fire simultaneously, orchestrator waits 
   </tr>
   <tr>
     <td valign="top">
-
 Parallel
 
     </td>
     <td valign="top">
-
 Workers are independent; no output from A is needed as input to B
 
     </td>
     <td valign="top">
-
 Loop Over Items + sapAgent(blocking=false); Merge node collects all callbacks
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Sequential
 
     </td>
     <td valign="top">
-
 Worker B needs Worker A's output as part of its context
 
     </td>
     <td valign="top">
-
 sapAgent(blocking=true) for A; pass A's output into B's customContext
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Conditional
 
     </td>
     <td valign="top">
-
 Whether to invoke Worker B depends on Worker A's output
 
     </td>
     <td valign="top">
-
 If node on Worker A's result; conditional sapAgent call for Worker B
 
     </td>
@@ -611,51 +551,42 @@ This is the **pro-code** orchestration path. The low-code n8n orchestrator above
   </tr>
   <tr>
     <td valign="top">
-
 Orchestration framework
 
     </td>
     <td valign="top">
-
 LangGraph (Python) with Compounding Shared State
 
     </td>
     <td valign="top">
-
 Provides native state persistence, conditional routing, and structured tool execution. Compounding Shared State enables persistent memory across conversation turns.
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Inter-agent communication
 
     </td>
     <td valign="top">
-
 A2A (Agent-to-Agent) protocol
 
     </td>
     <td valign="top">
-
 Mandated by TR1 and the standard for all SAP-platform agent communication. Agents expose A2A endpoints from day one to enable eval harness integration and inter-agent routing without rework.
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Agent scaffolding
 
     </td>
     <td valign="top">
-
 A2A Agent Toolkit
 
     </td>
     <td valign="top">
-
 Available in `context/fde/project-lightspeed/toolkits/a2a-agent-toolkit/`. Provides TypeScript (CAP + Express) and Python (FastAPI + LangGraph) scaffolding with the correct four-file spine: `agent.py`, `agent_executor.py`, `app.py`, `__main__.py`.
 
     </td>
@@ -688,48 +619,40 @@ When exposing multiple agents as a unified Joule experience, use the hub pattern
   </tr>
   <tr>
     <td valign="top">
-
 No personal pronouns
 
     </td>
     <td valign="top">
-
 Routing descriptions are written from Joule's perspective, not the agent's
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Use domain nouns specific to the agent's scope
 
     </td>
     <td valign="top">
-
 Generic descriptions ("handles requests") cause misrouting
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Include explicit negative boundary statements
 
     </td>
     <td valign="top">
-
 e.g., "does NOT handle procurement requests" — prevents intent bleed between agents
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Must be distinct from all other agents in the hub
 
     </td>
     <td valign="top">
-
 Joule cannot route correctly if two agents have overlapping descriptions
 
     </td>
@@ -787,48 +710,40 @@ Cross-worker consistency checks are always **deterministic** (Code node), not LL
   </tr>
   <tr>
     <td valign="top">
-
 Quantity cross-consistency
 
     </td>
     <td valign="top">
-
 Worker A: demand quantity 1,000 units. Worker B: available stock 800 units. Check: order ≤ available stock or escalate
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Unit consistency across workers
 
     </td>
     <td valign="top">
-
 Worker A output in EUR, Worker B output in EUR/unit. Check: units are compatible
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Timeline consistency
 
     </td>
     <td valign="top">
-
 Worker A: recommended order date 2026-09-01. Worker C: earliest delivery date 2026-09-15. Check: order date < delivery date
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Arithmetic cross-check
 
     </td>
     <td valign="top">
-
 total cost = unit_price × quantity (from different workers). Verify within tolerance
 
     </td>
@@ -854,48 +769,40 @@ Partial failure requires explicit design. Options:
   </tr>
   <tr>
     <td valign="top">
-
 One worker is rejected; others confirmed
 
     </td>
     <td valign="top">
-
 Pause full set; escalate all to sapTaskCenter with clear indication of which worker failed
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 One worker times out
 
     </td>
     <td valign="top">
-
 Treat as rejection; do not commit any worker's output; escalate with timeout evidence
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Workers produce inconsistent outputs
 
     </td>
     <td valign="top">
-
 Escalate all to sapTaskCenter; present all outputs with the specific inconsistency flagged
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 All workers confirmed but orchestrator's aggregate fails Layer 2
 
     </td>
     <td valign="top">
-
 Escalate aggregate to sapTaskCenter; per-worker approvals do not imply aggregate approval
 
     </td>
@@ -968,68 +875,56 @@ Workflow B monitors the SAP Cloud ALM pull APIs (via the `hm` provider) for the 
   </tr>
   <tr>
     <td valign="top">
-
 Orchestrator timeout rate
 
     </td>
     <td valign="top">
-
 > 10% of invocations over 24 hours
 
     </td>
     <td valign="top">
-
 Workers are slow or failing; orchestrator is waiting too long
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Partial completion rate
 
     </td>
     <td valign="top">
-
 > 5% of orchestrator invocations result in partial worker set
 
     </td>
     <td valign="top">
-
 One or more workers failing consistently
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Cross-worker inconsistency rate
 
     </td>
     <td valign="top">
-
 > 15% of multi-worker sets
 
     </td>
     <td valign="top">
-
 Workers are diverging; may indicate model drift in one worker
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Inter-agent communication latency
 
     </td>
     <td valign="top">
-
 > 3× p95 baseline
 
     </td>
     <td valign="top">
-
 BAIP runtime latency issue; check infrastructure
 
     </td>
@@ -1049,84 +944,70 @@ In Topology 3, the shared supervisor's state store (see [Supervisor Agent Patter
   </tr>
   <tr>
     <td valign="top">
-
 `orchestration_session_id`
 
     </td>
     <td valign="top">
-
 The orchestrator invocation's session ID
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 `expected_workers`
 
     </td>
     <td valign="top">
-
 Set of worker agent names expected in this invocation
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 `received_callbacks`
 
     </td>
     <td valign="top">
-
 Set of worker names that have completed and been verified
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 `pending_callbacks`
 
     </td>
     <td valign="top">
-
 Set of worker names not yet received
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 `any_rejected`
 
     </td>
     <td valign="top">
-
 Boolean: true if any worker was rejected
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 `rejection_details`
 
     </td>
     <td valign="top">
-
 Which worker was rejected and why
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 `timeout_at`
 
     </td>
     <td valign="top">
-
 Timestamp after which the pending set is treated as failed
 
     </td>
@@ -1178,144 +1059,120 @@ Build in strict order:
   </tr>
   <tr>
     <td valign="top">
-
 When to use
 
     </td>
     <td valign="top">
-
 Parallel sub-tasks need different authorization scopes OR independent quality verification OR different models — not merely because the workflow is complex
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Topology choice
 
     </td>
     <td valign="top">
-
 Flat (orchestrator + workers, no per-worker supervisor) for lower stakes; per-worker supervised for high-stakes independent outputs; shared supervisor for combined-output quality
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Orchestrator type
 
     </td>
     <td valign="top">
-
 Deterministic workflow preferred; LLM-powered only when decomposition must be dynamic
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Parallel invocation
 
     </td>
     <td valign="top">
-
 sapAgent(blocking=false) + Merge node; set timeout to 2× p95 worker latency, calibrated in EAC
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Cross-worker consistency
 
     </td>
     <td valign="top">
-
 Always deterministic Code node checks; LLM not appropriate for cross-worker verification
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Escalation
 
     </td>
     <td valign="top">
-
 Partial approval is not approval; all workers or none — atomic commit design
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Authorization
 
     </td>
     <td valign="top">
-
 Workers cannot inherit orchestrator scope; each holds minimum permissions for its sub-task
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 PII in inter-agent messages
 
     </td>
     <td valign="top">
-
 Apply masking before passing worker output into next worker's context
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Supervisor
 
     </td>
     <td valign="top">
-
 Workflow B covers all agents in tenant; Topology 3 needs Pending Set table in shared state store
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 FDE build order
 
     </td>
     <td valign="top">
-
 Workers → orchestrator → supervisor → integration; never add orchestration to unstable workers
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 Build cost
 
     </td>
     <td valign="top">
-
 2–4 days per additional worker; 8–12 days total for a 3-worker orchestration pattern
 
     </td>
   </tr>
   <tr>
     <td valign="top">
-
 MCP server governance
 
     </td>
     <td valign="top">
-
 All MCP servers in the topology must be registered and verified in AI Agent Hub before production; IT admin verification is a handover checklist item, not automatic
 
     </td>
