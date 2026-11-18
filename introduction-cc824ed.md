@@ -300,6 +300,11 @@ graph TB
     BAIP --> MLflow["MLflow\n(Observability)"]
 ```
 
+![Architecture overview showing the North Star Architecture for CIS Industry AI agent deployments on SAP BTP, depicting the flow from FDE Engineer through Joule Studio, BAIP Managed Runtime, Supervisor Agent, Worker Agents, SAP AI Core GenAI Hub, MCP Servers, and connected systems of record.](images/architecture-overview.png)
+
+> ### Note:  
+> The editable draw.io diagram is available at [architecture-overview.drawio](images/architecture-overview.drawio).
+
 **Table: North Star Architecture — Key Components**
 
 <table>

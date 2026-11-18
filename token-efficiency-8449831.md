@@ -395,7 +395,7 @@ The following four techniques have the strongest evidence base from SAP-internal
 
 **Caution**: do not apply this to supervisor workflows that need cross-domain visibility. The efficiency gain from narrow tool sets applies to specialist worker agents, not to generic monitoring or support relay workflows.
 
-#### 3. Session Handoff at Phase Boundaries (L5) — Compounds with Caching
+### Session Handoff at Phase Boundaries (L5) — Compounds with Caching
 
 **Why it works**: starting a fresh session at each sprint phase boundary (Discovery → Develop → Productization, or within Develop at major artifact milestones) eliminates re-sent upstream transcript from the previous phase. It also enables per-phase model routing — a simpler phase can use a lighter model without invalidating the cache from a heavier reasoning phase.
 

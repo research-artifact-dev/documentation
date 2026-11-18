@@ -872,7 +872,7 @@ Scenario runs use the Joule Studio CLI's `joule test` (which executes BDD featur
 
 Writing tests after the fact tests what the agent does, not what it should do. Retroactive test suites accumulate false coverage of edge cases the implementation happened to get right. Tests written first express business intent and become the ground truth for the Quality Flywheel.
 
-#### Test Onion — Layered Testing Strategy
+### Test Onion — Layered Testing Strategy
 
 Agent quality testing is organized in three concentric layers:
 
