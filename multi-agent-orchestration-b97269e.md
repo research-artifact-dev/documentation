@@ -1,17 +1,15 @@
-<!-- loioa7957a5b35db46e1a5fd0a7667bb3f07 -->
+<!-- loiob97269e7629941d2a8b9e4f36413e832 -->
 
 # Multi-Agent Orchestration
 
-Multi-agent orchestration describes the patterns and implementation guidance for coordinating multiple specialist AI agents within a single business workflow. This topic covers topology selection, SAP's orchestration model, quality verification across agents, data protection constraints, and FDE delivery implications.
+Multi-agent orchestration is the target state of the Autonomous Enterprise: SAP's Autonomous Suite deploys 224 specialized agents coordinated by 51 Joule Assistants, and Joule Work is explicitly designed to orchestrate agents — plural — in response to a single user intent. This topic covers when multi-agent patterns are warranted, the three topology options, quality and data protection considerations, and the FDE build implications for multi-agent deployments.
 
 
-<a name="loioa7957a5b35db46e1a5fd0a7667bb3f07__section_when_multi_agent"/>
+<a name="loiob97269e7629941d2a8b9e4f36413e832__section_when_needed"/>
 
 ## Why Multi-Agent Patterns Emerge — and When They Are Actually Needed
 
-Within a single FDE sprint, the typical deliverable is one or two specialist agents — the design patterns in [Agent Quality Framework](agent-quality-framework-5f15077.md), [Supervisor Agent Pattern](supervisor-agent-pattern-67417bb.md), [Security and Data Protection](security-and-data-protection-a403094.md), [Precision Guardrails](precision-guardrails-ae75c89.md), [Joule Studio Build Map](joule-studio-build-map-67ad030.md), and [CIS CoE Operations Model](cis-coe-operations-model-cba3b4d.md) are built around this scope. But Industry AI domains as SAP envisions them are inherently multi-agent systems: the Autonomous Suite deploys 224 specialized agents coordinated by 51 Joule Assistants across five domains, and Joule Work is explicitly designed to orchestrate agents — plural — in response to a single user intent. Multi-agent orchestration is the target state of the Autonomous Enterprise, not an edge case.
-
-Three Industry AI domain examples show how this structure emerges naturally within FDE sprint scope, before the full domain vision is even reached:
+Within a single FDE sprint, the typical deliverable is one or two specialist agents. But Industry AI domains are inherently multi-agent systems. Three Industry AI domain examples show how this structure emerges naturally within FDE sprint scope:
 
 -   **Autonomous Asset Management**: an orchestrator coordinates a fault-diagnosis agent, a parts-availability agent, and a maintenance-scheduling agent. Each needs different SAP data access (PM module, MM module, scheduling services) and different authorization scopes. Running all three as a single agent creates an authorization scope that is too broad and a workflow that is too complex to test reliably.
 
@@ -23,11 +21,12 @@ In each case, the multi-agent structure is justified by two factors that a singl
 
 ### When NOT to Use Multi-Agent
 
-Multi-agent adds latency (inter-agent communication overhead), complexity (more workflows to build, test, and govern), and more failure points. It is the right choice only when the alternatives are genuinely insufficient.
+Multi-agent adds latency (inter-agent communication overhead), complexity (more workflows to build, test, and govern), and more failure points. It is the right choice only when the alternatives are genuinely insufficient:
 
 **Multi-Agent Decision Guide**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -40,6 +39,8 @@ Recommendation
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -60,7 +61,7 @@ Different data retrieval steps, same authorization scope
 </td>
 <td valign="top">
 
-Single agent with multiple `sapMcpClient` tools
+Single agent with multiple sapMcpClient tools
 
 </td>
 </tr>
@@ -112,12 +113,13 @@ Multi-agent: model selection per worker without conflict
 
 </td>
 </tr>
+</tbody>
 </table>
 
 **Rule of thumb**: if a thoughtful human reviewer could do the whole task with one coherent set of authorizations and one line of reasoning, a single agent with multiple tools can probably do the same. If the task naturally decomposes into roles that a human team would assign to different specialists with different system access, multi-agent is warranted.
 
 
-<a name="loioa7957a5b35db46e1a5fd0a7667bb3f07__section_orchestration_model"/>
+<a name="loiob97269e7629941d2a8b9e4f36413e832__section_orchestration_model"/>
 
 ## SAP's Orchestration Model
 
@@ -132,19 +134,18 @@ In practice for FDE engagements:
 -   **Each specialist worker** executes its sub-task using its scoped tools and authorization, produces an output, and returns it to the orchestrator
 -   **The orchestrator** aggregates the worker outputs, applies cross-worker consistency verification, and either commits the combined result or escalates to human review
 
-This is an extension of the `sapAgent` node's capabilities described in [Supervisor Agent Pattern](supervisor-agent-pattern-67417bb.md). In the supervisor pattern, `sapAgent` is used for quality control (worker sends output to supervisor for verification). Here, `sapAgent` is used for task delegation (orchestrator sends sub-task to specialist worker). The mechanism is the same; the architectural intent is different.
-
-**The orchestrator is itself an agent registered on the BAIP (Business AI Platform) managed runtime**, with its own identity, authorization scope, and telemetry. It is not a meta-level controller outside the governed system — it is a first-class BAIP principal like any other agent.
+The orchestrator is itself an agent registered on the BAIP managed runtime, with its own identity, authorization scope, and telemetry. It is not a meta-level controller outside the governed system — it is a first-class BAIP principal like any other agent.
 
 ### ORD Registration: Normative Requirement for Multi-Agent Topologies
 
 ORD (Open Resource Discovery) registration via UMS is **normatively required** — not merely recommended — for agent discoverability and A2A routing. Agents not ORD-registered with the `sap:ai:v1` policy level and `sap.agt*` namespace are invisible to Agent Gateway. Without Agent Gateway visibility, agent-to-agent calls and tool calls cannot be routed correctly.
 
-In a multi-agent topology, this constraint is load-bearing: if any worker agent is not ORD-registered, the orchestrator's `sapAgent` call to that worker will fail at routing. ORD registration must be completed before any agent is tested in a multi-agent topology — it is not a post-build step. The Week 0 scope checklist must confirm that all agents in the topology will have ORD registrations in place before integration testing begins.
+In a multi-agent topology, this constraint is load-bearing: if any worker agent is not ORD-registered, the orchestrator's `sapAgent` call to that worker will fail at routing. ORD registration must be completed before any agent is tested in a multi-agent topology.
 
 **ORD Registration Process Guidance**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -157,6 +158,8 @@ Detail
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -217,12 +220,13 @@ Integration testing with multi-agent routing can proceed in a SAP-managed test t
 
 </td>
 </tr>
+</tbody>
 </table>
 
 Confirm ORD registration completion as a pre-Development gate item among the Discovery deliverables.
 
 
-<a name="loioa7957a5b35db46e1a5fd0a7667bb3f07__section_topologies"/>
+<a name="loiob97269e7629941d2a8b9e4f36413e832__section_topologies"/>
 
 ## Three Topology Options
 
@@ -243,11 +247,11 @@ The simplest multi-agent structure. The orchestrator decomposes the task, invoke
 
 **Verification responsibility**: the orchestrator holds verification for the aggregated output. Individual worker outputs are treated as intermediate results; only the combined output goes through the full guardrail stack.
 
-**When to use**: when individual worker outputs are only meaningful in combination and not independently committed to any system of record. A fault-diagnosis agent's output has no value without the parts-availability result — both are needed before any decision is made.
+**When to use**: when individual worker outputs are only meaningful in combination and not independently committed to any system of record.
 
 ### Topology 2 — Orchestrator + Independent Supervisor per Worker
 
-Each worker has its own supervisor (see [Supervisor Agent Pattern](supervisor-agent-pattern-67417bb.md)). The orchestrator receives only supervisor-approved outputs.
+Each worker has its own supervisor (see [Supervisor Agent Pattern](supervisor-agent-pattern-0d90e5f.md)). The orchestrator receives only supervisor-approved outputs.
 
 ```
 [Orchestrator Agent]
@@ -264,9 +268,9 @@ Each worker has its own supervisor (see [Supervisor Agent Pattern](supervisor-ag
 
 **Verification responsibility**: distributed. Each supervisor verifies its worker's output independently. The orchestrator applies an additional cross-worker consistency check on the approved set.
 
-**When to use**: when individual worker outputs are each independently high-stakes and could be committed to different systems of record. A pricing recommendation and a discount authorization are both independently meaningful; each warrants its own quality gate before being fed into the combined recommendation.
+**When to use**: when individual worker outputs are each independently high-stakes and could be committed to different systems of record.
 
-**FDE complexity**: this topology requires building and governing three separate supervisor workflow sets (A, B, C) plus the orchestrator. Budget accordingly — this is a full-stack multi-agent deployment, not a simple extension.
+**FDE complexity**: this topology requires building and governing three separate supervisor workflow sets (A, B, C) plus the orchestrator. Budget accordingly — this is a full-stack multi-agent deployment.
 
 ### Topology 3 — Orchestrator + Shared Supervisor
 
@@ -285,24 +289,23 @@ A single supervisor governs all workers. It receives callbacks from all workers,
 
 **Verification responsibility**: centralized. The shared supervisor has visibility across all workers and can detect cross-worker inconsistencies that no individual per-worker supervisor can see.
 
-**When to use**: when the primary verification concern is the combined output, not individual worker outputs. The shared supervisor can check cross-worker consistency (e.g., "does the materials availability figure support the production order quantity?") in a way that per-worker supervisors cannot.
+**When to use**: when the primary verification concern is the combined output, not individual worker outputs.
 
-**Implementation note**: the shared supervisor uses `sessionId` to group callbacks from the same orchestrator invocation. A Pending Set table in the shared state store tracks which workers in each set have been verified, and releases the orchestrator's callback only when all are complete or when a rejection triggers escalation.
+**Implementation note**: the shared supervisor uses `sessionId` to group callbacks from the same orchestrator invocation. A new Pending Set table in the shared state store tracks which workers in each set have been verified, and releases the orchestrator's callback only when all are complete or when a rejection triggers escalation.
 
 **Workers producing different output types**: if workers produce different output types (e.g., Worker A produces a batch release quantity and Worker B produces a maintenance cost estimate), the shared supervisor must handle both. Two approaches:
 
--   *Conditional routing within a single Workflow A*: an If/Switch node on `output_type` (included in the callback payload) routes each callback to the appropriate verification branch within the same workflow. Simpler to operate; recommended when there are 2–3 output types with similar verification complexity.
--   *Multiple Workflow A instances with a dispatcher webhook*: a lightweight router receives all callbacks and forwards each to the correct Workflow A instance by output type. Each instance remains focused; preferable when output types have significantly different verification complexity or different governance owners.
+-   *Conditional routing within a single Workflow A*: an If/Switch node on `output_type` (included in the callback payload) routes each callback to the appropriate verification branch. Recommended when there are 2–3 output types with similar verification complexity.
+-   *Multiple Workflow A instances with a dispatcher webhook*: a lightweight router receives all callbacks and forwards each to the correct Workflow A instance by output type. Preferable when output types have significantly different verification complexity or different governance owners.
 
 In both cases, the worker must include an `output_type` field in its callback payload so the supervisor can route correctly.
 
 ### Pending Set Failure Modes
 
-The Pending Set table tracks which worker callbacks have arrived for a given orchestrator invocation. Three failure modes must be explicitly handled.
-
 **Pending Set Failure Mode Handling**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -320,6 +323,8 @@ Required Response
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -367,21 +372,21 @@ Workflow B scheduled check queries for Pending Set entries past their `timeout_a
 </td>
 <td valign="top">
 
-Treat as orphan: log with the orchestration's `sessionId`; escalate to `sapTaskCenter` with an "orphan cleanup" reason; notify CIS T&O. Do not delete the Pending Set entry until a human operator has reviewed and resolved it.
+Treat as orphan: log with the orchestration's `sessionId`; escalate to `sapTaskCenter` with an "orphan cleanup" reason; notify CIS T&O. Do not delete the Pending Set entry until a human operator has reviewed and resolved it
 
 </td>
 </tr>
+</tbody>
 </table>
 
 **Timeout threshold configuration**: the `timeout_at` field in the Pending Set is populated by the orchestrator at dispatch time. The timeout threshold should be set to the worst-case worker execution time plus a safety margin (typically 2× the p95 worker latency observed during EAC). This is a `$vars` configuration parameter — calibrate it from EAC baseline data, not from a design assumption.
-
-The Workflow B scheduled check that drives orphan detection should run every 5–15 minutes in production.
 
 ### Choosing a Topology
 
 **Topology Comparison**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -404,6 +409,8 @@ Topology 3
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -505,7 +512,7 @@ None (orchestrator handles)
 </td>
 <td valign="top">
 
-3× supervisor stack
+3× Chapter 2 supervisor stack
 
 </td>
 <td valign="top">
@@ -514,21 +521,17 @@ None (orchestrator handles)
 
 </td>
 </tr>
+</tbody>
 </table>
 
 
-<a name="loioa7957a5b35db46e1a5fd0a7667bb3f07__section_joule_studio"/>
+<a name="loiob97269e7629941d2a8b9e4f36413e832__section_joule_studio_impl"/>
 
 ## Joule Studio Implementation
 
 ### Orchestrator as a Deterministic Workflow
 
-Where the decomposition logic is rule-based (always decompose this task type into these three sub-tasks), the orchestrator should be a deterministic Joule Studio n8n workflow, not an LLM-powered agent. Deterministic orchestration is:
-
--   Faster (no LLM call for decomposition)
--   More predictable (decomposition cannot vary at runtime)
--   Easier to test (decomposition logic is a Code node)
--   More auditable (every decomposition decision is logged without LLM reasoning traces)
+Where the decomposition logic is rule-based (always decompose this task type into these three sub-tasks), the orchestrator should be a deterministic Joule Studio n8n workflow, not an LLM-powered agent. Deterministic orchestration is faster, more predictable, easier to test, and more auditable.
 
 ```
 [Trigger: incoming task request]
@@ -551,17 +554,16 @@ Where the decomposition logic is rule-based (always decompose this task type int
 
 ### Orchestrator as an LLM-Powered Agent
 
-When the decomposition logic is dynamic — the orchestrator must reason about how to decompose the task based on context — use the n8n LangChain AI Agent node with `sapAgentTool` variants as its available tools. The agent reasons, selects which specialist workers to invoke, and decides how to aggregate responses.
+When the decomposition logic is dynamic — the orchestrator must reason about how to decompose the task based on context — use the n8n LangChain AI Agent node with `sapAgentTool` variants as its available tools.
 
 Use this only when the deterministic approach is genuinely insufficient. LLM-powered orchestration introduces the same quality, hallucination, and drift risks as any LLM step. An orchestrator that makes wrong decomposition decisions is harder to debug than an orchestrator that follows predictable rules.
 
 ### Parallel vs. Sequential Worker Invocation
 
-Workers can be invoked in parallel (all fire simultaneously, orchestrator waits for all callbacks) or sequentially (Worker B cannot start until Worker A completes).
-
 **Worker Invocation Patterns**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -579,6 +581,8 @@ Implementation
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -592,7 +596,7 @@ Workers are independent; no output from A is needed as input to B
 </td>
 <td valign="top">
 
-Loop Over Items + `sapAgent(blocking=false)`; Merge node collects all callbacks
+Loop Over Items + sapAgent(blocking=false); Merge node collects all callbacks
 
 </td>
 </tr>
@@ -609,7 +613,7 @@ Worker B needs Worker A's output as part of its context
 </td>
 <td valign="top">
 
-`sapAgent(blocking=true)` for A; pass A's output into B's `customContext`
+sapAgent(blocking=true) for A; pass A's output into B's customContext
 
 </td>
 </tr>
@@ -626,32 +630,32 @@ Whether to invoke Worker B depends on Worker A's output
 </td>
 <td valign="top">
 
-If node on Worker A's result; conditional `sapAgent` call for Worker B
+If node on Worker A's result; conditional sapAgent call for Worker B
 
 </td>
 </tr>
+</tbody>
 </table>
 
-**Joule 60-second constraint**: Joule expects a response from the outermost A2A-connected agent (the orchestrator) within **60 seconds** for synchronous calls. In parallel topologies, this window covers the full chain: Joule → orchestrator → workers → aggregation → response. For orchestrations that routinely exceed 60 seconds under realistic load (multiple parallel LLM-powered workers, external data fetches), use the asynchronous A2A pattern — the orchestrator responds immediately with a task ID and delivers the result via push notification when the orchestration completes. Do not assume the synchronous path is viable without measuring p99 latency under realistic parallel load conditions; retrofitting async behavior into a synchronous design is substantially harder than planning for it from the start.
+**Joule 60-second constraint**: Joule expects a response from the outermost A2A-connected agent (the orchestrator) within **60 seconds** for synchronous calls. In parallel topologies, this window covers the full chain: Joule → orchestrator → workers → aggregation → response. For orchestrations that routinely exceed 60 seconds under realistic load, use the asynchronous A2A pattern — the orchestrator responds immediately with a task ID and delivers the result via push notification when the orchestration completes.
 
-**Latency note**: parallel invocation is the most efficient but requires a Merge node with a configured timeout. Set the timeout to 2× the p95 worker latency, calibrated from EAC baseline data — not arbitrarily.
+**Declaring execution mode in the topology spec.** The `agent.spec.json` topology structure supports two explicit execution modes for multi-agent workflows. Declare execution mode explicitly in the spec — do not rely on runtime inference:
 
-**Declaring execution mode in the topology spec**: the `agent.spec.json` topology structure supports two explicit execution modes for multi-agent workflows. Declare execution mode explicitly in the spec — do not rely on runtime inference:
+-   `"execution": "sequential"` — agents execute in order, each receiving the output of the previous.
+-   `"execution": "parallel"` — agents execute simultaneously and results are merged.
 
--   `"execution": "sequential"` — agents execute in order, each receiving the output of the previous. Use when agent B depends on agent A's result.
--   `"execution": "parallel"` — agents execute simultaneously and results are merged. Use for independent sub-tasks that can be dispatched in parallel.
-
-The orchestration supervisor reads the declared execution mode from the spec to determine routing behaviour at runtime. A spec that omits execution mode requires manual runtime configuration and is treated as a spec integrity failure during the post-build eval scorecard (Category A; the 6-category A–F scorecard is defined in [Agent Evaluation](agent-evaluation-bb08bc0.md)).
+A spec that omits execution mode is treated as a spec integrity failure during the post-build eval scorecard (Category A).
 
 ### Recommended Orchestration Stack
 
 For FDE-delivered production agents, the following stack is recommended. These choices align with the A2A Agent Toolkit scaffolding and the post-build eval scorecard requirements.
 
-This is the **pro-code** orchestration path. The low-code n8n orchestrator is the default and preferred choice; reach for this pro-code stack only when the orchestration is genuinely too complex for the deterministic n8n workflow or the n8n LangChain agent to express cleanly — for example, stateful multi-turn coordination, intricate conditional routing, or persistent shared memory across invocations.
+This is the **pro-code** orchestration path. The low-code n8n orchestrator is the default and preferred choice; reach for this pro-code stack only when the orchestration is genuinely too complex for the deterministic n8n workflow or the n8n LangChain agent.
 
 **Pro-Code Orchestration Stack**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -669,6 +673,8 @@ Notes
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -716,17 +722,14 @@ A2A Agent Toolkit
 </td>
 <td valign="top">
 
-Available in `context/fde/project-lightspeed/toolkits/a2a-agent-toolkit/`. Provides TypeScript (CAP + Express) and Python (FastAPI + LangGraph) scaffolding with the correct four-file spine: `agent.py`, `agent_executor.py`, `app.py`, `__main__.py`.
+Available in `context/fde/project-lightspeed/toolkits/a2a-agent-toolkit/`. Provides TypeScript (CAP + Express) and Python (FastAPI + LangGraph) scaffolding with the correct four-file spine.
 
 </td>
 </tr>
+</tbody>
 </table>
 
 **Why A2A from day one**: agents that initially expose only a proprietary interface require rework before they can participate in multi-agent topologies or be tested by the eval harness. Scaffolding with A2A endpoints from the start avoids this rework and ensures the agent is discoverable via Agent Gateway from the first deployment.
-
-**LangGraph + Compounding Shared State**: Compounding Shared State is the recommended memory pattern for agents that need to maintain context across conversation turns or across multiple orchestrator invocations. It persists accumulated state as a structured object rather than a raw conversation history, which is more token-efficient and more amenable to deterministic inspection and audit.
-
-**TypeScript path**: for FDE teams building on the CAP + TypeScript stack (SwissKnife reference architecture), Project LightSpeed provides two standard pipeline outputs: `multi_agent_topology.py` (Python LangGraph topology scaffold) and `multi_agent_overlay_ts.py` (TypeScript A2A overlay). For TypeScript-first builds, use the A2A Agent Toolkit's CAP + Express scaffold — it produces an A2A-compliant TypeScript agent with the same structural contract as the Python path.
 
 ### Multi-Agent Joule Surface — The Hub Pattern
 
@@ -739,9 +742,10 @@ When exposing multiple agents as a unified Joule experience, use the hub pattern
 
 **Routing Description Rules** (enforced by post-build eval scorecard, Category D):
 
-**Routing Description Requirements**
+**Hub Routing Description Rules**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -754,6 +758,8 @@ Rationale
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -802,6 +808,7 @@ Joule cannot route correctly if two agents have overlapping descriptions
 
 </td>
 </tr>
+</tbody>
 </table>
 
 **Example**: an Autonomous Asset Management hub with three agents:
@@ -813,14 +820,14 @@ Joule cannot route correctly if two agents have overlapping descriptions
 The post-build eval scorecard (Category D) validates routing description quality and distinctness before deployment. A failing score in Category D blocks deployment — not merely advisory.
 
 > ### Note:  
-> **Delivery path (updated November 2026).** Delivery decomposes into two orthogonal axes. **Orchestrator / Joule activation (Axis 1)**: SAP-Managed Joule (SMJ, "THE BOX", GA 2026-06-01) is the default and the only activation path receiving new features. CMJ is legacy/deprecated — a migration target, not a delivery choice. **Custom-agent runtime (Axis 2)**: either Joule Studio 2.0 (low-code, SAP-managed) or BYOA (pro-code, customer BTP subaccount), both registering to the SMJ orchestrator via A2A. **Inbound direction (GA as of October 2026)**: an external AI client calling into SAP Agents is now generally available via the Agent Gateway. Customer admin registers the external AI platform as an Agent Gateway Consumer via SAP for Me; three sequential SAP-managed formations establish identity, trust, and access control. For FDE engagements involving heterogeneous multi-agent architectures where a non-SAP orchestrator needs to call into SAP domain agents, this is now a current GA integration path.
+> Delivery decomposes into two orthogonal axes. Orchestrator / Joule activation (Axis 1): SMJ always for new engagements — SAP-Managed Joule ("THE BOX", GA 2026-06-01) is the default and the only activation path receiving new features. CMJ is legacy/deprecated. Custom-agent runtime (Axis 2): one of two standard runtimes, both registering to the SMJ orchestrator via A2A — Joule Studio 2.0 (low-code, SAP-managed) or BYOA (pro-code, customer BTP subaccount). BYOA is the standard runtime for productization-intent FDE agents, not a fallback. For the multi-agent front-door/proxy pattern (single Joule capability targeting a proxy agent that fans out to specialist agents): verify current availability in the customer's BAIP tenant before committing to this architecture. Inbound direction (external AI client calling into SAP Agents) is now generally available via the Agent Gateway — the customer admin registers the external AI platform as an Agent Gateway Consumer via SAP for Me, and three sequential SAP-managed formations establish identity, trust, and access control.
 
 
-<a name="loioa7957a5b35db46e1a5fd0a7667bb3f07__section_quality_framework"/>
+<a name="loiob97269e7629941d2a8b9e4f36413e832__section_quality_framework"/>
 
 ## Quality Framework Extension for Multi-Agent Graphs
 
-The three-dimension quality framework from [Agent Quality Framework](agent-quality-framework-5f15077.md) extends to multi-agent with additional considerations at each level.
+The three-dimension quality framework (see [Agent Quality Framework](agent-quality-framework-09082f8.md)) extends to multi-agent with additional considerations at each level.
 
 ### Per-Worker Quality
 
@@ -830,11 +837,12 @@ Each worker agent retains its own self-verification and, in Topology 2/3, its ow
 
 A new quality dimension that only exists in multi-agent contexts: do the outputs from different workers form a coherent, non-contradictory whole?
 
-Cross-worker consistency checks are always **deterministic** (Code node), not LLM-based.
+Cross-worker consistency checks are always **deterministic** (Code node), not LLM-based:
 
 **Cross-Worker Consistency Check Examples**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -847,6 +855,8 @@ Implementation
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -895,21 +905,23 @@ total cost = unit_price × quantity (from different workers). Verify within tole
 
 </td>
 </tr>
+</tbody>
 </table>
 
 These checks are implemented in the Code node that follows the Merge node in the orchestrator workflow.
 
 ### Aggregate Output Verification
 
-The orchestrator's final combined output goes through the full guardrail stack from [Precision Guardrails](precision-guardrails-ae75c89.md) if it produces a numerical decision committed to a system of record. The orchestrator is the point at which the four-layer stack applies — not individual worker outputs (unless those are also independently committed).
+The orchestrator's final combined output goes through the full guardrail stack from [Precision Guardrails](precision-guardrails-a116de6.md) if it produces a numerical decision committed to a system of record. The orchestrator is the point at which the four-layer stack applies — not individual worker outputs (unless those are also independently committed).
 
 ### Escalation Handling in Multi-Agent Graphs
 
-Partial failure requires explicit design.
+Partial failure requires explicit design:
 
-**Escalation Scenarios**
+**Partial Failure Escalation Handling**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -922,6 +934,8 @@ Recommended Handling
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -930,7 +944,7 @@ One worker is rejected; others confirmed
 </td>
 <td valign="top">
 
-Pause full set; escalate all to `sapTaskCenter` with clear indication of which worker failed
+Pause full set; escalate all to sapTaskCenter with clear indication of which worker failed
 
 </td>
 </tr>
@@ -954,7 +968,7 @@ Workers produce inconsistent outputs
 </td>
 <td valign="top">
 
-Escalate all to `sapTaskCenter`; present all outputs with the specific inconsistency flagged
+Escalate all to sapTaskCenter; present all outputs with the specific inconsistency flagged
 
 </td>
 </tr>
@@ -966,16 +980,17 @@ All workers confirmed but orchestrator's aggregate fails Layer 2
 </td>
 <td valign="top">
 
-Escalate aggregate to `sapTaskCenter`; per-worker approvals do not imply aggregate approval
+Escalate aggregate to sapTaskCenter; per-worker approvals do not imply aggregate approval
 
 </td>
 </tr>
+</tbody>
 </table>
 
 The key principle: **partial approval is not approval**. A multi-agent write-back must be treated as an atomic operation — either all sub-task outputs are confirmed and the combined result passes verification, or the full operation is escalated. Committing Worker A's output while Worker B's is pending creates inconsistent state in the system of record.
 
 
-<a name="loioa7957a5b35db46e1a5fd0a7667bb3f07__section_data_protection"/>
+<a name="loiob97269e7629941d2a8b9e4f36413e832__section_data_protection"/>
 
 ## Data Protection in Multi-Agent Graphs
 
@@ -995,40 +1010,35 @@ Each worker agent has its own BAIP application registration with its own scoped 
 
 -   **Mandatory intersection rule**: effective permission = `min(user permissions, agent permissions)` — enforced at the gateway runtime, not advisory. An agent can never exceed what the calling user is entitled to do.
 -   **Authentication at every hop**: IAS App2App tokens with named user context; no anonymous tool calls between agents.
--   **Second enforcement point**: user context propagation carries the user's identity to backend systems (S/4HANA, etc.), which enforce PFCG/CDS/OData authorization independently — regardless of what the gateway permitted.
+-   **Second enforcement point**: user context propagation carries the user's identity to backend systems (S/4HANA, etc.), which enforce PFCG/CDS/OData authorization independently.
 
 **Where design discipline owns the risk:**
 
 -   **Capability authorization conditions**: SAP Cloud Identity Services enforces functional policy at the tool/MCP call level — but only if the capability developer registered the right authorization conditions. A tool published with no restrictions gives the gateway nothing to enforce beyond agent identity.
 -   **Custom and BYOA tools**: custom MCP servers and BYOA agents via BTP Destinations must validate the `ias_apis` claim in the inbound token themselves. A custom tool that skips this check is accessible to any authenticated agent despite the gateway.
--   **Non-SAP connectors**: if a connector uses a technical service account rather than principal propagation, the backend authorization check does not apply. Always verify that principal propagation is active on every backend connector.
+-   **Non-SAP connectors**: if a connector uses a technical service account rather than principal propagation, the backend authorization check does not apply.
 
-**The `customContext` data-passing caveat**: the gateway intersection rule governs *API calls*, not *data passing*. If an orchestrator retrieves authorized data and passes it to a worker via `customContext`, the worker gains access to that data even if it could not retrieve it directly through its own tools. The design rule:
+**The `customContext` data-passing caveat**: the gateway intersection rule governs *API calls*, not *data passing*. If an orchestrator retrieves authorized data and passes it to a worker via `customContext`, the worker gains access to that data even if it could not retrieve it directly. The design rule:
 
 > Orchestrators must apply data minimization — pass to each downstream worker only the fields that worker needs for its specific task, not the full output from prior workers or the orchestrator's own data access.
 
 ### PII in Inter-Agent Messages
 
-If Worker A produces output that contains PII (Personally Identifiable Information) and passes it to the orchestrator, the orchestrator must apply PII masking before including that data in Worker B's context. PII masking at the `sapOrchestration` node level (see [Security and Data Protection](security-and-data-protection-a403094.md)) only masks data before LLM calls — it does not automatically mask data in `customContext` payloads passed between agents.
-
-**Design rule**: orchestrators that aggregate outputs from multiple workers must apply data minimization — pass to each downstream worker only the fields that worker needs, not the full output from prior workers.
-
-### Supervisor Workflow C in Multi-Agent Contexts
-
-Workflow C (support relay) operates at the tenant level, not per-worker. In a multi-agent deployment, a single Workflow C can service anomalies from any worker or the orchestrator. The sanitization rules apply to all traces equally; the `agent_identity` field in the sanitized extract identifies which worker or orchestrator generated the anomaly.
+If Worker A produces output that contains PII and passes it to the orchestrator, the orchestrator must apply PII masking before including that data in Worker B's context. PII masking at the `sapOrchestration` node level only masks data before LLM calls — it does not automatically mask data in `customContext` payloads passed between agents.
 
 
-<a name="loioa7957a5b35db46e1a5fd0a7667bb3f07__section_supervisor_extension"/>
+<a name="loiob97269e7629941d2a8b9e4f36413e832__section_supervisor_extension"/>
 
 ## Supervisor Pattern Extension for Multi-Agent
 
 ### Workflow B (Telemetry Monitor) in Multi-Agent Context
 
-Workflow B monitors the SAP Cloud ALM pull APIs (via the `hm` provider) for the customer's tenant. In a multi-agent deployment, the same Workflow B can cover all agents in the tenant — the worker A traces, worker B traces, orchestrator traces, and supervisor traces are all in the same tenant's log stream. The Code node anomaly classifier applies the same rule set to each, with the `agent_identity` field used to identify which agent triggered each anomaly.
+In a multi-agent deployment, the same Workflow B can cover all agents in the tenant — the worker A traces, worker B traces, orchestrator traces, and supervisor traces are all in the same tenant's log stream. The Code node anomaly classifier applies the same rule set to each, with the `agent_identity` field used to identify which agent triggered each anomaly.
 
 **Extended Anomaly Signals for Multi-Agent**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -1046,6 +1056,8 @@ Interpretation
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -1054,7 +1066,7 @@ Orchestrator timeout rate
 </td>
 <td valign="top">
 
-> 10% of invocations over 24 hours
+>10% of invocations over 24 hours
 
 </td>
 <td valign="top">
@@ -1071,7 +1083,7 @@ Partial completion rate
 </td>
 <td valign="top">
 
-> 5% of orchestrator invocations result in partial worker set
+>5% of orchestrator invocations result in partial worker set
 
 </td>
 <td valign="top">
@@ -1088,7 +1100,7 @@ Cross-worker inconsistency rate
 </td>
 <td valign="top">
 
-> 15% of multi-worker sets
+>15% of multi-worker sets
 
 </td>
 <td valign="top">
@@ -1105,7 +1117,7 @@ Inter-agent communication latency
 </td>
 <td valign="top">
 
-> 3× p95 baseline
+>3× p95 baseline
 
 </td>
 <td valign="top">
@@ -1114,15 +1126,17 @@ BAIP runtime latency issue; check infrastructure
 
 </td>
 </tr>
+</tbody>
 </table>
 
 ### Shared Supervisor State Store (Topology 3)
 
-In Topology 3, the shared supervisor's state store needs an additional Pending Set table.
+In Topology 3, the shared supervisor's state store needs an additional Pending Set table:
 
 **Pending Set Table Fields**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -1135,6 +1149,8 @@ Content
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -1219,12 +1235,13 @@ Timestamp after which the pending set is treated as failed
 
 </td>
 </tr>
+</tbody>
 </table>
 
 The supervisor releases the orchestrator's callback only when `received_callbacks` equals `expected_workers` and `any_rejected` is false. If `timeout_at` is reached before all callbacks arrive, the supervisor marks the set as failed and escalates.
 
 
-<a name="loioa7957a5b35db46e1a5fd0a7667bb3f07__section_fde_delivery"/>
+<a name="loiob97269e7629941d2a8b9e4f36413e832__section_fde_implications"/>
 
 ## FDE Delivery Implications
 
@@ -1253,13 +1270,14 @@ Build in strict order:
 -   **MCP server governance**: all MCP servers used by agents in the topology must be registered and verified in the AI Agent Hub's Agent & MCP Registry before production deployment. Customer IT admins can verify and govern MCP servers at runtime via the AI Agent Hub — this is a customer-side governance action, not automatic. Include the MCP server registry entries and the IT admin activation steps in the production handover checklist alongside the agent registry entries.
 
 
-<a name="loioa7957a5b35db46e1a5fd0a7667bb3f07__section_summary"/>
+<a name="loiob97269e7629941d2a8b9e4f36413e832__section_summary"/>
 
 ## Summary
 
 **Multi-Agent Orchestration Key Principles**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -1272,6 +1290,8 @@ Key Principle
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -1316,7 +1336,7 @@ Parallel invocation
 </td>
 <td valign="top">
 
-`sapAgent(blocking=false)` + Merge node; set timeout to 2× p95 worker latency, calibrated in EAC
+sapAgent(blocking=false) + Merge node; set timeout to 2× p95 worker latency, calibrated in EAC
 
 </td>
 </tr>
@@ -1371,18 +1391,6 @@ Apply masking before passing worker output into next worker's context
 <tr>
 <td valign="top">
 
-Supervisor
-
-</td>
-<td valign="top">
-
-Workflow B covers all agents in tenant; Topology 3 needs Pending Set table in shared state store
-
-</td>
-</tr>
-<tr>
-<td valign="top">
-
 FDE build order
 
 </td>
@@ -1416,27 +1424,16 @@ All MCP servers in the topology must be registered and verified in AI Agent Hub 
 
 </td>
 </tr>
+</tbody>
 </table>
 
 **Related Information**  
 
 
-[Supervisor Agent Pattern](supervisor-agent-pattern-67417bb.md)
+[SAP AI Agent Hub — Key Capabilities](https://help.sap.com/docs/AI_AGENT_HUB/225000cc2ce44a228b9534a0f1098a9b/3f7ceafb1eb24d00ac50bf3499f50688.html "Overview of SAP AI Agent Hub capabilities including agent discovery, verification, monitoring, and governance.") :arrow_upper_right:
 
-[Agent Quality Framework](agent-quality-framework-5f15077.md)
+[SAP AI Agent Hub — Key Concepts](https://help.sap.com/docs/AI_AGENT_HUB/225000cc2ce44a228b9534a0f1098a9b/efc2d34129df4670925c64c3def4feba.html "Core concepts behind SAP AI Agent Hub including the meta model, fact sheets, and how AI agents are represented.") :arrow_upper_right:
 
-[Precision Guardrails](precision-guardrails-ae75c89.md)
+[Joule Studio](https://help.sap.com/docs/JOULESTUDIO/7e496fe6f81f4975aec07d9c1cbd2aef/36d3e974446844a1b0ffb7af8fa9446c.html "SAP's AI-first development environment for building and deploying AI agents, intelligent apps, and automations.") :arrow_upper_right:
 
-[Security and Data Protection](security-and-data-protection-a403094.md)
-
-[Production Operations](production-operations-e24808a.md)
-
-[Agent Evaluation](agent-evaluation-bb08bc0.md)
-
-[Reusable Components](reusable-components-ff99fe9.md)
-
-[SAP AI Agent Hub](https://help.sap.com/docs/AI_AGENT_HUB/225000cc2ce44a228b9534a0f1098a9b/8ebd704d35a746c180af003db1f5acb0.html "Documentation for the SAP AI Agent Hub, covering agent registration, ORD, and the Agent Gateway.") :arrow_upper_right:
-
-[Joule Work – Develop (Joule Studio in Joule Work)](https://help.sap.com/docs/JOULE_WORK/621104a90a01407fbb2d1613db39a54d/9d86b3b7b9534915a0f542ea7ea9f839.html "Joule Work developer documentation, including agent build and registration in the Joule Work environment.") :arrow_upper_right:
-
-[Joule Studio CLI (Pro-Code)](https://help.sap.com/docs/JOULESTUDIO/7e496fe6f81f4975aec07d9c1cbd2aef/a7bbbde0cf3b48f4a82a4403577a6b2c.html "CLI reference for pro-code Joule Studio agent development.") :arrow_upper_right:
+[Developing with Joule Studio CLI](https://help.sap.com/docs/JOULESTUDIO/7e496fe6f81f4975aec07d9c1cbd2aef/a7bbbde0cf3b48f4a82a4403577a6b2c.html "Build Joule Studio solutions from a local IDE using the jl CLI, with full control over code structure and CI/CD integration.") :arrow_upper_right:

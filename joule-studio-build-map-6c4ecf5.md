@@ -1,15 +1,15 @@
-<!-- loio67ad0307767e461e846f03fc32494e65 -->
+<!-- loio6c4ecf5a521243f6b62892f3d4bab557 -->
 
 # Joule Studio Build Map
 
-Joule Studio is SAP's unified design-time environment for building agents and skills and the strategic target build environment for FDE and Industry AI agent work. This topic maps every design concept from [Agent Quality Framework](agent-quality-framework-5f15077.md), [Supervisor Agent Pattern](supervisor-agent-pattern-67417bb.md), [Security and Data Protection](security-and-data-protection-a403094.md), and [Precision Guardrails](precision-guardrails-ae75c89.md) to the specific Joule Studio nodes and configuration choices required to implement them, including platform compliance requirements, pro-code paths, BYOA delivery, and MCP integration patterns.
+Joule Studio is SAP's unified design-time environment for building agents and skills, and the strategic target build environment for FDE and Industry AI agent work. This topic maps every design concept from [Agent Quality Framework](agent-quality-framework-09082f8.md), [Supervisor Agent Pattern](supervisor-agent-pattern-0d90e5f.md), [Security and Data Protection](security-and-data-protection-a6b66d5.md), and [Precision Guardrails](precision-guardrails-a116de6.md) to the specific Joule Studio nodes and configuration choices required for implementation.
 
 
-<a name="loio67ad0307767e461e846f03fc32494e65__section_overview"/>
+<a name="loio6c4ecf5a521243f6b62892f3d4bab557__section_overview"/>
 
 ## Joule Studio Overview
 
-Delivery is defined by two orthogonal axes — not a single primary-vs-fallback ladder:
+**Delivery is defined by two orthogonal axes — not a single primary-vs-fallback ladder.** The older "CMJ/BYOA" label wrongly bundled two independent decisions; keep them distinct:
 
 -   **Axis 1 — Orchestrator / Joule activation.** **SAP-Managed Joule (SMJ, "THE BOX") is the default** for all new engagements and the only activation path that receives new features (Joule Work, Joule Studio 2.0, new LoB onboarding). **Customer-Managed Joule (CMJ) is deprecated** — a migration target, not a delivery choice; it now receives only AutoSQL / Knowledge Graph / DPQuery. The CPA direction since Sapphire 2026 is CMJ → SMJ migration.
 -   **Axis 2 — Custom-agent runtime.** A custom FDE agent runs either as **BYOA (Bring Your Own Agent)** on the customer's BTP subaccount (pro-code: LangGraph/AG2/CAP/CrewAI) or in **Joule Studio 2.0** (low-code, SAP-managed). Both register to SMJ via the SAP-managed Agent Gateway over A2A. **BYOA is the standard runtime for productization-intent FDE work — it is NOT a fallback.**
@@ -18,9 +18,10 @@ The two FDE delivery types map cleanly onto these axes: **IAI CAE** (customer-sp
 
 ### Two Artifact Types
 
-**Artifact Type Selection**
+**Joule Artifact Types**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -38,6 +39,8 @@ Characteristics
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -72,15 +75,17 @@ LLM-powered; reason-act-observe loop; handles variable inputs and ambiguous goal
 
 </td>
 </tr>
+</tbody>
 </table>
 
 Most Industry AI FDE use cases require Joule Agents (complex, non-deterministic). Joule Skills are appropriate for subcomponents that can be fully specified — for example, a data retrieval step with fixed parameters that feeds into an agent workflow.
 
 ### Three Build Paths
 
-**Build Path Comparison**
+**Build Path Options**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -103,6 +108,8 @@ When to Use
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -169,35 +176,37 @@ Full pro-code A2A agent; custom business logic; orchestrated by SMJ via the Agen
 
 </td>
 </tr>
+</tbody>
 </table>
 
-**FDE pro-code engineering pattern.** For complex custom agents, FDE engineers escalate from Path 1 to Path 2. The expected FDE pro-code workflow combines: **Joule Studio CLI** (agent scaffolding, deployment, and Joule integration commands) + **a pro-code IDE** (e.g., VS Code) + **an AI coding assistant** (e.g., Claude Code via the Joule Studio MCP integration). This combination retains Joule Studio governance and BAIP harness integration while providing full code-level expressiveness.
+The low-code path (Path 1) is the correct starting assumption for every FDE engagement. The decision to use Path 2 or Path 3 should be made explicitly, documented in the Draft Product Design Specs, and reviewed against the security implications described in [Security and Data Protection](security-and-data-protection-a6b66d5.md).
 
-**Joule Studio methodology: Intent-Based Development (IBD).** Joule Studio's official methodology term is **Intent-Based Development (IBD)** — a structured six-phase workflow: **01 Intent → 02 Requirements → 03 Specification → 04 Solution → 05 Testing → 06 Deployment**. Both Low-Code (Path 1) and Pro-Code (Path 2) follow the same six phases.
+**FDE pro-code engineering pattern.** For complex custom agents, FDE engineers escalate from Path 1 to Path 2. The expected FDE pro-code workflow combines: **Joule Studio CLI** (agent scaffolding, deployment, and Joule integration commands) + **a pro-code IDE** (e.g., VS Code) + **an AI coding assistant** (e.g., Claude Code via the Joule Studio MCP integration) for implementation.
 
-**Creation paths within Path 2 (pro-code):**
+**Joule Studio methodology: Intent-Based Development (IBD).** Joule Studio's official methodology term is **Intent-Based Development (IBD)** — a structured six-phase workflow: **01 Intent → 02 Requirements → 03 Specification → 04 Solution → 05 Testing → 06 Deployment**. Both Low-Code (Path 1) and Pro-Code (Path 2) follow the same six phases and produce the same deployable artifact.
 
--   **Dev IDE path** (pro-code): Joule Studio CLI + VS Code + AI coding assistant. The expected path for FDE engineers building complex custom agents.
+**Creation paths within Path 2 (pro-code).** The AI Golden Path now documents two creation paths for code-based agents, both producing the same AppFND artifact and deploying to the unified Agent Fabric runtime:
+
+-   **Dev IDE path** (pro-code): Joule Studio CLI + VS Code + AI coding assistant. The expected path for FDE engineers building complex custom agents with full code-level expressiveness.
 -   **Vibe path** (prompt-driven): natural language description → generated AppFND artifact. Lower-code entry point for business analysts or simpler automation flows.
 
-Both paths produce the same deployable artifact. The Vibe path lowers the entry bar but does not change governance requirements.
-
-**AppFND standard framework stack (Path 2 pro-code):** The Application Foundation SDK provides first-class support for **LangGraph** (Python, JS/TS) and **Pydantic AI** (Python) — both are the SAP-recommended frameworks for code-based agent builds, with built-in tracing, metering, and Joule connectivity (confirmed October 2026 AI Golden Path update). AutoGen and other frameworks remain usable via the BYOA path but have no first-class AppFND SDK support and require manual harness wiring.
+Both paths produce the same deployable artifact. The Vibe path lowers the entry bar but does not change governance requirements — the resulting artifact is subject to the same BAIP harness, security controls, and must-have integrations as a Dev IDE build.
 
 
-<a name="loio67ad0307767e461e846f03fc32494e65__section_node_reference"/>
+<a name="loio6c4ecf5a521243f6b62892f3d4bab557__section_node_reference"/>
 
 ## Node Reference: SAP Custom Nodes
 
-These are the four SAP-provided custom nodes available in the Joule Studio n8n canvas.
+These are the four SAP-provided custom nodes available in the Joule Studio n8n canvas. All other capabilities are built from these nodes (plus the three tool-wrapped variants) and standard n8n nodes.
 
 ### CUSTOM.sapAgent — Invoke Another SAP Agent
 
 Calls a registered Joule Agent by name. Supports both blocking and non-blocking execution.
 
-**CUSTOM.sapAgent Parameters**
+**sapAgent Node Parameters**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -215,6 +224,8 @@ Description
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -334,17 +345,19 @@ Maximum wait time in seconds (blocking mode only). Default 180,000 ms; max 300,0
 
 </td>
 </tr>
+</tbody>
 </table>
 
-**Key design rule**: for the supervisor pattern, always use `blocking=false` with a `callbackUrl`. This decouples worker execution time from supervisor evaluation time and allows concurrent workers.
+**Key design rule**: for the supervisor pattern (see [Supervisor Agent Pattern](supervisor-agent-pattern-0d90e5f.md)), always use `blocking=false` with a `callbackUrl`. This decouples worker execution time from supervisor evaluation time and allows concurrent workers.
 
 ### CUSTOM.sapOrchestration — SAP AI Core LLM Orchestration
 
 The primary LLM interface. Wraps SAP's generative AI hub with enterprise controls.
 
-**CUSTOM.sapOrchestration Parameters**
+**sapOrchestration Node Parameters**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -362,6 +375,8 @@ Description
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -443,7 +458,7 @@ boolean
 </td>
 <td valign="top">
 
-`true`: activates Azure Content Safety on input + output (see [Security and Data Protection](security-and-data-protection-a403094.md))
+`true`: activates Azure Content Safety on input + output (see [Security and Data Protection](security-and-data-protection-a6b66d5.md))
 
 </td>
 </tr>
@@ -460,7 +475,7 @@ boolean
 </td>
 <td valign="top">
 
-`true`: activates SAP DPI entity masking before LLM call (see [Security and Data Protection](security-and-data-protection-a403094.md))
+`true`: activates SAP DPI entity masking before LLM call
 
 </td>
 </tr>
@@ -478,6 +493,23 @@ object
 <td valign="top">
 
 RAG configuration: vector store endpoint or help.sap.com; authorization-enforced retrieval
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+`promptRegistry`
+
+</td>
+<td valign="top">
+
+string
+
+</td>
+<td valign="top">
+
+*(planned — not in the current node; prompts are inline via `systemPrompt`/`userMessage`, so a prompt change requires workflow redeployment today)*
 
 </td>
 </tr>
@@ -515,22 +547,21 @@ Enable streaming response (for UX integration; not for supervisor validation flo
 
 </td>
 </tr>
+</tbody>
 </table>
-
-> ### Note:  
-> `promptRegistry` is planned but not yet shipped (node v1.5.0, 2026-10-22). Prompts are currently inline via `systemPrompt`/`userMessage`, so a prompt change requires workflow redeployment. See [Production Operations](production-operations-e24808a.md) for the prompt versioning fallback approach.
 
 **Security defaults**: `enableFiltering` and `enableMasking` are node-level flags — they must be consciously enabled. For all Industry AI agents that process user input or retrieve external content, both flags should be enabled unless there is a documented reason not to.
 
-**Critic pattern**: to implement a validation or critic call, create a second `sapOrchestration` node with a different `systemPrompt` explicitly designed for critique.
+**Critic pattern**: to implement a validation or critic call, create a second `sapOrchestration` node with a different `systemPrompt` explicitly designed for critique. The model may be the same or different; the prompt must be different.
 
 ### CUSTOM.sapMcpClient — SAP Applications via Agent Gateway
 
-Connects to SAP MCP servers through the SAP Agent Gateway. Tool selection and server configuration happen at **design time** in the Joule Studio canvas — at runtime, every call is deterministic.
+Connects to SAP MCP servers through the SAP Agent Gateway. Tool selection and server configuration happen at **design time** in the Joule Studio canvas — at runtime, every call is deterministic. Uses `sapClientCredentials` (SAP Agent Gateway / `sap.agw`) auto-wired; no manual credential configuration required.
 
-**CUSTOM.sapMcpClient Parameters**
+**sapMcpClient Node Parameters**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -553,6 +584,8 @@ Description
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -654,12 +687,12 @@ number
 </td>
 <td valign="top">
 
-30,000 ms
+30,000ms
 
 </td>
 <td valign="top">
 
-Max 300,000 ms; **default is 30s — shorter than `sapAgent` (180s)**
+Max 300,000ms; **default is 30s — shorter than `sapAgent` (180s)**
 
 </td>
 </tr>
@@ -685,21 +718,22 @@ Include server info and tool details in the response
 
 </td>
 </tr>
+</tbody>
 </table>
 
-**Design-time tool discovery**: available tools are fetched from the MCP server when selected in the Joule Studio canvas. The tool call is fixed at design time; there is no runtime tool enumeration or adaptive selection.
-
-**Timeout note**: the 30s default is adequate for most SAP API calls, but SAP backend operations with significant processing time require an explicit timeout setting.
+> ### Note:  
+> The 30s timeout default is adequate for most SAP API calls, but SAP backend operations with significant processing time (batch retrieval, complex calculations) require an explicit timeout setting — otherwise the workflow will fail on calls that would succeed with more time.
 
 **Authorization enforcement**: the Agent Gateway enforces the calling agent's authorization scope for every tool call. If the agent is not authorized to access a particular SAP entity, the call fails with an authorization error — it does not silently return empty or partial data.
 
 ### CUSTOM.sapTaskCenter — SAP Human in the Loop
 
-Sends an approval task to SAP Task Center and pauses the workflow until a human decision is received (display name in Joule Studio: **"SAP Human in the Loop"**).
+Sends an approval task to SAP Task Center and pauses the workflow until a human decision is received (display name in Joule Studio: **"SAP Human in the Loop"**). Uses a webhook + `restartWebhook` internally — the workflow truly suspends and resumes on the human's decision.
 
-**CUSTOM.sapTaskCenter Parameters**
+**sapTaskCenter Node Parameters**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -717,6 +751,8 @@ Description
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -853,19 +889,21 @@ Display name for the task definition in Task Center (optional; defaults to node 
 
 </td>
 </tr>
+</tbody>
 </table>
 
-**Custom attributes design principle**: always include the full decision context in `customAttributeDefinitions`. The minimum useful context for a numerical approval task: proposed value, reference value, deviation, agent confidence, validation stage results, and a transaction correlation ID.
+**Typed custom attributes**: each entry in `customAttributeDefinitions` has four fields: `code` (identifier sent to Task Center), `name` (display label), `type` (`STRING`/`INTEGER`/`FLOAT`/`BOOLEAN`/`DATE`/`DATETIME`/`TIME`), and `value` (expression referencing prior nodes). Up to 30 attributes per task.
 
-**Approval result**: the node outputs the human's decision (APPROVED / REJECTED / MODIFIED) as a structured object that the downstream If node routes on. When a human changes the agent's proposed value, the audit trail must record both values (agent proposed, human committed) and the delta.
+**Custom attributes design principle**: always include the full decision context in `customAttributeDefinitions`. An approver who receives only a task subject cannot make a good decision. The minimum useful context for a numerical approval task: proposed value, reference value, deviation, agent confidence, validation stage results, and a transaction correlation ID (see [Precision Guardrails](precision-guardrails-a116de6.md)).
 
 ### Tool Variants for LangChain AI Agent Node
 
-SAP provides tool-wrapped variants of the above nodes for use as tools within the n8n LangChain AI Agent node.
+SAP provides tool-wrapped variants of the above nodes for use as tools within the n8n LangChain AI Agent node:
 
-**Tool Variant Reference**
+**Tool Variant Equivalences**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -878,6 +916,8 @@ Equivalent To
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -914,15 +954,17 @@ Equivalent To
 
 </td>
 </tr>
+</tbody>
 </table>
 
-For the supervisor pattern, the supervisor's reasoning is typically encoded in the workflow structure (If/Switch routing), not in an LLM reasoning loop. Use the direct nodes rather than the tool variants for supervisor workflows.
+For the supervisor pattern, the supervisor's reasoning is typically encoded in the workflow structure (If/Switch routing), not in an LLM reasoning loop. Use the direct nodes (sapAgent, sapOrchestration, sapTaskCenter) rather than the tool variants for supervisor workflows.
 
-### Standard n8n Nodes
+### Standard n8n Nodes Used in This Build Map
 
-**Standard n8n Nodes Used in This Concept**
+**Standard n8n Node Usage**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -935,6 +977,8 @@ Key Use
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -1031,29 +1075,26 @@ Constructing structured objects for downstream nodes
 
 </td>
 </tr>
+</tbody>
 </table>
 
 **Code node constraints**: sandboxed execution; no network access; no filesystem access. These are security features, not bugs. Any computation that requires network access must use an HTTP Request node instead.
 
 
-<a name="loio67ad0307767e461e846f03fc32494e65__section_master_build_map"/>
+<a name="loio6c4ecf5a521243f6b62892f3d4bab557__section_master_build_map"/>
 
 ## The Master Build Map
 
-The following table maps every design concept from [Agent Quality Framework](agent-quality-framework-5f15077.md), [Supervisor Agent Pattern](supervisor-agent-pattern-67417bb.md), [Security and Data Protection](security-and-data-protection-a403094.md), and [Precision Guardrails](precision-guardrails-ae75c89.md) to its Joule Studio implementation.
+This table maps every design concept from [Agent Quality Framework](agent-quality-framework-09082f8.md), [Supervisor Agent Pattern](supervisor-agent-pattern-0d90e5f.md), [Security and Data Protection](security-and-data-protection-a6b66d5.md), and [Precision Guardrails](precision-guardrails-a116de6.md) to its Joule Studio implementation:
 
-**Design Concept to Joule Studio Implementation**
+**Master Build Map: Design Concepts to Joule Studio Implementation**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
 Design Concept
-
-</th>
-<th valign="top">
-
-Topic Reference
 
 </th>
 <th valign="top">
@@ -1072,13 +1113,12 @@ Key Configuration Note
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
 **Worker Agent**
-
-</td>
-<td valign="top">
 
 </td>
 <td valign="top">
@@ -1095,11 +1135,6 @@ Key Configuration Note
 <td valign="top">
 
 Worker agent: reason + act on SAP data
-
-</td>
-<td valign="top">
-
-[Agent Quality Framework](agent-quality-framework-5f15077.md)
 
 </td>
 <td valign="top">
@@ -1126,11 +1161,6 @@ Inline self-verification (single LLM check)
 </td>
 <td valign="top">
 
-[Agent Quality Framework](agent-quality-framework-5f15077.md)
-
-</td>
-<td valign="top">
-
 Second sapOrchestration node
 
 </td>
@@ -1149,11 +1179,6 @@ Different systemPrompt from generation node; critic role
 <td valign="top">
 
 Multi-stage verification: deterministic
-
-</td>
-<td valign="top">
-
-[Agent Quality Framework](agent-quality-framework-5f15077.md)
 
 </td>
 <td valign="top">
@@ -1180,11 +1205,6 @@ Multi-stage verification: LLM critic
 </td>
 <td valign="top">
 
-[Agent Quality Framework](agent-quality-framework-5f15077.md)
-
-</td>
-<td valign="top">
-
 sapOrchestration (critic systemPrompt)
 
 </td>
@@ -1202,12 +1222,29 @@ outputSchema with verdict + confidence + reason fields
 <tr>
 <td valign="top">
 
-Write-back to system of record
+Multi-stage routing (CONFIRM/REJECT/DISAGREE)
 
 </td>
 <td valign="top">
 
-[Agent Quality Framework](agent-quality-framework-5f15077.md), [Precision Guardrails](precision-guardrails-ae75c89.md)
+If / Switch node
+
+</td>
+<td valign="top">
+
+Yes
+
+</td>
+<td valign="top">
+
+Three branches; DISAGREE → sapTaskCenter
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+Write-back to system of record
 
 </td>
 <td valign="top">
@@ -1222,7 +1259,7 @@ Yes
 </td>
 <td valign="top">
 
-Committer pattern: the worker is read/recommend-only; the supervisor/committer identity holds the write scope and performs the write after approval
+Committer pattern: the worker is read/recommend-only (no SoR write scope); the supervisor/committer identity holds the write scope and performs the write after approval
 
 </td>
 </tr>
@@ -1241,19 +1278,11 @@ Committer pattern: the worker is read/recommend-only; the supervisor/committer i
 <td valign="top">
 
 </td>
-<td valign="top">
-
-</td>
 </tr>
 <tr>
 <td valign="top">
 
 Supervisor calls worker async
-
-</td>
-<td valign="top">
-
-[Supervisor Agent Pattern](supervisor-agent-pattern-67417bb.md)
 
 </td>
 <td valign="top">
@@ -1280,11 +1309,6 @@ Supervisor receives worker callback
 </td>
 <td valign="top">
 
-[Supervisor Agent Pattern](supervisor-agent-pattern-67417bb.md)
-
-</td>
-<td valign="top">
-
 Webhook trigger
 
 </td>
@@ -1303,11 +1327,6 @@ Registered as callbackUrl in sapAgent; outputs worker result + sessionId
 <td valign="top">
 
 Supervisor commits write-back
-
-</td>
-<td valign="top">
-
-[Supervisor Agent Pattern](supervisor-agent-pattern-67417bb.md)
 
 </td>
 <td valign="top">
@@ -1334,11 +1353,6 @@ Telemetry polling (SAP Cloud ALM)
 </td>
 <td valign="top">
 
-[Supervisor Agent Pattern](supervisor-agent-pattern-67417bb.md)
-
-</td>
-<td valign="top">
-
 Schedule Trigger + HTTP Request
 
 </td>
@@ -1357,11 +1371,6 @@ HTTP Request → SAP Cloud ALM pull APIs (via `hm` provider; one-time LMS `servi
 <td valign="top">
 
 Anomaly classification
-
-</td>
-<td valign="top">
-
-[Supervisor Agent Pattern](supervisor-agent-pattern-67417bb.md), [Security and Data Protection](security-and-data-protection-a403094.md)
 
 </td>
 <td valign="top">
@@ -1388,11 +1397,6 @@ SAP support ticket creation
 </td>
 <td valign="top">
 
-[Supervisor Agent Pattern](supervisor-agent-pattern-67417bb.md)
-
-</td>
-<td valign="top">
-
 HTTP Request → SAP Cloud ALM ITSM Adapter API
 
 </td>
@@ -1411,11 +1415,6 @@ Sanitized trace extract as attachment
 <td valign="top">
 
 Shared state store (baseline data)
-
-</td>
-<td valign="top">
-
-[Supervisor Agent Pattern](supervisor-agent-pattern-67417bb.md)
 
 </td>
 <td valign="top">
@@ -1449,19 +1448,11 @@ HANA Cloud for queryable baseline state
 <td valign="top">
 
 </td>
-<td valign="top">
-
-</td>
 </tr>
 <tr>
 <td valign="top">
 
 Human approval gate (any escalation)
-
-</td>
-<td valign="top">
-
-[Agent Quality Framework](agent-quality-framework-5f15077.md), [Precision Guardrails](precision-guardrails-ae75c89.md)
 
 </td>
 <td valign="top">
@@ -1484,11 +1475,6 @@ customAttributes: proposed value, reference, deviation, confidence, verdicts, co
 <td valign="top">
 
 Human override rate tracking
-
-</td>
-<td valign="top">
-
-[Agent Quality Framework](agent-quality-framework-5f15077.md)
 
 </td>
 <td valign="top">
@@ -1522,19 +1508,11 @@ Capture APPROVED/REJECTED/MODIFIED + delta value
 <td valign="top">
 
 </td>
-<td valign="top">
-
-</td>
 </tr>
 <tr>
 <td valign="top">
 
 Content safety filtering
-
-</td>
-<td valign="top">
-
-[Security and Data Protection](security-and-data-protection-a403094.md)
 
 </td>
 <td valign="top">
@@ -1561,11 +1539,6 @@ PII masking
 </td>
 <td valign="top">
 
-[Security and Data Protection](security-and-data-protection-a403094.md)
-
-</td>
-<td valign="top">
-
 sapOrchestration (enableMasking=true)
 
 </td>
@@ -1588,11 +1561,6 @@ Prompt injection structural separation
 </td>
 <td valign="top">
 
-[Security and Data Protection](security-and-data-protection-a403094.md)
-
-</td>
-<td valign="top">
-
 sapOrchestration systemPrompt design
 
 </td>
@@ -1610,12 +1578,29 @@ systemPrompt instructs agent: treat retrieved data as data, not instructions
 <tr>
 <td valign="top">
 
-RAG grounding with authorization
+Sanitize trace before export
 
 </td>
 <td valign="top">
 
-[Security and Data Protection](security-and-data-protection-a403094.md)
+Code node + sapOrchestration (enableMasking=true)
+
+</td>
+<td valign="top">
+
+Partial
+
+</td>
+<td valign="top">
+
+Code node strips business data fields; sapOrchestration for entity masking
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+RAG grounding with authorization
 
 </td>
 <td valign="top">
@@ -1637,10 +1622,29 @@ Authorization-enforced; agent cannot retrieve data outside its scope
 <tr>
 <td valign="top">
 
-**Precision Guardrails**
+Agent credential management
 
 </td>
 <td valign="top">
+
+BAIP credential objects (not hardcoded)
+
+</td>
+<td valign="top">
+
+Yes
+
+</td>
+<td valign="top">
+
+All credentials stored as named credential objects; never in node parameters
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+**Precision Guardrails**
 
 </td>
 <td valign="top">
@@ -1657,11 +1661,6 @@ Authorization-enforced; agent cannot retrieve data outside its scope
 <td valign="top">
 
 Pre-check: retrieve valid range/approved values
-
-</td>
-<td valign="top">
-
-[Precision Guardrails](precision-guardrails-ae75c89.md)
 
 </td>
 <td valign="top">
@@ -1688,11 +1687,6 @@ Output range/unit/sign/precision check
 </td>
 <td valign="top">
 
-[Precision Guardrails](precision-guardrails-ae75c89.md)
-
-</td>
-<td valign="top">
-
 Code node
 
 </td>
@@ -1710,12 +1704,29 @@ Boolean verdict: within tolerance or not
 <tr>
 <td valign="top">
 
-Confidence + uncertainty in output
+Reference calculation check
 
 </td>
 <td valign="top">
 
-[Precision Guardrails](precision-guardrails-ae75c89.md)
+sapMcpClient → SAP calculation service
+
+</td>
+<td valign="top">
+
+Yes
+
+</td>
+<td valign="top">
+
+Compare agent output to authoritative service result within tolerance band
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+Confidence + uncertainty in output
 
 </td>
 <td valign="top">
@@ -1742,11 +1753,6 @@ Audit trail write
 </td>
 <td valign="top">
 
-[Precision Guardrails](precision-guardrails-ae75c89.md)
-
-</td>
-<td valign="top">
-
 sapMcpClient → HANA Cloud (append-only table)
 
 </td>
@@ -1761,14 +1767,97 @@ All fields: input snapshot, output, verdicts, human decision, committed value
 
 </td>
 </tr>
+<tr>
+<td valign="top">
+
+**Pro-Code (Path 2) / BYOA (Path 3)**
+
+</td>
+<td valign="top">
+
+</td>
+<td valign="top">
+
+</td>
+<td valign="top">
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+Complex domain computation
+
+</td>
+<td valign="top">
+
+HTTP Request → custom BAIP function
+
+</td>
+<td valign="top">
+
+Pro-code
+
+</td>
+<td valign="top">
+
+When Code node sandbox is insufficient for the computation
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+Custom eval harness
+
+</td>
+<td valign="top">
+
+Joule Studio CLI (pro-code, Path 2)
+
+</td>
+<td valign="top">
+
+Pro-code
+
+</td>
+<td valign="top">
+
+Full eval loop; custom metrics; non-n8n agent framework
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+Agent deactivation (Level 3 escalation)
+
+</td>
+<td valign="top">
+
+SAP AI Agent Hub API (HTTP Request or manual)
+
+</td>
+<td valign="top">
+
+Pro-code / manual
+
+</td>
+<td valign="top">
+
+Governance policy in Agent Hub Secure & Govern
+
+</td>
+</tr>
+</tbody>
 </table>
 
 
-<a name="loio67ad0307767e461e846f03fc32494e65__section_worker_agent_pattern"/>
+<a name="loio6c4ecf5a521243f6b62892f3d4bab557__section_worker_pattern"/>
 
 ## Worker Agent Pattern
 
-The baseline worker agent handles the reason-act-observe loop for a defined Industry AI task.
+The baseline worker agent handles the reason-act-observe loop for a defined Industry AI task. This is the foundation on which the supervisor and guardrail layers are added.
 
 ```
 [Trigger: user request or event]
@@ -1795,7 +1884,7 @@ The baseline worker agent handles the reason-act-observe loop for a defined Indu
     └── Unsupervised (dev/test only) → inline verification (see below)
 ```
 
-**Committer pattern (production).** The worker is **read/recommend-only**: it holds no system-of-record write scope and returns a structured proposal. The write is performed by the **supervisor/committer identity**, which holds the write scope, after approval. The Agent Gateway denies a direct worker write at the API-call level (`min(user, agent)` scope), and an optional S/4HANA RAP instance-authorization check backstops it.
+**Committer pattern (production).** The worker is **read/recommend-only**: it holds no system-of-record write scope and returns a structured proposal. The write is performed by the **supervisor/committer identity** after approval. The Agent Gateway denies a direct worker write at the API-call level (`min(user, agent)` scope), and an optional S/4HANA RAP instance-authorization check backstops it. The audit trail attributes every committed write to the committer identity. The inline verification path below applies to **dev/test only**.
 
 **Inline verification** (when supervisor is not on the critical path):
 
@@ -1810,7 +1899,7 @@ The baseline worker agent handles the reason-act-observe loop for a defined Indu
 ```
 
 
-<a name="loio67ad0307767e461e846f03fc32494e65__section_supervisor_agent_three_workflows"/>
+<a name="loio6c4ecf5a521243f6b62892f3d4bab557__section_supervisor_workflows"/>
 
 ## Supervisor Agent: Three Workflows
 
@@ -1833,17 +1922,20 @@ Triggered by each worker agent callback. The critical path for supervised write-
          ↓
 [If/Switch: routing logic]
     ├── BOTH CONFIRM + confidence >= threshold + value < approval_threshold
-    │       → [sapMcpClient: committer writes to system of record]
+    │       → [sapMcpClient: committer writes to system of record (committer identity)]
     │         [audit trail write: COMMITTED by supervisor/committer, no human]
     ├── BOTH CONFIRM + value >= approval_threshold
-    │       → [sapTaskCenter: human approval gate]
+    │       → [sapTaskCenter: human approval gate (Layer 3)]
     │         → on APPROVED: [sapMcpClient: committer writes to system of record]
     │         → on REJECTED: [sapAgent: notify worker — no write-back]
+    │         [audit trail write: human decision + delta]
     ├── BOTH REJECT
     │       → [sapTaskCenter: escalation (priority HIGH)]
+    │         [sapAgent: notify worker — no write-back]
     │         [audit trail write: REJECTED, both stages]
     └── DISAGREE or confidence < threshold
             → [sapTaskCenter: escalation with both verdicts visible]
+              [sapAgent: notify worker — pending human decision]
               [audit trail write: ESCALATED, stage verdicts]
 ```
 
@@ -1862,7 +1954,7 @@ Runs on schedule. Does not touch the worker's critical path.
     - error_rate vs. rolling_baseline  → flag if > 3× for 3 consecutive periods
     - tool_call_count_per_invocation   → flag if > 2× p95 for 5 consecutive
     - response_latency                 → flag if > 5× p95 for 2 consecutive
-    - human_override_rate              → flag if > 40% over 7-day window
+    - human_override_rate (from audit table) → flag if > 40% over 7-day window
     - verification_rejection_rate      → flag if > 20% over 24 hours
     - identical_input_pattern          → flag if same params 3× within 5 minutes
   Output: list of {anomaly_type, severity, invocation_id, evidence}
@@ -1874,6 +1966,7 @@ Runs on schedule. Does not touch the worker's critical path.
          │       → [sapTaskCenter: alert to customer IT admin]
          └── Anomalies requiring SAP support
                  → [trigger Workflow C via HTTP Request or n8n workflow call]
+                   [update shared store: pending_support_relay=true]
 ```
 
 ### Workflow C — Support Relay
@@ -1884,6 +1977,7 @@ Triggered by Workflow B. Fires only on confirmed anomalies where SAP support is 
 [Triggered by Workflow B: receives anomaly event + invocation_id]
          ↓
 [HTTP Request: retrieve specific trace from SAP Cloud ALM pull API]
+  (targeted retrieval of the anomalous invocation only — not bulk export)
          ↓
 [Code node: sanitization pass]
   Strip:  tool call parameters, LLM response content, LLM system prompt
@@ -1894,25 +1988,31 @@ Triggered by Workflow B. Fires only on confirmed anomalies where SAP support is 
   Apply SAP DPI entity masking to any remaining text fields
          ↓
 [HTTP Request: SAP Cloud ALM ITSM Adapter API]
-  Create support ticket: severity from anomaly_type;
-  attachment: sanitized trace extract; description: anomaly_type + evidence summary
+  Create support ticket:
+    severity: derived from anomaly_type
+    attachment: sanitized trace extract
+    description: anomaly_type + evidence summary (no business data)
+    customerTenantId: from BAIP context
          ↓
 [HTTP Request: BAIP notification service]
   Notify customer IT admin: incident created, reference number
+         ↓
+[Update shared store: support_relay_completed, incident_id]
 ```
 
 
-<a name="loio67ad0307767e461e846f03fc32494e65__section_hitl_integration"/>
+<a name="loio6c4ecf5a521243f6b62892f3d4bab557__section_hitl"/>
 
 ## Human-in-the-Loop Integration
 
-`sapTaskCenter` is the single integration point for all human-in-the-loop requirements.
+`sapTaskCenter` is the single integration point for all human-in-the-loop requirements. The node handles queueing, routing, and response capture.
 
 ### Priority Guidance
 
 **Task Center Priority by Situation**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -1925,6 +2025,8 @@ Priority
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -1985,22 +2087,32 @@ Advisory review: human override rate alert
 
 </td>
 </tr>
+</tbody>
 </table>
 
-For production deployments, use group IDs (roles) rather than individual user IDs so that approval tasks route correctly when individuals are unavailable. The group configuration is a production handover item that the customer's IT admin must configure.
+### Task Center Response Handling
+
+```
+[sapTaskCenter output]
+    ├── decision: "APPROVED"    → proceed with committed value from agent
+    ├── decision: "REJECTED"    → abort transaction; log rejection reason
+    └── decision: "MODIFIED"    → use human-modified value; log delta in audit trail
+                                   (the human's modification IS the committed value)
+```
+
+The MODIFIED path is important: when a human changes the agent's proposed value, the audit trail must record both values (agent proposed, human committed) and the delta. This delta is the primary input to the human override rate signal and the ground-truth dataset.
 
 
-<a name="loio67ad0307767e461e846f03fc32494e65__section_security_checklist"/>
+<a name="loio6c4ecf5a521243f6b62892f3d4bab557__section_security_controls"/>
 
 ## Security and Data Protection Controls
 
 ### Per-Workflow Security Checklist
 
-For every Joule Studio workflow in production, verify:
-
-**Per-Workflow Security Controls**
+**Security Control Implementation**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -2018,6 +2130,8 @@ Required For
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -2137,6 +2251,7 @@ All supervisor workflows
 
 </td>
 </tr>
+</tbody>
 </table>
 
 ### Prompt Injection Defense in Workflow Design
@@ -2151,7 +2266,7 @@ sapOrchestration systemPrompt (always include for agents retrieving external con
 ```
 
 
-<a name="loio67ad0307767e461e846f03fc32494e65__section_precision_guardrail_implementation"/>
+<a name="loio6c4ecf5a521243f6b62892f3d4bab557__section_guardrail_impl"/>
 
 ## Precision Guardrail Implementation
 
@@ -2169,9 +2284,10 @@ LAYER 2 — Output Validation (before write-back)
     output: {s1_verdict: CONFIRM|REJECT, s1_deviation: number}
 
   Stage 2 (if authoritative calculation service exists):
-    [sapMcpClient → SAP calculation service]
+    [sapMcpClient → SAP calculation service (pricing engine, batch classifier, etc.)]
     output: {reference_value, reference_unit}
     [Code node: |agent_value - reference_value| / reference_value → deviation_pct]
+    output: {s1_reference_verdict: CONFIRM|REJECT, reference_deviation: number}
 
   Stage 3 (LLM critic):
     [sapOrchestration: critic systemPrompt with outputSchema]
@@ -2198,13 +2314,14 @@ LAYER 4 — Audit Trail (always, for every committed output)
 ```
 
 
-<a name="loio67ad0307767e461e846f03fc32494e65__section_when_pro_code_required"/>
+<a name="loio6c4ecf5a521243f6b62892f3d4bab557__section_procode"/>
 
 ## When Pro-Code Is Required
 
-**Pro-Code Decision Guide**
+**Low-Code vs. Pro-Code Decision**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -2222,6 +2339,8 @@ Pro-Code Path
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -2293,12 +2412,12 @@ Yes
 <tr>
 <td valign="top">
 
-Content safety + PII masking
+Range/unit/sign/precision checks
 
 </td>
 <td valign="top">
 
-Yes
+Yes (Code node)
 
 </td>
 <td valign="top">
@@ -2354,39 +2473,25 @@ No
 </td>
 <td valign="top">
 
-**BYOA (Path 3)** on the customer subaccount, registering to SMJ via A2A. SAP API Policy v4/2026 prohibits direct SAP API calls from external agents — all SAP interactions must flow via A2A → Joule/Agent Gateway.
+**BYOA (Path 3)** on the customer subaccount, registering to SMJ via A2A, is the standard runtime for productization-intent builds today. The AppFND SDK gives LangGraph and Pydantic AI first-class support. SAP API Policy v4/2026 prohibits direct SAP API calls from external agents — all SAP interactions must flow via A2A → Joule/Agent Gateway.
 
 </td>
 </tr>
-<tr>
-<td valign="top">
-
-Batch processing of large datasets within agent workflow
-
-</td>
-<td valign="top">
-
-Partial — Loop Over Items works for moderate volumes; very large batches exceed n8n canvas limits
-
-</td>
-<td valign="top">
-
-BAIP function or BYOA (Path 3)
-
-</td>
-</tr>
+</tbody>
 </table>
 
-**FDE timeline cost of pro-code**: Path 2 (Joule Studio CLI) requires CLI setup, code review, and security concept documentation for DPCE. Path 3 (BYOA) adds dependency scanning and explicit harness registration. Budget an additional 3–5 days per pro-code component in the FDE Development phase estimate.
+**FDE timeline cost of pro-code**: Path 2 (Joule Studio CLI) requires CLI setup, code review, and security concept documentation for DPCE. Path 3 (BYOA) adds dependency scanning and explicit harness registration to these requirements. Budget an additional 3–5 days per pro-code component in the FDE Development phase estimate.
+
+**AppFND standard framework stack (Path 2 pro-code):** The Application Foundation SDK provides first-class support for **LangGraph** (Python, JS/TS) and **Pydantic AI** (Python) — both are the SAP-recommended frameworks for code-based agent builds, with built-in tracing, metering, and Joule connectivity (confirmed October 2026 AI Golden Path update).
 
 
-<a name="loio67ad0307767e461e846f03fc32494e65__section_fde_build_sequence"/>
+<a name="loio6c4ecf5a521243f6b62892f3d4bab557__section_build_sequence"/>
 
 ## FDE Build Sequence
 
 The recommended build order ensures each layer can be tested against the previous before adding complexity.
 
-**Not every engagement requires the full stack.** Two paths are available: a Minimum Viable Path (worker + inline verification + security) that fits comfortably within a standard ~90-day FDE sprint for most use cases, and a Full Stack Path that adds supervisor workflows and precision guardrails for high-stakes or high-automation deployments. The scope decision belongs in Week 0.
+**Not every engagement requires the full stack.** The sequence below shows two paths: a Minimum Viable Path (worker + inline verification + security) that fits comfortably within a standard ~90-day FDE sprint for most use cases, and a Full Stack Path that adds supervisor workflows and precision guardrails for high-stakes or high-automation deployments. The scope decision belongs in Week 0.
 
 ```
 ── MINIMUM VIABLE PATH (all FDE engagements) ────────────────────────────────
@@ -2396,14 +2501,16 @@ Week 0 (Scope):
           human approval recipients, test data strategy (synthetic vs. TEA)
   Decide: which supervisor workflows are in scope (A only? A+B? Full A+B+C?)
           precision guardrail stack required? (yes/no per output type)
-  Architect: TR1 A2A endpoint — prerequisite for eval-harness integration and
-             Agent Gateway routing; plan it as a Week-0 architecture item
+  Architect: TR1 A2A endpoint — prerequisite for eval-harness integration and Agent
+             Gateway routing; plan it as a Week-0 architecture item
 
 Week 1–2 (Worker Agent, basic):
   Build: AI Agent + sapOrchestration + sapMcpClient (read tools)
-  Instrument: TR13 Agent Action metering from day one — emit the OTel metering
-              payload; do not defer to productization
+  Instrument: TR13 Agent Action metering from day one — emit the OTel metering payload
+              (sap.ai.agent.trigger.type; propagate x-sap-origin); do not defer to
+              productization
   Test:  Read-only flows only; no write-back
+  Verify: Data retrieval correct; LLM output format correct
 
 Week 3–5 (Inline Verification + Write-Back + Security):
   Build: Stage 1 Code node (deterministic checks)
@@ -2414,10 +2521,12 @@ Week 3–5 (Inline Verification + Write-Back + Security):
   Enable: enableFiltering=true, enableMasking=true on sapOrchestration nodes
   Add:    Prompt injection defense to systemPrompts
   Review: Credential handling — no hardcoded secrets in any node
+  Test:   Boundary condition inputs; escalation paths; content safety filter;
+          audit trail records created for all committed outputs
 
 Week 6–9 (Integration, UAT, Handover):
   Internal testing + checkpoint
-  Customer UAT with EAC (Early Adopter Care) contacts (if applicable)
+  Customer UAT with EAC contacts (if applicable)
   Production handover package (minimum):
     - Agent authorization matrix
     - Threshold configuration parameters (and their owners)
@@ -2428,30 +2537,34 @@ Week 6–9 (Integration, UAT, Handover):
 
 Week 5–7 (Supervisor Workflows):
   Build: Workflow A (Inline Quality Relay) — Webhook + verification + sapAgent
-         Workflow B (Telemetry Monitor)
+         Workflow B (Telemetry Monitor) — if anomaly detection across invocations needed
          Workflow C (Support Relay) — only if CA alignment is confirmed
          Shared state store (HANA Cloud baseline table)
   Separate BAIP application registrations for each supervisor workflow
+  Test:  Inject anomalous telemetry; verify Workflow B classifies correctly
+         Verify Workflow C sanitization: no business data in exported extract
+         Verify worker-supervisor callback correlation via sessionId
 
 Week 7–9 (Precision Guardrail Stack):
   Build: Layer 1 pre-check (sapMcpClient constraints retrieval)
          Layer 2 reference calculation (sapMcpClient → SAP calculation service)
          Layer 3 threshold routing + sapTaskCenter (full customAttributes)
          Layer 4 audit trail (HANA Cloud append-only)
+  Test:  Unit confusion inputs; magnitude error inputs; sign error inputs
 
-Week 9–12 (Extended Integration + Handover):
+Week 9–12 (Extended Integration + Handover — when full stack is in scope):
   Additional UAT covering supervisor and guardrail layers
   Production handover additions:
     - Supervisor workflow configurations and agent identities
-    - Audit trail table structure and retention policy
+    - Audit trail table structure and retention policy (confirmed with compliance team)
     - QPA test strategy extended with guardrail boundary tests
 ```
 
 > ### Note:  
-> Escalation *Levels* — Level 2 (human approval via `sapTaskCenter`) and Level 3 (agent deactivation) — are defined in [Agent Quality Framework](agent-quality-framework-5f15077.md). Keep them distinct from the precision guardrail *Layers* 1–4: "Layer" names a guardrail stage; "Level" names an escalation step.
+> Escalation *Levels* — Level 2 (human approval via `sapTaskCenter`) and Level 3 (agent deactivation) — are defined in [Agent Quality Framework](agent-quality-framework-09082f8.md). Keep them distinct from the precision guardrail *Layers* 1–4: "Layer" names a guardrail stage; "Level" names an escalation step.
 
 
-<a name="loio67ad0307767e461e846f03fc32494e65__section_platform_compliance"/>
+<a name="loio6c4ecf5a521243f6b62892f3d4bab557__section_platform_compliance"/>
 
 ## Platform Compliance Requirements
 
@@ -2459,9 +2572,10 @@ Week 9–12 (Extended Integration + Handover):
 
 Regardless of whether an agent is built on AppFoundation or a custom runtime, nine integrations are required by the AI Golden Path. Teams building outside AppFND must provide equivalent coverage independently — there is no exemption.
 
-**Required BTP Agent Integrations**
+**Required Platform Integrations**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -2474,6 +2588,8 @@ Purpose
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -2494,7 +2610,7 @@ IAS / SCI
 </td>
 <td valign="top">
 
-Identity and access; IAS app2app tokens for agent-to-agent calls (TR3)
+Identity and access; IAS app2app tokens for agent-to-agent calls
 
 </td>
 </tr>
@@ -2506,7 +2622,7 @@ UMS / ORD
 </td>
 <td valign="top">
 
-Unified Metering Service; Open Resource Discovery registration (TR6, TR13)
+Unified Metering Service; Open Resource Discovery registration
 
 </td>
 </tr>
@@ -2518,7 +2634,7 @@ Agent Gateway
 </td>
 <td valign="top">
 
-All tool calls and agent-to-agent calls must route through Agent Gateway (TR10)
+All tool calls and agent-to-agent calls must route through Agent Gateway
 
 </td>
 </tr>
@@ -2530,7 +2646,7 @@ OctoRoute
 </td>
 <td valign="top">
 
-Metering pipeline for AI Unit consumption (TR13)
+Metering pipeline for AI Unit consumption
 
 </td>
 </tr>
@@ -2582,36 +2698,36 @@ Automated deploy, rollback, and version management
 
 </td>
 </tr>
+</tbody>
 </table>
 
-Confirm coverage for each item before the Development phase begins — this is a Week 0 checklist item, not a productization task.
+Teams building on AppFoundation receive these integrations as part of the platform. Teams choosing a custom runtime (Path 3 — BYOA) must wire each integration independently. Confirm coverage for each item before the Development phase begins — this is a Week 0 checklist item, not a productization task.
+
+**Agent Action Metering (TR13)** is the most frequently missed item in FDE sprints and is revenue-critical. Every agent step must emit a metering payload via OpenTelemetry so that AI Unit consumption can be billed correctly. This is not a productization-time addition — it must be designed into the agent's OTel instrumentation from sprint week 1.
 
 **TR13 delivery differs by deployment path:**
 
--   **JS2.0 managed runtime (on SMJ)**: the managed harness emits TR13-compliant metering automatically. Confirm with the BAIP platform team that the harness version active in the customer's tenant includes TR13 telemetry.
--   **BYOA (self-managed runtime)**: the metering payload is **not** automatic. The FDE team must explicitly instrument every agent step to emit `sap.ai.agent.trigger.type` and propagate the `x-sap-origin` header. Verify metering emission in the development environment before Week 6 gate.
+-   **JS2.0 managed runtime (on SMJ)**: the managed harness emits TR13-compliant metering automatically for all agent invocations. Confirm with the BAIP platform team that the harness version includes TR13 telemetry.
+-   **BYOA (self-managed runtime)**: the metering payload is **not** automatic. The FDE team must explicitly instrument every agent step to emit `sap.ai.agent.trigger.type` and propagate the `x-sap-origin` header. Use the OTel middleware in Project LightSpeed (`references/middleware/`) as the starting point. Verify metering emission before Week 6 gate.
 
-**A2A Server (TR1)** is the prerequisite for eval harness integration and Agent Gateway routing. Plan TR1 as a Week 0 architecture item.
+For the complete TR1–TR14 checklist with sprint integration timing, see [Production Operations](production-operations-168fd42.md).
 
-For the complete TR1–TR14 checklist with sprint integration timing, see [Production Operations](production-operations-e24808a.md).
+### Open Compliance Items
 
-### Open Compliance Items — EU AI Act, Ethics Assessment, IUCR
-
-Three compliance processes are explicitly flagged as "process not confirmed — contribute via PR" as of 2026-09:
+The FDE Engagement Skill includes a Compliance & Technical Release track. As of 2026-09, three compliance processes are explicitly flagged as "process not confirmed":
 
 -   **EU AI Act classification**: risk-tier classification process for agent outputs not yet formally confirmed across all domain types.
 -   **Ethics Assessment**: internal review process not yet confirmed.
 -   **IUCR (Internal Use Case Review)**: review gate not yet confirmed.
 
-Flag these at Week 0 so they can be resolved before the Week 9 pre-deployment gate. The formal process is pending confirmation, not absent.
+Until these processes are formally confirmed, treat them as open compliance items during FDE sprint planning. Flag them at Week 0 so they can be resolved before the Week 9 pre-deployment gate.
 
-### Governance Bodies: EATER vs. CPA Central Agent and Skill Marketplace
-
-Two distinct governance bodies apply to different artifact types.
+### Governance Bodies: EATER vs. CPA Central Agent & Skill Marketplace
 
 **Governance Body Scope**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -2629,6 +2745,8 @@ When It Applies
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -2649,7 +2767,7 @@ Before adopting any non-SAP tool in an FDE engagement. Check the EATER Tech Rada
 <tr>
 <td valign="top">
 
-**CPA Central Agent and Skill Marketplace**
+**CPA Central Agent & Skill Marketplace**
 
 </td>
 <td valign="top">
@@ -2663,33 +2781,136 @@ When publishing reusable components for multi-project use.
 
 </td>
 </tr>
+</tbody>
 </table>
 
 A coding assistant used to build an agent goes through EATER; the agent itself (if published as a reusable component) goes through CPA. Both checks may apply within the same FDE sprint.
 
 
-<a name="loio67ad0307767e461e846f03fc32494e65__section_byoa_runtime"/>
+<a name="loio6c4ecf5a521243f6b62892f3d4bab557__section_byoa"/>
 
 ## BYOA Runtime and the CMJ→SMJ Orchestrator Migration
 
-**CMJ (Customer-Managed Joule) — orchestrator, deprecated.** CMJ receives only AutoSQL / Knowledge Graph / DPQuery, and Joule Work, Joule Studio 2.0, and new LoB onboarding are explicitly out of scope for it. The CPA direction since Sapphire 2026 is **CMJ → SMJ migration**.
+Two separate concepts — keep them on their two axes:
 
-**BYOA (Bring Your Own Agent) — custom-agent runtime, standard.** Custom agents built by the FDE team run on the customer's BTP subaccount and register to the SAP-managed orchestrator (SMJ) via the **A2A protocol (v0.3.0)** and capability bundle. BYOA is the **standard runtime for productization-intent FDE work — it is NOT a fallback**.
+-   **CMJ (Customer-Managed Joule) — orchestrator, deprecated.** The Joule provisioning model where the customer manages their own Joule/BAIP account. It is now a **migration target, not a delivery choice**: CMJ receives only AutoSQL / Knowledge Graph / DPQuery. The CPA direction since Sapphire 2026 is **CMJ → SMJ migration**.
+-   **BYOA (Bring Your Own Agent) — custom-agent runtime, standard.** Custom agents built by the FDE team run on the customer's BTP subaccount and register to the SAP-managed orchestrator (SMJ) via the **A2A protocol (v0.3.0)**. BYOA is the **standard runtime for productization-intent FDE work — it is NOT a fallback**, and it is independent of the orchestrator axis: a BYOA agent registers to SMJ, not CMJ.
 
 **Phased-GA status (as of November 2026):**
 
--   **SMJ / THE BOX orchestrator**: GA since 2026-06-01
--   **Joule Studio 2.0 design-time / build env**: GA underway in a phased approach (fair-use limits apply)
--   **Custom-agent runtime on the SAP-managed platform**: EAC-gated / select customers only, free through Dec 2026 — not broadly GA
--   **Bidirectional A2A** (inbound Joule → BYOA agent): not yet GA — the SAP Architecture Center (Oct 2026) calls this a transitional state
+-   **SMJ / THE BOX orchestrator**: **GA since 2026-06-01**.
+-   **Joule Studio 2.0 design-time / build env**: GA underway in a phased approach (fair-use limits apply).
+-   **Custom-agent runtime on the SAP-managed platform**: **EAC-gated / select customers only, free through Dec 2026 — not broadly GA.**
+-   **Outbound A2A** (agent registered + surfaced in Joule): available but limited, **unidirectional**.
+-   **Bidirectional A2A** (inbound Joule → BYOA agent): **not yet GA** — the SAP Architecture Center (Oct 2026) calls this a **transitional state**.
 
-For engagements starting now, architect the **BYOA + outbound-A2A** path — it is functional today. Treat full Joule Studio managed-runtime deployment + bidirectional A2A as an **H1 2027 target**.
+**Engagement guidance.** For engagements starting now, architect the **BYOA + outbound-A2A** path — it is functional today. Treat full Joule Studio managed-runtime deployment + bidirectional A2A as an **H1 2027 target**.
+
+### CMJ vs SMJ — The Two Joule Provisioning Models
+
+**CMJ vs. SMJ Comparison**
+
+<table>
+<thead>
+<tr>
+<th valign="top">
+
+Aspect
+
+</th>
+<th valign="top">
+
+CMJ (Customer-Managed Joule) — Deprecated
+
+</th>
+<th valign="top">
+
+SMJ (SAP-Managed Joule) — Default
+
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td valign="top">
+
+**What it means**
+
+</td>
+<td valign="top">
+
+Customer manages their own Joule/BAIP account
+
+</td>
+<td valign="top">
+
+SAP manages the Joule/BAIP account ("THE BOX")
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+**Status**
+
+</td>
+<td valign="top">
+
+**Deprecated — migration target.** Receives only AutoSQL / Knowledge Graph / DPQuery
+
+</td>
+<td valign="top">
+
+**GA since 2026-06-01.** Default orchestrator for all new engagements
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+**New features**
+
+</td>
+<td valign="top">
+
+**Out of scope** — not delivered on CMJ
+
+</td>
+<td valign="top">
+
+**In scope** — only SMJ receives new features
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+**FDE implication**
+
+</td>
+<td valign="top">
+
+Relevant only as the source side of a CMJ → SMJ migration
+
+</td>
+<td valign="top">
+
+**Default for all new FDE engagements**; confirm SMJ availability in the customer's region
+
+</td>
+</tr>
+</tbody>
+</table>
+
+> ### Note:  
+> A2A integration is phased as of November 2026. Outbound (BYOA path — the BYOA agent is registered and surfaced in Joule) is available but limited and unidirectional. Inbound / bidirectional A2A is not yet GA — the SAP Architecture Center (October 2026) explicitly calls this a transitional state. For FDE engagements starting now, architect the outbound BYOA + A2A path (functional today) and treat full bidirectional A2A as an H1 2027 target.
 
 ### Three-Checkpoint BYOA Delivery Flow
 
 **BYOA Delivery Checkpoints**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -2707,6 +2928,8 @@ Evidence Required to Proceed
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -2737,7 +2960,7 @@ Deploy to Cloud Foundry or Kyma; remote smoke test via public URL; auth configur
 </td>
 <td valign="top">
 
-Agent Card reachable at public URL; `SendMessage` over HTTPS returns correct response; pod healthy
+Agent Card reachable at public URL; `SendMessage` over HTTPS returns correct response; CF app or Kyma pod healthy
 
 </td>
 </tr>
@@ -2749,7 +2972,7 @@ Agent Card reachable at public URL; `SendMessage` over HTTPS returns correct res
 </td>
 <td valign="top">
 
-Register agent in Joule via capability bundle + `joule deploy`; test from Joule sidebar
+Register agent in Joule via capability bundle + `joule deploy`; test from Joule sidebar or surface
 
 </td>
 <td valign="top">
@@ -2758,15 +2981,14 @@ Register agent in Joule via capability bundle + `joule deploy`; test from Joule 
 
 </td>
 </tr>
+</tbody>
 </table>
 
-**Synchronous timeout constraint**: Joule expects a response from the BYOA agent within **60 seconds** for synchronous A2A calls. Measure p99 latency under realistic load conditions before confirming the synchronous path is viable.
+**Synchronous timeout constraint**: Joule expects a response from the BYOA agent within **60 seconds** for synchronous A2A calls. Agent workflows involving chained LLM calls, multi-step tool use, or external data fetches must be designed to respond within this window — or must implement the asynchronous A2A pattern.
 
 ### Joule Capability Bundle
 
-Registering a BTP-hosted agent into Joule requires a `joule-capability/` directory containing four `.sapdas.yaml` files.
-
-**Bundle layout:**
+Registering a BTP-hosted agent into Joule requires a `joule-capability/` directory containing four `.sapdas.yaml` files:
 
 ```
 joule-capability/
@@ -2791,6 +3013,40 @@ spec:
   scenarios: [default]
 ```
 
+**`_da.sapdas.yaml`** — binds the agent to Joule conversational surfaces:
+
+```yaml
+apiVersion: joule.ext/v1
+kind: DigitalAssistant
+metadata: { name: my-agent-da }
+spec:
+  surfaces: [joule-sidebar-erp]
+  capabilityRef: my-agent
+```
+
+**`scenarios/default.sapdas.yaml`** — maps user intents to functions:
+
+```yaml
+apiVersion: joule.ext/v1
+kind: Scenario
+metadata: { name: default }
+spec:
+  intents: ["@my-agent *"]
+  fallback: true
+  functions: [my-function]
+```
+
+**`functions/<name>.sapdas.yaml`** — maps each function to an A2A skill ID:
+
+```yaml
+apiVersion: joule.ext/v1
+kind: Function
+metadata: { name: my-function }
+spec:
+  description: "What this function does"
+  a2aSkillId: my-skill-id    # must match AgentSkill(id=...) in the agent code
+```
+
 **Deploy command:**
 
 ```bash
@@ -2799,17 +3055,15 @@ joule deploy ./joule-capability
 joule list capabilities | grep my-agent
 ```
 
-**Critical pitfalls:**
-
--   `agentCardUrl` must be publicly reachable (no auth on the Agent Card endpoint). If Joule cannot GET the Agent Card during registration, the capability will not register.
--   `a2aSkillId` must exactly match the skill ID declared in the agent code. A mismatch registers the capability but invocation returns 404.
--   DTA schema 3.28.0+ is required. Older tenants with schema 3.27.0 may fail. Verify before the Development phase.
+> ### Caution:  
+> `agentCardUrl` must be publicly reachable (no auth on the Agent Card endpoint). If Joule cannot GET the Agent Card during registration, the capability will not register. `a2aSkillId` must exactly match the skill ID declared in the agent code — a mismatch registers the capability but invocation returns 404. DTA schema version 3.28.0 or higher is required on the target tenant.
 
 ### Regional Joule Availability
 
 **Regional Joule GA Status (as of 2026-Q3)**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -2827,6 +3081,8 @@ Notes
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -2927,26 +3183,20 @@ Confirm with current regional preflight
 
 </td>
 </tr>
+</tbody>
 </table>
 
-### Templated Approach — Convergence to Joule Studio
 
-The Templated Approach is the convergence mechanism: BYOA/cookbook patterns are being progressively mapped to Joule Studio low-code and CLI equivalents. Convergence happens at three levels:
-
-1.   **Scaffold templates**: the A2A Agent Toolkit scaffolds the same agent shape that Joule Studio will eventually consume as a managed artifact
-2.   **Capability bundle → Joule Studio agent config**: the 4-file YAML bundle maps directly to Joule Studio agent configuration fields
-3.   **BAIP harness adoption**: as BAIP rolls out to additional regions, BYOA agents can migrate to the managed runtime — the A2A interface remains unchanged
-
-
-<a name="loio67ad0307767e461e846f03fc32494e65__section_mcp_fde_context"/>
+<a name="loio6c4ecf5a521243f6b62892f3d4bab557__section_mcp"/>
 
 ## MCP in the FDE Context
 
-The **Model Context Protocol (MCP)** is an open standard that connects AI agents to tools — APIs, data sources, functions. MCP is frequently discussed alongside A2A but serves a fundamentally different purpose.
+The **Model Context Protocol (MCP)** is an open standard that connects AI agents to tools — APIs, data sources, functions. MCP and A2A serve different purposes:
 
-**MCP vs. A2A**
+**MCP vs. A2A Comparison**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -2964,10 +3214,12 @@ A2A
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
-Purpose
+**Purpose**
 
 </td>
 <td valign="top">
@@ -2984,7 +3236,7 @@ Connect **agents to other agents** (delegation, capability discovery)
 <tr>
 <td valign="top">
 
-Communication
+**Communication**
 
 </td>
 <td valign="top">
@@ -3001,7 +3253,7 @@ Multi-turn task delegation, capability discovery
 <tr>
 <td valign="top">
 
-Primary SAP use (external)
+**Primary SAP use (external)**
 
 </td>
 <td valign="top">
@@ -3011,14 +3263,14 @@ MCP Gateway: governed tool access for specific integrations
 </td>
 <td valign="top">
 
-Agent Gateway: preferred for multi-agent interoperability and production scenarios
+Agent Gateway: preferred for multi-agent interoperability and production agent-to-agent scenarios
 
 </td>
 </tr>
 <tr>
 <td valign="top">
 
-Protocol stability
+**Protocol stability**
 
 </td>
 <td valign="top">
@@ -3032,6 +3284,7 @@ More stable; v0.3.0 is current SAP implementation
 
 </td>
 </tr>
+</tbody>
 </table>
 
 **For external multi-agent interoperability and production scenarios, A2A via the Agent Gateway is SAP's preferred standard.**
@@ -3041,6 +3294,7 @@ More stable; v0.3.0 is current SAP implementation
 **SAP MCP Usage Modes**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -3063,6 +3317,8 @@ FDE Relevance
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -3137,7 +3393,7 @@ Relevant when connecting BYOA agents to non-standard API sources not covered by 
 </td>
 <td valign="top">
 
-SAP-provided MCP servers for CAP, Fiori, and UI5 Web Components used by AI coding agents during development — not for production agent-to-tool connectivity
+SAP-provided MCP servers for CAP, Fiori, and UI5 Web Components used by AI coding agents during *development* — not for production agent-to-tool connectivity
 
 </td>
 <td valign="top">
@@ -3151,15 +3407,17 @@ Mandatory for Path 2 pro-code builds with CAP/Fiori
 
 </td>
 </tr>
+</tbody>
 </table>
 
 ### Three SAP MCP Servers for Pro-Code FDE Builds
 
-For FDE engineers building Path 2 (Joule Studio CLI, pro-code) agents with CAP backends or Fiori frontends, three SAP-provided MCP servers provide authoritative, real-time knowledge at code generation time.
+For FDE engineers building Path 2 agents with CAP backends or Fiori frontends, three SAP-provided MCP servers provide authoritative, real-time knowledge at code generation time:
 
 **SAP Dev MCP Servers**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -3177,6 +3435,8 @@ Impact Without It
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -3190,7 +3450,7 @@ CDS entity definitions, service specs, OData wiring patterns, backend best pract
 </td>
 <td valign="top">
 
-AI coding agents produce ~27% architectural errors on CAP code: deprecated annotations, naming mismatches, wrong OData wiring — bugs that fail silently at runtime
+AI coding agents produce ~27% architectural errors on CAP code: deprecated annotations, naming mismatches, wrong OData wiring
 
 </td>
 </tr>
@@ -3228,24 +3488,17 @@ Component configuration errors that appear correct but fail in the browser
 
 </td>
 </tr>
+</tbody>
 </table>
 
 Install via the Joule Studio developer documentation for current MCP server endpoints. These are dev tooling Mode 4 servers — they improve code generation quality during the sprint; they are not wired into the production agent.
 
-### MCP Gateway: When the FDE Team Might Build or Consume One
-
-Key constraints when using a customer-managed MCP Gateway:
-
--   **Full customer responsibility**: security, lifecycle management, upgrade cycles, and compliance sit with the customer.
--   **Token exchange is a hard requirement**: any MCP server calling SAP APIs must perform OAuth 2.0 Token Exchange (RFC 8693). See [Security and Data Protection](security-and-data-protection-a403094.md) for the full token exchange requirement.
--   **SAP AI Agent Hub verification gate**: only MCP servers that have been verified through the SAP AI Agent Hub can be called in production.
--   **Protocol volatility warning**: MCP is still evolving rapidly. The July 2026 release candidate introduced breaking changes. Budget for upgrade cycles if committing to a self-managed server.
-
-### Decision Guide
+### MCP vs. A2A Decision Guide
 
 **Integration Path Decision Guide**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -3258,6 +3511,8 @@ Path
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -3306,37 +3561,16 @@ Three SAP dev MCP servers (Mode 4)
 
 </td>
 </tr>
-<tr>
-<td valign="top">
-
-Multi-party enterprise hybrid scenarios
-
-</td>
-<td valign="top">
-
-A2A via SAP Integration Suite (adds pub-sub, traffic management on top of Agent Gateway)
-
-</td>
-</tr>
+</tbody>
 </table>
 
 **Related Information**  
 
 
-[Agent Quality Framework](agent-quality-framework-5f15077.md)
+[Joule Studio](https://help.sap.com/docs/JOULESTUDIO/7e496fe6f81f4975aec07d9c1cbd2aef/36d3e974446844a1b0ffb7af8fa9446c.html "SAP's AI-first development environment for building and deploying AI agents, intelligent apps, and automations.") :arrow_upper_right:
 
-[Supervisor Agent Pattern](supervisor-agent-pattern-67417bb.md)
+[Developing with Joule Studio CLI](https://help.sap.com/docs/JOULESTUDIO/7e496fe6f81f4975aec07d9c1cbd2aef/a7bbbde0cf3b48f4a82a4403577a6b2c.html "Build Joule Studio solutions from a local IDE using the jl CLI, with full control over code structure and CI/CD integration.") :arrow_upper_right:
 
-[Security and Data Protection](security-and-data-protection-a403094.md)
+[SAP AI Agent Hub — Plan and Build](https://help.sap.com/docs/AI_AGENT_HUB/225000cc2ce44a228b9534a0f1098a9b/e2a29b0c422e4aceadee658f4bbab71b.html "Guidance for planning which AI agents to build or adopt and avoiding duplication using the agent inventory.") :arrow_upper_right:
 
-[Precision Guardrails](precision-guardrails-ae75c89.md)
-
-[Production Operations](production-operations-e24808a.md)
-
-[Joule Studio overview](https://help.sap.com/docs/JOULESTUDIO/7e496fe6f81f4975aec07d9c1cbd2aef/36d3e974446844a1b0ffb7af8fa9446c.html "Joule Studio overview — design-time environment for building Joule agents and skills, including the visual canvas and build paths.") :arrow_upper_right:
-
-[Joule Studio CLI (Pro-Code)](https://help.sap.com/docs/JOULESTUDIO/7e496fe6f81f4975aec07d9c1cbd2aef/a7bbbde0cf3b48f4a82a4403577a6b2c.html "Joule Studio CLI documentation for pro-code agent development, scaffolding, and deployment.") :arrow_upper_right:
-
-[SAP Integration Suite MCP Server](https://help.sap.com/docs/SAP_INTEGRATION_SUITE/9519789d5664487f8b9cd89eba514477/94957bc87247462ebdfd65e72512122a.html "SAP Integration Suite MCP Gateway — configure and manage customer-managed MCP servers for governed tool access.") :arrow_upper_right:
-
-[Joule Work – Develop (Joule Studio in Joule Work)](https://help.sap.com/docs/JOULE_WORK/621104a90a01407fbb2d1613db39a54d/9d86b3b7b9534915a0f542ea7ea9f839.html "Joule Studio in Joule Work — integrated development experience for building and deploying agents within the Joule Work surface.") :arrow_upper_right:
+[SAP AI Agent Hub](https://help.sap.com/docs/AI_AGENT_HUB/225000cc2ce44a228b9534a0f1098a9b/8ebd704d35a746c180af003db1f5acb0.html "Introduction to SAP AI Agent Hub — discover, govern, and monitor AI agents across your enterprise landscape.") :arrow_upper_right:

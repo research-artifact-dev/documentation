@@ -1,32 +1,20 @@
-<!-- loiobb08bc0fcf5344a3b5b927f89ffc57eb -->
+<!-- loio6150d04f3469451bbe132250d3242d8d -->
 
-# Agent Evaluation
+# Agent Evaluation in FDE Sprints
 
-Evaluation in an FDE context is not a final-sprint activity — it is the feedback mechanism that gates each phase of delivery. This topic defines the three-phase evaluation lifecycle, the pre-build readiness gates, the post-build scorecard, the `aeval` framework (offline and online modes), test case construction, the post-deployment feedback loop, production drift classification, and the `agentic-eval` spec quality tool.
-
-
-<a name="loiobb08bc0fcf5344a3b5b927f89ffc57eb__section_why_evaluation_needs_its_own_chapter"/>
-
-## Why Evaluation Needs Its Own Chapter
-
-[Agent Quality Framework](agent-quality-framework-5f15077.md) defines *what* to measure: three quality dimensions (technical, process KPIs, business outcomes) and the success rate as the primary release gate. This topic defines *how* to measure it — the mechanism, the tooling, and when in the sprint each piece is required.
-
-Evaluation in an FDE context has properties that make informal approaches fail:
-
--   **Agents are non-deterministic.** The same input can produce different outputs on different runs. A single manual test run is not quality evidence; a structured test suite run across multiple iterations is.
--   **TR9 is mandatory.** SAP's AI Golden Path requires both offline evaluation (scripted test suites in CI) and online evaluation (monitoring of live production sessions) for every production agent.
--   **Evaluation must start early.** FDE sprints are short (target: 90 days). An evaluation infrastructure built in week 9 cannot generate the quality evidence needed for the FDE Gate at week 6 or the EAC launch at week 9.
+Agent evaluation in FDE sprints is a continuous, multi-phase activity — not a final-sprint gate — encompassing pre-build readiness checks, post-build scoring, and continuous production monitoring. The `aeval` framework implements the two evaluation modes required by SAP's AI Golden Path TR9 (offline CI-gated and online production monitoring), while the `agentic-eval` skill measures spec and build quality at the two sprint points where spec drift is most likely to surface.
 
 
-<a name="loiobb08bc0fcf5344a3b5b927f89ffc57eb__section_three_phase_lifecycle"/>
+<a name="loio6150d04f3469451bbe132250d3242d8d__section_lifecycle"/>
 
 ## Three-Phase Evaluation Lifecycle
 
-Evaluation in FDE sprints is not a single activity — it spans three distinct phases, each with its own tools, owners, and purpose.
+Evaluation in FDE sprints spans three distinct phases, each with its own tools, owners, and purpose.
 
-**Evaluation Lifecycle Phases**
+**Table: Evaluation Lifecycle Overview**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -49,6 +37,8 @@ Purpose
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -137,24 +127,26 @@ Detect regressions, close learning loops, improve agent over time
 
 </td>
 </tr>
+</tbody>
 </table>
 
-The `aeval` offline/online framework covers the CI-gated release gate between post-build and post-deployment. The G1–G4 gates and the 6-category scorecard are additions from the Project LightSpeed delivery toolchain that extend evaluation earlier — into the discovery and code-generation phases — where defects are cheapest to fix.
+The G1–G4 gates and the 6-category scorecard extend evaluation earlier — into the discovery and code-generation phases — where defects are cheapest to fix. The `agentic-eval` skill adds structured spec-and-build quality measurement at the two points in the sprint where spec drift is most likely to surface.
 
 
-<a name="loiobb08bc0fcf5344a3b5b927f89ffc57eb__section_pre_build_readiness_gates"/>
+<a name="loio6150d04f3469451bbe132250d3242d8d__section_readiness_gates"/>
 
 ## Pre-Build Readiness Gates (G1–G4)
 
-Before generating an agent spec, the extracted knowledge must meet four readiness gates. Each gate scores 0–1:
+Before generating an agent spec, the extracted knowledge must meet four readiness gates. These gates prevent the most common cause of wasted build effort: generating agent code from discovery outputs that are structurally incomplete. Each gate scores 0–1:
 
 -   **≥ 0.8** — proceed
 -   **≥ 0.5 and < 0.8** — proceed with gaps; coaching questions auto-generated
 -   **< 0.5** — stop and return to discovery
 
-**G1–G4 Readiness Gates**
+**Table: Pre-Build Readiness Gates**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -172,6 +164,8 @@ Pass Threshold
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -240,24 +234,26 @@ Every Integration has an API binding
 
 </td>
 </tr>
+</tbody>
 </table>
 
-When a gate score falls between 0.5 and 0.8, the system auto-generates **coaching questions** — targeted gap-filling queries designed to be taken back to the customer in the next working session.
+When a gate score falls between 0.5 and 0.8, the system auto-generates **coaching questions** — targeted gap-filling queries designed to be taken back to the customer in the next working session. This transforms discovery gaps from silent blockers into structured follow-up items that can be tracked and closed.
 
-The 0.5 hard stop is deliberate: generating an agent spec from a foundation that is less than half-resolved against SAP's canonical catalog produces agent code that cannot correctly route to the right APIs, cannot express entities in terms the system of record understands, and will fail the post-build scoring categories A, C, and F before any functionality is tested.
+The 0.5 hard stop is deliberate: generating an agent spec from a foundation that is less than half-resolved against SAP's canonical catalog produces agent code that cannot correctly route to the right APIs and will fail the post-build scoring categories A, C, and F before any functionality is tested.
 
 Implementation reference: `context/fde/project-lightspeed/` — `/fde-synthesize` skill.
 
 
-<a name="loiobb08bc0fcf5344a3b5b927f89ffc57eb__section_post_build_scorecard"/>
+<a name="loio6150d04f3469451bbe132250d3242d8d__section_postbuild_scorecard"/>
 
 ## Post-Build Evaluation Scorecard
 
-After agent code is generated and before deployment, a 6-category scorecard validates readiness. This is a hybrid evaluation: categories A–C are deterministic checks; categories D–F are LLM-graded. Output: `evals/eval-report.md`.
+After agent code is generated and before deployment, a 6-category scorecard validates readiness. Categories A–C are deterministic checks; categories D–F are LLM-graded. Output: `evals/eval-report.md`.
 
-**6-Category Post-Build Scorecard**
+**Table: Post-Build Scorecard Categories**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -275,6 +271,8 @@ Method
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -377,32 +375,34 @@ LLM-graded
 
 </td>
 </tr>
+</tbody>
 </table>
 
-**Category B — generation drift** is the most operationally critical check. If `agent.spec.json` is edited after code generation — common in iterative FDE development — the generated agent no longer implements the spec it claims to implement. A `spec_sha256` mismatch is a blocking failure: the deployment is invalid regardless of whether the other categories pass.
+**Category B — generation drift** is the most operationally critical check. If `agent.spec.json` is edited after code generation — common in iterative FDE development, where late-breaking customer feedback prompts spec adjustments — the generated agent no longer implements the spec it claims to implement. A `spec_sha256` mismatch is a blocking failure: the deployment is invalid regardless of whether the other categories pass. The fix is to re-run code generation from the updated spec, then re-evaluate.
 
-**Category D — routing description quality** addresses a failure mode that is invisible until production: two agents with overlapping or generic routing descriptions cause the Joule orchestrator to misroute user requests.
+**Category D — routing description quality** addresses a failure mode that is invisible until production: two agents with overlapping or generic routing descriptions cause the Joule orchestrator to misroute user requests. The LLM-graded check compares all routing descriptions in the bundle against each other and flags overlap risk before deployment.
 
-**MUST-rule compliance (Category E)** connects to [Precision Guardrails](precision-guardrails-ae75c89.md): the MUST rules encoded in `golden_scenarios.yaml` are the machine-verifiable form of the business constraints that the guardrail design was built to enforce.
+**MUST-rule compliance (Category E)** connects to [Precision Guardrails](precision-guardrails-a116de6.md): the MUST rules encoded in `golden_scenarios.yaml` are the machine-verifiable form of the business constraints that the guardrail design was built to enforce.
 
 Implementation reference: `context/fde/project-lightspeed/` — `/fde-evals` skill.
 
 
-<a name="loiobb08bc0fcf5344a3b5b927f89ffc57eb__section_post_deployment_feedback_loop"/>
+<a name="loio6150d04f3469451bbe132250d3242d8d__section_feedback_loop"/>
 
 ## Post-Deployment Feedback Loop
 
 The feedback loop captures every HITL override event and transforms it into a learning signal. It runs on two parallel paths:
 
-**Spec path (human-gated):** HITL override → analyst LLM proposes targeted edit to `agent.spec.json` → human approves → redeploy triggered. A human gate is mandatory because spec changes affect all future deployments.
+**Spec path (human-gated):** HITL override → analyst LLM proposes targeted edit to `agent.spec.json` → human approves → redeploy triggered. This path fires only when the spec genuinely needs to change. A human gate is mandatory because spec changes affect all future deployments.
 
-**Memory path (autonomous):** Per-conversation traces → analyst LLM proposes memory changes → auditor LLM confirms or rejects → ACTIVE memories are injected into the agent's system prompt on subsequent turns. The auditor LLM provides the quality check. No human gate for memory updates.
+**Memory path (autonomous):** Per-conversation traces → analyst LLM proposes memory changes → auditor LLM confirms or rejects → ACTIVE memories are injected into the agent's system prompt on subsequent turns. No human gate for memory updates; the auditor LLM provides the quality check.
 
-Both paths handle the same four learning cases.
+Both paths handle the same four learning cases:
 
-**Four Learning Cases**
+**Table: Feedback Loop Learning Cases**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -420,6 +420,8 @@ Action
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -488,24 +490,28 @@ Reinforce via memory path. No spec change needed.
 
 </td>
 </tr>
+</tbody>
 </table>
 
-**Case 3 — the operator training issue** is the most subtle and the most consequential. Without explicit handling of this case, a feedback system learns incorrect behaviors from operator mistakes. When the analyst LLM determines Case 3 (agent correct, human wrong), it logs the override event with a `case_3` flag. These flagged events are surfaced to the engagement's Adoption Lead as a distinct metric — **"agent correct, human override rate"** — separate from the general HITL override rate. A rising `agent correct, human override rate` is an adoption signal, not a quality signal; it should trigger an operator training review, not a prompt revision. Acting on Case 3 events as if they were Case 1 events degrades the agent by teaching it to match human mistakes. See [Customer Enablement and Adoption](customer-enablement-adoption-318c7e2.md) for the HITL override guide.
+**Case 3 — the operator training issue** is the most subtle and the most consequential. Without explicit handling of this case, a feedback system learns incorrect behaviors from operator mistakes. Every implementation of HITL feedback must handle Case 3 explicitly, with a separate tracking path that feeds into operator training, not agent spec revision.
 
-**Deferred outcome tracking:** Not all outcomes are immediately observable. The feedback loop supports configurable outcome horizons. Outcomes that come back as `outcome_confirmed_bad` escalate the associated memory or spec change to CRITICAL severity, requiring human review before any update is applied.
+When the analyst LLM determines Case 3 (agent correct, human wrong), it logs the override event with a `case_3` flag. These flagged events are surfaced to the engagement's Adoption Lead through the feedback loop's own reporting surface as a distinct metric — **"agent correct, human override rate"** — separate from the general HITL override rate. A rising `agent correct, human override rate` is an adoption signal, not a quality signal; it should trigger an operator training review, not a prompt revision.
+
+**Deferred outcome tracking:** Not all outcomes are immediately observable. A financial posting might take 24 hours to be confirmed correct. The feedback loop supports configurable outcome horizons: the system waits for a downstream outcome event before closing the learning loop. Outcomes that come back as `outcome_confirmed_bad` escalate the associated memory or spec change to CRITICAL severity, requiring human review before any update is applied.
 
 Implementation reference: `context/fde/project-lightspeed/` — `/fde-feedback` skill.
 
 
-<a name="loiobb08bc0fcf5344a3b5b927f89ffc57eb__section_testing_vs_evaluation"/>
+<a name="loio6150d04f3469451bbe132250d3242d8d__section_testing_vs_eval"/>
 
 ## Testing vs. Evaluation — Two Distinct Activities
 
 SAP's AI Golden Path draws a deliberate distinction:
 
-**Testing vs. Evaluation**
+**Table: Testing vs. Evaluation**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -528,6 +534,8 @@ Owner
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -541,7 +549,7 @@ Ongoing defect finding throughout development
 </td>
 <td valign="top">
 
-Continuously, throughout Develop (formerly Execute)
+Continuously, throughout Develop
 
 </td>
 <td valign="top">
@@ -572,12 +580,15 @@ FDE Dev Architect + Domain PM
 
 </td>
 </tr>
+</tbody>
 </table>
 
 Both are required. Testing uses unit tests, integration tests, and smoke tests. Evaluation uses structured test suites that measure agent behavior on representative user journeys across multiple iterations.
 
+The distinction also maps to tools: testing uses standard test frameworks (pytest, jest); evaluation uses SAP's `aeval` framework.
 
-<a name="loiobb08bc0fcf5344a3b5b927f89ffc57eb__section_aeval_framework"/>
+
+<a name="loio6150d04f3469451bbe132250d3242d8d__section_aeval"/>
 
 ## The aeval Framework
 
@@ -588,11 +599,11 @@ Both are required. Testing uses unit tests, integration tests, and smoke tests. 
 -   **Offline mode** (`aeval run`): scripted test cases run against a live or local agent. Results exported as JSON and HTML reports. Gates release decisions.
 -   **Online mode** (`aeval-online` / AI Core CronJob): real production traces retrieved from MLflow and scored by an LLM judge. Results written back to MLflow as session-level feedback. Tracks production quality trends continuously.
 
-Both modes use the same evaluation core: SAP's `agent-inspect` library, which invokes 3 independent LLM judge calls per validation (majority vote) via SAP AI Core GenAI Hub. The 3-judge configuration achieves reliability close to that of a 5-judge ensemble while materially reducing latency and cost.
+Both modes use the same evaluation core: SAP's `agent-inspect` library, which invokes 3 independent LLM judge calls per validation (majority vote) via SAP AI Core GenAI Hub. The 3-judge configuration was determined empirically — it achieves reliability close to that of a 5-judge ensemble while materially reducing latency and cost.
 
 ### Provisioning aeval on FDE Engagements
 
-`aeval` is available from the `developer-efficiency-tools` repository. Installation on a new engagement environment:
+`aeval` is available from the `developer-efficiency-tools` repository (`github.tools.sap/CISDeveloperEfficiencyTools/developer-efficiency-tools`). Installation on a new engagement environment:
 
 ```bash
 npx skills add aeval-set-up  # installs the setup skill
@@ -604,15 +615,16 @@ npx skills add aeval-set-up  # installs the setup skill
 
 **Configuration requirements:**
 
--   **GenAI Hub connection**: for FDE sprint environments, use the team's shared AI Core development instance. For production online eval, the `aeval-online` CronJob must have access to a GenAI Hub deployment in the same tenant as the agent.
--   **MLflow setup**: the LightSpeed-provided MLflow instance is the standard starting point; for production online eval, provision a dedicated MLflow server in the customer's BTP sub-account.
--   **Sovereign regions**: `aeval-online` requires a GenAI Hub endpoint within the sovereign boundary for judge calls. In CN40, NS2, and KSA, confirm that a GenAI Hub deployment is available before committing to online eval in production.
+-   **GenAI Hub connection**: the LLM judge calls require a GenAI Hub deployment accessible from the eval environment. For FDE sprint environments, use the team's shared AI Core development instance.
+-   **MLflow setup**: offline eval results are stored in MLflow. The LightSpeed-provided MLflow instance (`references/observe-and-eval/`) is the standard starting point.
+-   **Sovereign regions**: `aeval-online` requires a GenAI Hub endpoint within the sovereign boundary for judge calls. In CN40, NS2, and KSA, confirm that a GenAI Hub deployment is available in the sovereign region before committing to online eval in production.
 
 ### Tracing Modes
 
-**Eval Tracing Modes**
+**Table: aeval Tracing Modes**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -630,6 +642,8 @@ Metrics Available
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -681,17 +695,19 @@ Per-session `success_rate`, `token_count`, `latency` — continuous monitoring
 
 </td>
 </tr>
+</tbody>
 </table>
 
 **Traceless mode is deliberately available for early-sprint use.** An agent without full OTel instrumentation can still be evaluated for output correctness and rule compliance from sprint week 1.
 
-### OTel Score Schema (November 2026)
+### OTel Score Schema
 
-The aeval OTel output uses `gen_ai.evaluation.*` attributes.
+The aeval OTel output uses `gen_ai.evaluation.*` attributes. Key behavioral rules for anyone consuming eval traces or building dashboards on top of them:
 
-**OTel Score Schema Behavioral Rules**
+**Table: OTel Score Attribute Behavior**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -704,10 +720,12 @@ OTel Behavior
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
-Numeric scores (float, e.g., 0.85)
+**Numeric scores** (float, e.g., 0.85)
 
 </td>
 <td valign="top">
@@ -719,7 +737,7 @@ Written to `gen_ai.evaluation.score.value` (double)
 <tr>
 <td valign="top">
 
-Label/categorical scores (string, e.g., "high")
+**Label/categorical scores** (string, e.g., "high")
 
 </td>
 <td valign="top">
@@ -731,7 +749,7 @@ Written to `gen_ai.evaluation.score.label` — **not** to `score.value`. Do not 
 <tr>
 <td valign="top">
 
-Boolean scores
+**Boolean scores**
 
 </td>
 <td valign="top">
@@ -743,19 +761,19 @@ Both `score.value: 1.0|0.0` AND `score.label: "true"|"false"` emitted simultaneo
 <tr>
 <td valign="top">
 
-NOT_APPLICABLE scores
+**NOT_APPLICABLE scores**
 
 </td>
 <td valign="top">
 
-**Not emitted at all.** Absence in the trace is the signal — a check that did not apply produces no OTel event. Do not equate "no record" with "score = 0".
+**Not emitted at all.** Absence in the trace is the signal — a check that did not apply to a session produces no OTel event. Do not equate "no record" with "score = 0".
 
 </td>
 </tr>
 <tr>
 <td valign="top">
 
-Error-skipped scores
+**Error-skipped scores**
 
 </td>
 <td valign="top">
@@ -764,12 +782,13 @@ Error-skipped scores
 
 </td>
 </tr>
+</tbody>
 </table>
 
 **Dashboard implication**: aggregate success-rate calculations must explicitly handle absent records (NOT_APPLICABLE) vs. zero-scored records (Incomplete). A query that treats missing rows as 0 will silently under-report success rates for checks with frequent NA cases.
 
 
-<a name="loiobb08bc0fcf5344a3b5b927f89ffc57eb__section_test_case"/>
+<a name="loio6150d04f3469451bbe132250d3242d8d__section_test_case"/>
 
 ## The Test Case: the Primary Evaluation Artifact
 
@@ -810,9 +829,10 @@ test_steps:
 
 ### Two Step Types
 
-**Test Case Step Types**
+**Table: Test Step Types**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -830,6 +850,8 @@ What It Tests
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -864,15 +886,36 @@ Agent's ability to guide a conversation to a goal across natural language variat
 
 </td>
 </tr>
+</tbody>
 </table>
 
-For dynamic conversations, a **User Agent** (LLM-powered) drives the conversation from a `task_summary`. The agent must reach the defined termination conditions within `max_turns` (maximum: 15).
+For dynamic conversations, a **User Agent** (LLM-powered) drives the conversation from a `task_summary`. The agent under test must reach the defined termination conditions within `max_turns` (maximum: 15).
+
+```yaml
+  - type: dynamic_conversation
+    user_agent:
+      task_summary: "Guide the agent to release a batch with quantity confirmed by the
+          batch classification service. You are the process owner."
+      termination_conditions:
+        - check: "Agent has confirmed the release quantity and requested approval"
+      initial_message: "I need to process batch release for production order 500012345"
+    max_turns: 8
+    agent_response_validations:
+      - check: "Agent arrives at a specific quantity recommendation backed by the
+          batch classification service"
+    tool_validations:
+      expected_tool_calls:
+        - tool: sapTaskCenter_submit
+          output:
+            check: "Approval task created with proposed quantity and reference value"
+```
 
 ### What Makes a Good Check
 
-**Check Quality Examples**
+**Table: Check Quality Examples**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -885,6 +928,8 @@ Example
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -933,20 +978,22 @@ Safety/guardrail
 
 </td>
 </tr>
+</tbody>
 </table>
 
 The rule of thumb: a check should be falsifiable. If it is impossible to imagine an agent output that would fail the check, the check is not measuring anything useful.
 
 
-<a name="loiobb08bc0fcf5344a3b5b927f89ffc57eb__section_quality_flywheel"/>
+<a name="loio6150d04f3469451bbe132250d3242d8d__section_flywheel"/>
 
 ## The Quality Flywheel — Mapped to Sprint Weeks
 
-The evaluation framework is built incrementally. Each phase of the sprint adds a new evaluation layer. Starting at week 1 (not week 9) is essential.
+The evaluation framework is built incrementally. Starting at week 1 (not week 9) is essential. Week numbers are sprint-global (weeks 1–12 of the engagement):
 
-**Quality Flywheel by Sprint Phase**
+**Table: Evaluation Maturity by Sprint Phase**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -969,6 +1016,8 @@ Tooling
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -982,7 +1031,7 @@ Spec quality (C1–C7)
 </td>
 <td valign="top">
 
-Run `agentic-eval` against spec and design docs. Focus: C1–C5 spec quality + C7 AI Readiness. Scores below 6/10 on C1–C5 signal Discovery gaps; below "Agent-Ready" on C7 signals spec needs restructuring
+Run `agentic-eval` against spec and design docs. Focus: C1–C5 spec quality + C7 AI Readiness. Scores below 6/10 on C1–C5 signal Discovery gaps to resolve before Develop; below "Agent-Ready" on C7 signals spec needs restructuring
 
 </td>
 <td valign="top">
@@ -1048,7 +1097,7 @@ Full suite + code quality gate
 </td>
 <td valign="top">
 
-Add safety/guardrail checks, boundary conditions, and negative tests. Add `dynamic_conversation` steps for key user journeys. Integrate into CI. Run `agentic-eval` full 11+1-criteria sweep (C6 Spec-to-Code Alignment is the key metric — gaps represent productization risk)
+Add safety/guardrail checks, boundary conditions, and negative tests. Add `dynamic_conversation` steps for key user journeys. Integrate into CI. Run `agentic-eval` full 11+1-criteria sweep (C6 Spec-to-Code Alignment is the key metric at this point)
 
 </td>
 <td valign="top">
@@ -1070,7 +1119,7 @@ Production monitoring
 </td>
 <td valign="top">
 
-Activate online eval — LLM-as-judge scoring against real EAC sessions using the **3-way C/I/N judge** (Complete / Incomplete / Not Applicable). Establish baseline metrics before production go-live. The final two weeks of EAC are the **go-live baseline capture window**: record task completion rate, escalation rate, faithfulness scores, and output embedding centroid.
+Activate online eval — LLM-as-judge scoring against real EAC sessions using the **3-way C/I/N judge** (Complete / Incomplete / Not Applicable). Define production monitoring requirements. Establish baseline metrics before production go-live. The final two weeks of EAC are the **go-live baseline capture window**: record task completion rate, escalation rate, faithfulness scores, and output embedding centroid as the signed reference baseline for post-deploy drift detection.
 
 </td>
 <td valign="top">
@@ -1079,26 +1128,30 @@ Activate online eval — LLM-as-judge scoring against real EAC sessions using th
 
 </td>
 </tr>
+</tbody>
 </table>
 
-**Synthetic data for early-sprint evaluation:** Before production data is available — typical during weeks 1–6 — the `/fde-ontology` skill (Project LightSpeed Stage 5) can generate domain-contextual synthetic data directly from the logical schema. The synthetic data can be replaced with live system data in later sprint phases without changing the eval suite structure.
+**Traceless fallback in offline mode**: when a `response_validations` check would exceed the LLM judge's input-token limit, aeval automatically runs the check without trace context and appends a note to the result's `explanations`. The result is still a normal pass/fail — not `skipped`.
+
+**Synthetic data for early-sprint evaluation:** Before production data is available (typical during weeks 1–6), the `/fde-ontology` skill (Project LightSpeed Stage 5) can generate domain-contextual synthetic data directly from the logical schema. This gives the agent realistic grounding data to query at runtime and makes evaluation meaningful from week 1, without requiring access to the customer's live systems.
 
 **Week 6 milestone gate**: eval suite runs with ≥ 3 iterations; success rate documented in FDE Gate evidence package.
 
 **Week 9 milestone gate**: full eval suite passes in CI; online eval active in EAC; TR9 offline compliance satisfied.
 
 
-<a name="loiobb08bc0fcf5344a3b5b927f89ffc57eb__section_primary_release_gate"/>
+<a name="loio6150d04f3469451bbe132250d3242d8d__section_success_rate"/>
 
 ## The Primary Release Gate: Success Rate
 
-Success rate is binary: 1 if all validations in a test case pass, 0 if any fail. This is the `aeval` framework's primary aggregation metric and the primary release gate metric, aligned with [Agent Quality Framework](agent-quality-framework-5f15077.md).
+Success rate is binary: 1 if all validations in a test case pass, 0 if any fail. This is the aeval framework's primary aggregation metric and the primary release gate metric.
 
-All other metrics are diagnostic.
+All other metrics are diagnostic:
 
-**Diagnostic Metrics**
+**Table: Diagnostic Metrics**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -1111,6 +1164,8 @@ What It Diagnoses
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -1167,7 +1222,7 @@ Agent response time; p95 baseline establishes operational norms
 </td>
 <td valign="top">
 
-Token consumption per invocation; input to cost monitoring
+Token consumption per invocation; input to cost monitoring ([Token Efficiency in Industry AI Delivery](token-efficiency-2cc8da2.md))
 
 </td>
 </tr>
@@ -1191,16 +1246,17 @@ Invocation cost at AI Core pricing; input to floor pricing submission
 </td>
 <td valign="top">
 
-Tool call efficiency
+Tool call efficiency (Dimension 1 of the Agent Quality Framework)
 
 </td>
 </tr>
+</tbody>
 </table>
 
-An agent with 95% tool call correctness but a low success rate is still failing — the failing validation is where the investigation starts.
+The diagnostic metrics explain *why* success rate is below target, but they are not themselves release gates.
 
 
-<a name="loiobb08bc0fcf5344a3b5b927f89ffc57eb__section_online_evaluation"/>
+<a name="loio6150d04f3469451bbe132250d3242d8d__section_online_eval"/>
 
 ## Online Evaluation in Production
 
@@ -1208,12 +1264,12 @@ Online evaluation is the continuous quality monitoring layer that runs after go-
 
 ### How It Works
 
-1.   The AI Core CronJob polls MLflow for real user sessions within a configurable lookback window.
-2.   Hash-based deterministic sampling ensures consistent coverage across repeated runs.
-3.   Each session is scored by an LLM judge using the **3-way C/I/N template** (Complete / Incomplete / Not Applicable) against **requirements** — natural language statements describing expected behavior.
-4.   Scores are written back to MLflow as session-level feedback.
+1.  The AI Core CronJob (or `aeval-online` locally) polls MLflow for real user sessions within a configurable lookback window.
+2.  Hash-based deterministic sampling ensures consistent coverage across repeated runs.
+3.  Each session is scored by an LLM judge using the **3-way C/I/N template** (Complete / Incomplete / Not Applicable) against **requirements** — natural language statements describing expected behavior.
+4.  Scores are written back to MLflow as session-level feedback. The MLflow UI shows per-category scores, judge reasoning, and trend analysis over time.
 
-**Not Applicable (N) in online eval**: if a check's criterion was not triggered in a session, the judge returns Not Applicable. Write requirements so their applicability conditions are implicit in the scenario context — avoid encoding "if X does not apply, treat as satisfied" into the check text.
+**Not Applicable (N) in online eval**: if a check's criterion was not triggered in a session, the judge returns Not Applicable. Write requirements so their applicability conditions are implicit in the scenario context; avoid encoding "if X does not apply, treat as satisfied" into the check text.
 
 ### Requirements Format
 
@@ -1241,9 +1297,10 @@ Requirements for online eval are natural language statements in three categories
 
 ### Online vs. Offline — Roles and Limits
 
-**Online vs. Offline Evaluation Comparison**
+**Table: Online vs. Offline Evaluation Roles**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -1261,6 +1318,8 @@ Online (aeval-online)
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -1346,24 +1405,26 @@ Real user behavior including long tail
 
 </td>
 </tr>
+</tbody>
 </table>
 
-**The Supervisor agent and online eval are complementary, not redundant.** The supervisor reacts in real time within a single agent execution; online eval tracks statistical patterns across sessions over time.
+The supervisor agent (see [Supervisor Agent Pattern](supervisor-agent-pattern-0d90e5f.md)) and online eval are complementary, not redundant. The supervisor reacts in real time within a single agent execution; online eval tracks statistical patterns across sessions over time.
 
 ### Relationship to the Post-Deployment Feedback Loop
 
--   **aeval online** provides statistical trend monitoring across sessions — it surfaces regressions but does not prescribe a corrective action.
+-   **aeval online** provides statistical trend monitoring across sessions. It surfaces regressions — a drop in session-level success rate or rule compliance over time — but does not prescribe a corrective action.
 -   **Feedback loop** is event-driven learning from individual HITL override events. Each override is causally analysed (the four learning cases), and the result is either a targeted spec edit, a memory update, or a flag for operator training.
 
 In practice: online eval tells you *something is getting worse*; the feedback loop tells you *what to change* and *whether to change the spec or retrain the operator*.
 
 ### Production Drift Types
 
-Not all post-deploy quality degradation is the same. Recognising the drift type before acting matters because it determines the corrective action.
+Not all post-deploy quality degradation is the same. Recognising the drift type before acting matters because it determines the corrective action:
 
-**Production Drift Type Taxonomy**
+**Table: Production Drift Taxonomy**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -1386,6 +1447,8 @@ Corrective Action
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -1443,12 +1506,12 @@ Developer modifies system prompt; RAG context injection pattern changes
 </td>
 <td valign="top">
 
-Abrupt quality score drop correlated with a deployment event
+Abrupt quality score drop correlated with a deployment event; per-prompt-version eval score regression
 
 </td>
 <td valign="top">
 
-Rollback prompt to prior version; A/B test prompt changes against baseline
+Rollback prompt to prior version ([Production Operations](production-operations-168fd42.md)); A/B test prompt changes against baseline
 
 </td>
 </tr>
@@ -1465,12 +1528,12 @@ LLM provider silently updates the underlying model
 </td>
 <td valign="top">
 
-Semantic drift in output embeddings with no correlated prompt change
+Semantic drift in output embeddings with no correlated prompt change; behaviour diff on frozen canary set across model version boundary
 
 </td>
 <td valign="top">
 
-Pin to specific model version; run canary eval on model version boundary before routing production traffic
+Pin to specific model version ([Production Operations](production-operations-168fd42.md)); run canary eval on model version boundary before routing production traffic
 
 </td>
 </tr>
@@ -1509,7 +1572,7 @@ Context Precision drops; answers cite stale or irrelevant chunks
 </td>
 <td valign="top">
 
-RAGAS Context Precision < 0.80; Context Recall < 0.75
+RAGAS Context Precision < 0.80; Context Recall < 0.75; rising "no relevant docs" rate
 
 </td>
 <td valign="top">
@@ -1540,20 +1603,22 @@ Review rate limits; add query queuing; review model serving capacity
 
 </td>
 </tr>
+</tbody>
 </table>
 
-The recommended detection approach is a **hybrid sliding + fixed baseline**: a fixed reference baseline captured during the EAC go-live window, combined with a 7-day sliding window for real-time alerts. When any metric crosses its alert threshold, classify the drift type first — this prevents alert fatigue by providing a diagnosis rather than just a signal.
+The recommended detection approach for production deployments is a **hybrid sliding + fixed baseline**: a fixed reference baseline captured during the EAC go-live window, combined with a 7-day sliding window for real-time alerts.
 
 
-<a name="loiobb08bc0fcf5344a3b5b927f89ffc57eb__section_evaluation_dimensions_checklist"/>
+<a name="loio6150d04f3469451bbe132250d3242d8d__section_eval_checklist"/>
 
 ## Evaluation Dimensions Checklist
 
-SAP's AI Golden Path specifies evaluation dimensions with priorities. FDE sprint test suites should cover at minimum the High-priority dimensions before the Week 6 gate, and all Medium-priority dimensions before production go-live.
+SAP's AI Golden Path specifies evaluation dimensions with priorities. FDE sprint test suites should cover at minimum the High-priority dimensions before the Week 6 gate, and all Medium-priority dimensions before production go-live:
 
-**Evaluation Dimensions**
+**Table: Evaluation Dimensions and Priority**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -1576,6 +1641,8 @@ Notes
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -1616,7 +1683,7 @@ High
 </td>
 <td valign="top">
 
-At minimum test known hallucination-prone outputs
+Hard to cover fully; at minimum test known hallucination-prone outputs
 
 </td>
 </tr>
@@ -1633,7 +1700,7 @@ High
 </td>
 <td valign="top">
 
-Boundary tests: inputs designed to trigger guardrails; verify correct Layer 3 escalation
+Boundary tests: inputs designed to trigger guardrails ([Precision Guardrails](precision-guardrails-a116de6.md)); verify correct Layer 3 escalation
 
 </td>
 <td valign="top">
@@ -1697,12 +1764,12 @@ High
 </td>
 <td valign="top">
 
-Prompt injection tests; tool call boundary tests
+Prompt injection tests ([Security and Data Protection](security-and-data-protection-a6b66d5.md)); tool call boundary tests
 
 </td>
 <td valign="top">
 
-Include in MVP eval suite; not just at productization. See [Security and Data Protection](security-and-data-protection-a403094.md)
+Include in MVP eval suite; not just at productization
 
 </td>
 </tr>
@@ -1806,20 +1873,22 @@ Low
 
 </td>
 </tr>
+</tbody>
 </table>
 
 
-<a name="loiobb08bc0fcf5344a3b5b927f89ffc57eb__section_agentic_eval_spec_quality"/>
+<a name="loio6150d04f3469451bbe132250d3242d8d__section_agentic_eval"/>
 
 ## Spec Quality Evaluation (agentic-eval)
 
 ### What It Evaluates
 
-The `aeval` framework measures whether the agent produces correct *outputs at runtime*. The `agentic-eval` skill measures whether the *spec and codebase* are well-formed: is the spec complete and AI-ready? Does the implementation align with what was specified in Discovery?
+The `aeval` framework measures whether the agent produces correct *outputs at runtime*. The `agentic-eval` skill measures whether the *spec and codebase* are well-formed: is the spec complete and AI-ready? Does the implementation align with what was specified in Discovery? Are SAP standards and MCP tools being used properly?
 
-**Evaluation Tool Comparison**
+**Table: aeval vs. agentic-eval Comparison**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -1842,6 +1911,8 @@ When
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -1867,7 +1938,7 @@ Throughout sprint; CI gate
 <tr>
 <td valign="top">
 
-Spec and build quality
+Spec & build quality
 
 </td>
 <td valign="top">
@@ -1886,13 +1957,17 @@ End of Discovery; pre-EAC
 
 </td>
 </tr>
+</tbody>
 </table>
+
+Both dimensions can fail independently: an agent can pass all runtime eval checks while still drifting significantly from its original spec (C6 gap), or it can have a complete spec but produce outputs that fail correctness checks.
 
 ### The 11+1 Criteria
 
-**agentic-eval 11+1 Criteria**
+**Table: agentic-eval 11+1 Criteria**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -1915,6 +1990,8 @@ FDE Relevance
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -2179,17 +2256,25 @@ CIS skills installed and actively used in the workflow?
 
 </td>
 </tr>
+</tbody>
 </table>
 
-**C6 carries the highest weight (15%)** because it addresses the most common FDE failure mode: the gap that opens between Discovery specification and Develop delivery.
+**C6 carries the highest weight (15%)** because it addresses the most common FDE failure mode: the gap that opens between Discovery specification and Develop delivery. A low C6 score at pre-EAC means the delivered agent does not match what the customer agreed to in Discovery — a productization risk that must be resolved before handover.
 
 **C7 AI Readiness** is the pre-Development diagnostic. A "Prompt-Level" classification (score 0–2) signals that the spec needs more precision before AI-assisted code generation will be efficient; "Agent-Ready" or "Autonomous-Ready" (6–10) signals the spec will sustain the Development phase without constant clarification loops.
 
+### Two Natural Run Points in the Sprint
+
+**End of Discovery / Develop kickoff — spec quality gate**: run against spec and design documents before generating agent code. Focus: C1–C5 (spec quality) and C7 (AI Readiness). A C1–C5 average below 6/10 signals Discovery gaps to resolve before Develop; a C7 score below "Agent-Ready" signals the spec needs restructuring before agentic development will be efficient.
+
+**Pre-EAC — full quality gate**: run against the full project repository before customer go-live. All 11+1 criteria active. C6 (Spec-to-Code Alignment) is the key metric: gaps between specified requirements and implemented capabilities must be resolved or explicitly documented before productization. The HTML or Word report export is suitable evidence for the EAC acceptance package and the Sirius QPA test strategy.
+
 ### Score Thresholds
 
-**agentic-eval Score Thresholds**
+**Table: agentic-eval Score Thresholds**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -2207,6 +2292,8 @@ FDE Implication
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -2292,15 +2379,12 @@ Production and Agentic Engineering ready
 
 </td>
 </tr>
+</tbody>
 </table>
 
-### Two Natural Run Points in the Sprint
-
-**End of Discovery / Develop kickoff — spec quality gate:** Run against spec and design documents before generating agent code. Focus: C1–C5 (spec quality) and C7 (AI Readiness). A C1–C5 average below 6/10 signals Discovery gaps to resolve before Develop; a C7 score below "Agent-Ready" signals the spec needs restructuring.
-
-**Pre-EAC — full quality gate:** Run against the full project repository before customer go-live. C6 (Spec-to-Code Alignment) is the key metric. The HTML or Word report export is suitable evidence for the EAC acceptance package and the Sirius QPA test strategy.
-
 ### Installation
+
+The skill is part of the CIS developer efficiency tools repo (also listed as a Starter Kit component in [Reusable Components and Reference Implementations](reusable-components-4ff1667.md)). **Contacts / owners: Apurba Ghosh, Saurabh Kejriwal.**
 
 ```bash
 # Project-level (one engagement)
@@ -2310,10 +2394,10 @@ npx skills add https://github.tools.sap/CISDeveloperEfficiencyTools/developer-ef
 npx skills add https://github.tools.sap/CISDeveloperEfficiencyTools/developer-efficiency-tools.git --skill agentic-eval -g
 ```
 
-Invoke as `/agentic-eval [project-path] [--html] [--word]`. The `--html` flag generates a self-contained report with SAP Horizon styling and collapsible per-criterion cards. Both formats are suitable as FDE Gate or EAC acceptance evidence artifacts.
+Invoke as `/agentic-eval [project-path] [--html] [--word]`. The `--html` flag generates a self-contained report with SAP Horizon styling and collapsible per-criterion cards. The `--word` flag generates a Word document in the Porsche sample report style. Both formats are suitable as FDE Gate or EAC acceptance evidence artifacts.
 
 
-<a name="loiobb08bc0fcf5344a3b5b927f89ffc57eb__section_fde_delivery_implications"/>
+<a name="loio6150d04f3469451bbe132250d3242d8d__section_delivery"/>
 
 ## FDE Delivery Implications
 
@@ -2322,13 +2406,13 @@ Invoke as `/agentic-eval [project-path] [--html] [--word]`. The `--html` flag ge
 -   For each numerical output or high-risk agent action in the TO-BE process flow, define at least one boundary condition test case: what input should trigger the guardrail? What input should pass? Document these in the Draft Product Design Specs.
 -   Confirm which SAP calculation services exist in the customer's landscape — they determine whether `tool_call` validations against authoritative references are feasible.
 -   Agree with the process owner what "success" means for each user journey. This agreement becomes the `agent_response_validations` in the test case.
--   Run the G1–G4 readiness gates against the compiled discovery outputs before any agent spec is generated.
--   Run `agentic-eval` against the Discovery output documents at the end of Discovery. A C1–C5 average below 6/10 or a C7 score below "Agent-Ready" should be resolved before Develop kickoff.
+-   Run the G1–G4 readiness gates against the compiled discovery outputs before any agent spec is generated. Gate scores below 0.8 should be resolved — or their coaching questions answered — before the team enters the Development phase.
+-   Run `agentic-eval` against the Discovery output documents (spec, design docs, CLAUDE.md) at the end of Discovery. A C1–C5 average below 6/10 or a C7 score below "Agent-Ready" should be resolved before Develop kickoff.
 
 ### During Develop
 
--   Week 1: create the first test cases (traceless). Even three `agent_response` checks on the happy-path user journey are enough to establish the evaluation baseline. If production data is not yet available, generate synthetic data using the `/fde-ontology` skill.
--   Keep test cases in version control alongside the agent workflow. Treat a failing test case the same way as a failing unit test: do not proceed to the next sprint phase with known failing checks.
+-   Week 1: create the first test cases (traceless). Even three `agent_response` checks on the happy-path user journey are enough to establish the evaluation baseline and validate the eval framework setup. If production data is not yet available for agent grounding, generate synthetic data using the `/fde-ontology` skill (Project LightSpeed Stage 5).
+-   Keep test cases in version control alongside the agent workflow. Treat a failing test case the same way you would treat a failing unit test: do not proceed to the next sprint phase with known failing checks.
 -   The eval report (HTML format from `aeval`) is the evidence package for the FDE Gate. Produce it before the Week 6 review, not during it.
 -   Run the post-build scorecard before the Week 9 deployment gate. A generation drift failure (Category B) at Week 9 is recoverable but disruptive.
 -   Run `agentic-eval` against the full project repo in the Weeks 7–9 window — before EAC, not during it. C6 (Spec-to-Code Alignment) is the metric to watch.
@@ -2336,30 +2420,18 @@ Invoke as `/agentic-eval [project-path] [--html] [--word]`. The `--html` flag ge
 
 ### During Productization
 
--   The offline eval suite must be running in CI (TR9) before Sirius productization tasks begin.
+-   The offline eval suite must be running in CI (TR9) before Sirius productization tasks begin. The QPA test strategy references eval coverage.
 -   The online eval configuration (requirements JSON, lookback window, sampling rate) must be part of the production handover package.
 -   Configure the post-deployment feedback loop outcome horizons to match the business process: financial postings may require a 24-hour confirmation window; supply chain decisions may require longer.
--   Re-run the full eval suite against any model version change (TR9 implication). A model update that degrades success rate by more than 5 percentage points from baseline is a rollback trigger (see [Production Operations](production-operations-e24808a.md)).
+-   Re-run the full eval suite against any model version change (TR9 implication). A model update that degrades success rate by more than 5 percentage points from baseline is a rollback trigger ([Production Operations](production-operations-168fd42.md)).
 
 **Related Information**  
 
 
-[Agent Quality Framework](agent-quality-framework-5f15077.md)
+[SAP AI Agent Hub — Key Capabilities](https://help.sap.com/docs/AI_AGENT_HUB/225000cc2ce44a228b9534a0f1098a9b/3f7ceafb1eb24d00ac50bf3499f50688.html "Overview of SAP AI Agent Hub capabilities including agent discovery, verification, monitoring, and governance.") :arrow_upper_right:
 
-[Supervisor Agent Pattern](supervisor-agent-pattern-67417bb.md)
+[Joule Studio](https://help.sap.com/docs/JOULESTUDIO/7e496fe6f81f4975aec07d9c1cbd2aef/36d3e974446844a1b0ffb7af8fa9446c.html "SAP's AI-first development environment for building and deploying AI agents, intelligent apps, and automations.") :arrow_upper_right:
 
-[Precision Guardrails](precision-guardrails-ae75c89.md)
+[SAP AI Agent Hub — Plan and Build](https://help.sap.com/docs/AI_AGENT_HUB/225000cc2ce44a228b9534a0f1098a9b/e2a29b0c422e4aceadee658f4bbab71b.html "Guidance for planning which AI agents to build or adopt and avoiding duplication using the agent inventory.") :arrow_upper_right:
 
-[Security and Data Protection](security-and-data-protection-a403094.md)
-
-[Production Operations](production-operations-e24808a.md)
-
-[Reusable Components](reusable-components-ff99fe9.md)
-
-[Token Efficiency](token-efficiency-8449831.md)
-
-[Customer Enablement and Adoption](customer-enablement-adoption-318c7e2.md)
-
-[SAP AI Core](https://help.sap.com/docs/AI_CORE/2d6c5984063c40a59eda62f4a9135bee/d029a32c22fb45fbb607e6a2c48c8a0e.html "SAP AI Core documentation — GenAI Hub, model lifecycle management, and AI Core CronJob for online evaluation.") :arrow_upper_right:
-
-[Generative AI Hub in SAP AI Core](https://help.sap.com/docs/AI_CORE/d5d03749687449ad9768e46ea9e32b1e/7db524ee75e74bf8b50c167951fe34a5.html "Generative AI Hub in SAP AI Core — LLM judge deployment, model selection, and evaluation infrastructure.") :arrow_upper_right:
+[SAP AI Agent Hub](https://help.sap.com/docs/AI_AGENT_HUB/225000cc2ce44a228b9534a0f1098a9b/8ebd704d35a746c180af003db1f5acb0.html "Introduction to SAP AI Agent Hub — discover, govern, and monitor AI agents across your enterprise landscape.") :arrow_upper_right:

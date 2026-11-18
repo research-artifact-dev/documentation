@@ -1,28 +1,20 @@
-<!-- loio318c7e2d95514e2a865a33d3e76bc520 -->
+<!-- loiob8233b2e467d45089522a452a85f137d -->
 
 # Customer Enablement and Adoption
 
-The Enable track defines how to transfer operational ownership of an AI agent from the FDE delivery team to the customer organization. Delivering a working agent and enabling adoption of that agent are two distinct deliverables — the first is a software artifact, the second is an organizational capability — and both must be complete before an FDE engagement is done.
+Delivering a working agent and enabling its adoption are two distinct deliverables: the first is a software artifact, the second is an organizational capability. The Enable track runs as a mandatory parallel workstream alongside Build and Operate, beginning in Discovery and targeting Stage 4 independence — the point at which the customer team operates, monitors, adjusts, and evolves the agent without FDE support.
 
 
-<a name="loio318c7e2d95514e2a865a33d3e76bc520__section_enablement_first_class"/>
-
-## Why Enablement Is a First-Class Delivery Concern
-
-The FDE Engagement Playbook (Oct 2026) formalizes the **Enable track** as a mandatory, parallel workstream alongside Build and Operate. Enablement is not a Phase 4 activity. It begins in Discovery and targets Stage 4 independence — the point at which the customer team can operate, monitor, adjust, and evolve the agent without FDE support. **Stage 3 is the minimum required at handover; Stage 4 is the target** (see Gradual Release of Responsibility below).
-
-Industry AI FDE engagements have delivered working agents that customers did not use — not because the agent was wrong, but because the customer organization was not prepared to change how it worked. Technically complete agents that are never adopted represent the enablement failure mode this track is designed to prevent.
-
-
-<a name="loio318c7e2d95514e2a865a33d3e76bc520__section_three_track_model"/>
+<a name="loiob8233b2e467d45089522a452a85f137d__section_three_track_model"/>
 
 ## The Three-Track FDE Model
 
-The FDE Engagement Playbook introduces a three-track model that runs in parallel throughout the engagement:
+The FDE Engagement Playbook introduces a three-track model that runs in parallel throughout the engagement.
 
-**Table: Three-Track FDE Model**
+**Three-Track FDE Model**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -40,6 +32,8 @@ Owner
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -91,24 +85,26 @@ FDE Domain PM + Adoption Lead
 
 </td>
 </tr>
+</tbody>
 </table>
 
-The three tracks converge at productization. None can substitute for the others: a fully built and monitored agent that hasn't been adopted is a cost center. A well-adopted agent without operational monitoring drifts without detection.
+The three tracks converge at productization. None can substitute for the others: a fully built and monitored agent that has not been adopted is a cost center. A well-adopted agent without operational monitoring drifts without detection.
 
 
-<a name="loio318c7e2d95514e2a865a33d3e76bc520__section_adoption_strategy"/>
+<a name="loiob8233b2e467d45089522a452a85f137d__section_adoption_strategy"/>
 
 ## Adoption Strategy — The Formal Engagement Deliverable
 
-The Adoption Strategy (see [CIS CoE Operations Model](cis-coe-operations-model-cba3b4d.md)) is the primary Enable track artifact. It is not a communication plan or a training calendar. It is a structured accountability document that defines what adoption success looks like, who is accountable, and how the customer organization will sustain and evolve the agent after the FDE team departs.
+The Adoption Strategy is the primary Enable track artifact. It is not a communication plan or a training calendar. It is a structured accountability document that defines what adoption success looks like, who is accountable, and how the customer organization will sustain and evolve the agent after the FDE team departs.
 
 ### The Seven-Section Structure
 
-The Adoption Strategy (defined by the Adoption Strategy Skill v2.4 in the `book-of-fde` repository) has seven mandatory sections:
+The Adoption Strategy has seven mandatory sections.
 
-**Table: Adoption Strategy — Seven Mandatory Sections**
+**Adoption Strategy Sections**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -121,6 +117,8 @@ Content
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -153,7 +151,7 @@ Quantified value case: cost reduction, time saved, error rate reduction, through
 </td>
 <td valign="top">
 
-Nine defined governance roles with named individuals, decision rights, and escalation paths. The full nine-role roster is maintained in [CIS CoE Operations Model](cis-coe-operations-model-cba3b4d.md)
+Nine defined governance roles with named individuals, decision rights, and escalation paths
 
 </td>
 </tr>
@@ -165,7 +163,7 @@ Nine defined governance roles with named individuals, decision rights, and escal
 </td>
 <td valign="top">
 
-Five readiness areas assessed and scored: technical, data, process, user, and governance readiness. Action plan for any gap areas
+Five readiness areas assessed and scored: technical, data, process, user, and governance readiness. Action plan for any gap areas.
 
 </td>
 </tr>
@@ -177,7 +175,7 @@ Five readiness areas assessed and scored: technical, data, process, user, and go
 </td>
 <td valign="top">
 
-Rollout plan: pilot group → broader rollout → full adoption. Scale gate criteria: what conditions must be met before each phase expansion
+Rollout plan: pilot group → broader rollout → full adoption. Scale gate criteria: what conditions must be met before each phase expansion.
 
 </td>
 </tr>
@@ -205,15 +203,20 @@ The top 5–7 adoption risks (typically: user resistance, data quality, process 
 
 </td>
 </tr>
+</tbody>
 </table>
 
-**The nine governance roles** required by Section 3 are: Executive Sponsor, Adoption Lead, Business Lead, Customer IT Lead, Account Executive, Enterprise Architect, Discovery/Execution Lead, Product/Solution Manager, and Test Lead. All nine must be named by end of Discovery. The delivery-side roles — **FDE Domain PM** (Enable-track owner on the FDE side) and the **Value Advisor** — are FDE/advisory roles and are **not** part of the nine-role customer-governance roster; "**product owner**" (used in the scale gate) maps to the roster's **Product / Solution Manager**.
+**The nine governance roles** required by Section 3 are: Executive Sponsor, Adoption Lead, Business Lead, Customer IT Lead, Account Executive, Enterprise Architect, Discovery/Execution Lead, Product/Solution Manager, and Test Lead. All nine must be named by the end of Discovery.
+
+> ### Note:  
+> The FDE Domain PM (Enable-track owner on the FDE side) and the Value Advisor are FDE/advisory roles — they are **not** part of the nine-role customer-governance roster. The "product owner" referenced in scale gate criteria maps to the roster's **Product / Solution Manager**.
 
 ### Production of the Adoption Strategy Across the Engagement Lifecycle
 
-**Table: Adoption Strategy Production Timeline**
+**Adoption Strategy Production Timeline**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -226,6 +229,8 @@ What Is Produced
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -274,9 +279,10 @@ All sections reviewed, updated from EAC learnings, signed by Executive Sponsor
 
 </td>
 </tr>
+</tbody>
 </table>
 
-The Adoption Strategy is a living document. It is never "done" in a sprint — it is updated each time new information changes the adoption picture.
+The Adoption Strategy is a living document. It is updated each time new information changes the adoption picture.
 
 ### Adoption Strategy Quality Gate
 
@@ -288,20 +294,22 @@ At the productization handover gate, the Adoption Strategy must meet:
 -   Section 7 risks reviewed and risk owners confirmed
 -   Executive Sponsor signature obtained
 
-An Adoption Strategy that fails this gate is a productization blocker, not a deferred action. Without it, the agent enters production with no organizational accountability structure.
+> ### Caution:  
+> An Adoption Strategy that fails this gate is a productization blocker, not a deferred action. Without it, the agent enters production with no organizational accountability structure.
 
 
-<a name="loio318c7e2d95514e2a865a33d3e76bc520__section_gradual_release"/>
+<a name="loiob8233b2e467d45089522a452a85f137d__section_gradual_release"/>
 
 ## Gradual Release of Responsibility
 
 ### The Four-Stage Model
 
-The Enable track transfers operational responsibility to the customer using a structured four-stage model. Stages are sequential — each requires explicit readiness confirmation before the next begins. Do not skip stages under time pressure; a customer who hasn't completed Stage 3 (Reverse Shadowing) is not ready for independent operation.
+The Enable track transfers operational responsibility to the customer using a structured four-stage model. Stages are sequential — each requires explicit readiness confirmation before the next begins.
 
-**Table: Four-Stage Responsibility Transfer Model**
+**Four-Stage Responsibility Transfer Model**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -324,6 +332,8 @@ Evidence That Stage Is Complete
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -342,7 +352,7 @@ FDE team
 </td>
 <td valign="top">
 
-Customer team can accurately describe agent behavior in their own words; no questions about basic operation remain
+Customer team can accurately describe agent behavior in their own words; no questions about basic operation remain.
 
 </td>
 </tr>
@@ -354,7 +364,7 @@ Customer team can accurately describe agent behavior in their own words; no ques
 </td>
 <td valign="top">
 
-Customer IT admin and process owner shadow FDE team during live operations. All decisions are made by the FDE team; customer team asks questions in context.
+Customer IT admin and process owner shadow the FDE team during live operations. All decisions are made by the FDE team; customer team asks questions in context.
 
 </td>
 <td valign="top">
@@ -364,7 +374,7 @@ FDE team
 </td>
 <td valign="top">
 
-Customer team can predict FDE team's decisions before they are made 80% of the time
+Customer team can predict the FDE team's decisions before they are made 80% of the time.
 
 </td>
 </tr>
@@ -386,7 +396,7 @@ Customer team
 </td>
 <td valign="top">
 
-Customer team completes one full operational cycle (including at least one alert or approval event) without FDE intervention
+Customer team completes one full operational cycle (including at least one alert or approval event) without FDE intervention.
 
 </td>
 </tr>
@@ -408,10 +418,11 @@ Customer team
 </td>
 <td valign="top">
 
-Customer team handles three consecutive incidents or threshold adjustment requests independently; FDE team is not contacted for routine operations
+Customer team handles three consecutive incidents or threshold adjustment requests independently; FDE team is not contacted for routine operations.
 
 </td>
 </tr>
+</tbody>
 </table>
 
 **Enable exit criterion for FDE handover: Stage 3 minimum; Stage 4 target.**
@@ -420,9 +431,10 @@ If the engagement timeline does not permit Stage 4 before the FDE team exits, do
 
 ### Handover Activities by Stage
 
-**Table: Required Handover Activities per Stage**
+**Required Handover Activities**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -435,6 +447,8 @@ Required Handover Activities
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -471,15 +485,17 @@ Customer IT admin independently completes: one prompt rollback exercise, one thr
 
 </td>
 </tr>
+</tbody>
 </table>
 
-### Scale Gate Criteria Template
+### Scale Gate Criteria
 
-The transition from EAC (Early Adopter Care) operation to standard production scale requires explicit criteria agreed between the FDE team, the customer, and the product owner. The values in brackets are engagement-specific and must be agreed in Discovery or during EAC, not at productization.
+The transition from EAC operation to standard production scale requires explicit criteria agreed between the FDE team, the customer, and the product owner. Engagement-specific values must be agreed in Discovery or during EAC — not at productization.
 
-**Table: Scale Gate Criteria Template**
+**Scale Gate Criteria Template**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -497,6 +513,8 @@ Engagement-Specific Value
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -561,7 +579,7 @@ aeval online eval success rate ≥ [threshold]% with no declining trend over 30 
 </td>
 <td valign="top">
 
-[threshold] typically 80–90%; agreed with the Business Lead in Discovery and recorded in Adoption Strategy Section 5. Set independently — [Agent Evaluation](agent-evaluation-bb08bc0.md)'s Week-9 milestone is a qualitative stability gate, not a numeric success-rate threshold
+[threshold] typically 80–90%; agreed with the Business Lead in Discovery and recorded in Adoption Strategy Section 5
 
 </td>
 </tr>
@@ -607,7 +625,7 @@ Fixed criterion — no engagement-specific value
 </td>
 <td valign="top">
 
-All enablement artifacts present and accepted by the customer
+All artifacts listed in the Enablement Artifacts Summary are present and accepted by the customer
 
 </td>
 <td valign="top">
@@ -616,12 +634,13 @@ Fixed criterion — no exception
 
 </td>
 </tr>
+</tbody>
 </table>
 
-Populate the engagement-specific values during Discovery (or at the latest during the first EAC review) and record them in Adoption Strategy Section 5. If the criteria have not been agreed at the time of scale gate review, the gate cannot be called passed.
+Populate the engagement-specific values during Discovery (or at the latest during the first EAC review) and record them in the Adoption Strategy Section 5. These values become the formal scale gate criteria — reaching them is the trigger for productization sign-off and standard production transition.
 
 
-<a name="loio318c7e2d95514e2a865a33d3e76bc520__section_role_based_training"/>
+<a name="loiob8233b2e467d45089522a452a85f137d__section_role_based_training"/>
 
 ## Role-Based Training
 
@@ -629,9 +648,10 @@ Training is not one-size-fits-all. The Enable track delivers seven distinct trai
 
 ### Training Matrix
 
-**Table: Role-Based Training Matrix**
+**Training Audiences and Requirements**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -654,6 +674,8 @@ Key Content
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -808,15 +830,17 @@ First-line triage checklist: is this an agent issue or an SAP platform issue? Wh
 
 </td>
 </tr>
+</tbody>
 </table>
 
 ### Training Materials as Handover Artifacts
 
-All training materials must be delivered as durable artifacts, not just session slides:
+All training materials must be delivered as durable artifacts, not just session slides.
 
-**Table: Training Artifacts and Post-Handover Owners**
+**Training Handover Artifacts**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -834,6 +858,8 @@ Owner Post-Handover
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -915,7 +941,7 @@ Markdown file
 </td>
 <td valign="top">
 
-CIS T&O (see [CIS CoE Operations Model](cis-coe-operations-model-cba3b4d.md))
+CIS T&O
 
 </td>
 </tr>
@@ -953,68 +979,71 @@ Customer IT Support
 
 </td>
 </tr>
+</tbody>
 </table>
 
-Training materials that exist only in the FDE team's heads or in a sprint archive are not handover artifacts. They must be in a system the customer organization owns and can maintain.
+> ### Caution:  
+> Training materials that exist only in the FDE team's heads or in a sprint archive are not handover artifacts. They must be in a system the customer organization owns and can maintain.
 
 
-<a name="loio318c7e2d95514e2a865a33d3e76bc520__section_readiness_checklist"/>
+<a name="loiob8233b2e467d45089522a452a85f137d__section_readiness_checklist"/>
 
 ## Enablement Readiness Checklist
 
-The following checklist must be complete before productization handover is signed off. This is the Enable track's equivalent of the technical TR1–TR14 checklist (see [Production Operations](production-operations-e24808a.md)).
+The following checklist must be complete before productization handover is signed off.
 
 **Governance readiness:**
 
--   [ ] All 9 adoption governance roles named with specific individuals
--   [ ] Executive Sponsor has confirmed business case and success criteria
--   [ ] Business Lead has accepted HITL decision responsibility in writing
--   [ ] Adoption Strategy Sections 1–7 complete and signed
+-   All 9 adoption governance roles named with specific individuals
+-   Executive Sponsor has confirmed business case and success criteria
+-   Business Lead has accepted HITL decision responsibility in writing
+-   Adoption Strategy Sections 1–7 complete and signed
 
 **Technical transfer:**
 
--   [ ] Customer IT Admin has Joule Studio builder access confirmed
--   [ ] Customer IT Admin has AI Agent Hub read access confirmed
--   [ ] Customer IT Admin can navigate to Workflow B telemetry independently
--   [ ] At least one rollback exercise completed by customer IT admin (not by FDE team)
+-   Customer IT Admin has Joule Studio builder access confirmed
+-   Customer IT Admin has AI Agent Hub read access confirmed
+-   Customer IT Admin can navigate to Workflow B telemetry independently
+-   At least one rollback exercise completed by customer IT admin (not by FDE team)
 
 **Training completions:**
 
--   [ ] Executive Sponsor briefing delivered and acknowledged
--   [ ] Business Lead workshop completed (HITL decision guide delivered)
--   [ ] IT Admin technical session completed (hands-on, not just slides)
--   [ ] End user training session completed for pilot user group
--   [ ] T&O runbook handover session completed with CIS T&O team
--   [ ] Security evidence walkthrough completed with compliance team
--   [ ] Help Desk triage briefing completed
+-   Executive Sponsor briefing delivered and acknowledged
+-   Business Lead workshop completed (HITL decision guide delivered)
+-   IT Admin technical session completed (hands-on, not just slides)
+-   End user training session completed for pilot user group
+-   T&O runbook handover session completed with CIS T&O team
+-   Security evidence walkthrough completed with compliance team
+-   Help Desk triage briefing completed
 
 **Drills:**
 
--   [ ] At least one Workflow B alert drill completed (synthetic alert → customer team triages → resolution without FDE)
--   [ ] At least one threshold adjustment exercise completed (customer IT admin makes adjustment following the documented procedure)
--   [ ] At least one HITL approval decision executed by the Business Lead (not FDE team guidance)
+-   At least one Workflow B alert drill completed (synthetic alert → customer team triages → resolution without FDE)
+-   At least one threshold adjustment exercise completed (customer IT admin makes adjustment following the documented procedure)
+-   At least one HITL approval decision executed by the Business Lead (not FDE team guidance)
 
 **Enable stage:**
 
--   [ ] Stage 3 achieved (customer team completes an operational cycle without FDE intervention)
--   [ ] Stage 4 target date confirmed if Stage 4 not yet reached
+-   Stage 3 achieved (customer team completes an operational cycle without FDE intervention)
+-   Stage 4 target date confirmed if Stage 4 not yet reached
 
 **Post-handover plan:**
 
--   [ ] 30/60/90-day review schedule confirmed with customer contacts
--   [ ] CIS T&O contact list confirmed and handed to customer IT Admin
--   [ ] Hypercare period start date and scope agreed
+-   30/60/90-day review schedule confirmed with customer contacts
+-   CIS T&O contact list confirmed and handed to customer IT Admin
+-   Hypercare period start date and scope agreed
 
 
-<a name="loio318c7e2d95514e2a865a33d3e76bc520__section_change_management"/>
+<a name="loiob8233b2e467d45089522a452a85f137d__section_change_management"/>
 
 ## Change Management and Organizational Readiness
 
-The five readiness areas from Adoption Strategy Section 4 are assessed during Discovery and reviewed at EAC. Each area has specific implications for the Enable track:
+The five readiness areas from Adoption Strategy Section 4 are assessed during Discovery and reviewed at EAC.
 
-**Table: Five Readiness Areas**
+**Readiness Areas**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -1032,6 +1061,8 @@ Enable Track Response
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -1117,15 +1148,17 @@ Governance table complete; accountability confirmed; Adoption Strategy Section 3
 
 </td>
 </tr>
+</tbody>
 </table>
 
 ### Managing Resistance
 
-The most common adoption failure mode is not technical — it is user resistance. An agent that recommends decisions that humans consistently override is not a failing agent; it is an agent that hasn't been adopted. Distinguish these signals:
+The most common adoption failure mode is not technical — it is user resistance. An agent that recommends decisions that humans consistently override is not a failing agent; it is an agent that has not been adopted. Distinguish resistance signals from quality signals:
 
-**Table: Override Signal Interpretation**
+**Override Signal Interpretation**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -1143,6 +1176,8 @@ Enable Track Response
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -1211,19 +1246,21 @@ Executive Sponsor escalation; temporary HITL gate tightening while root cause is
 
 </td>
 </tr>
+</tbody>
 </table>
 
 ### Business Lead HITL Decision Guide — Legitimate Override vs. Operator Error
 
-The Business Lead is the accountability owner for HITL decisions (see training matrix above). Distinguishing a *legitimate override* (the Business Lead had correct contextual information the agent lacked) from an *operator error* (the Business Lead overrode a correct agent output due to unfamiliarity or mistrust) is critical for the feedback loop (see [Agent Evaluation](agent-evaluation-bb08bc0.md)).
+The Business Lead is the accountability owner for HITL decisions. Distinguishing a legitimate override (the Business Lead had correct contextual information the agent lacked) from an operator error (the Business Lead overrode a correct agent output due to unfamiliarity or mistrust) is critical for the feedback loop.
 
-**A legitimate override** is one where the Business Lead can articulate a specific reason the agent output was wrong for this decision, citing information not available to the agent at the time (e.g., "the plant is under maintenance this week and the system doesn't reflect that yet"). Legitimate overrides should be documented with the specific reason.
+**A legitimate override** is one where the Business Lead can articulate a specific reason the agent output was wrong for this decision, citing information not available to the agent at the time. Legitimate overrides should be documented with the specific reason.
 
-**An operator error** is one where the Business Lead overrides a correct output because: (a) they don't trust the agent yet, (b) they prefer the old process habit, or (c) they misread the agent's recommendation. These are training signals, not spec change triggers.
+**An operator error** is one where the Business Lead overrides a correct output because: (a) they do not trust the agent yet, (b) they prefer the old process habit, or (c) they misread the agent's recommendation. These are training signals, not spec change triggers.
 
-**Table: Override Classification and Correct Response**
+**Override Classification Guide**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -1241,6 +1278,8 @@ Correct Response
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -1326,12 +1365,11 @@ Review whether that output type needs a tighter precision guardrail, a different
 
 </td>
 </tr>
+</tbody>
 </table>
 
-This guide should be included in the Business Lead training materials and kept as a laminated reference card alongside the HITL decision guide artifact.
 
-
-<a name="loio318c7e2d95514e2a865a33d3e76bc520__section_coe_support_post_handover"/>
+<a name="loiob8233b2e467d45089522a452a85f137d__section_coe_support_model"/>
 
 ## CoE Support Model Post-Handover
 
@@ -1339,7 +1377,7 @@ After productization handover, the CIS CoE provides three tiers of ongoing suppo
 
 ### Tier 1 — Operational Support (via CIS T&O)
 
-Available through the post-engagement operating rhythm (see [CIS CoE Operations Model](cis-coe-operations-model-cba3b4d.md)):
+Available through the post-engagement operating rhythm defined in the [CIS CoE Operations Model](cis-coe-operations-model-07aa8f3.md):
 
 -   Weekly hypercare reviews (first 30 days)
 -   Monthly quality reviews
@@ -1364,9 +1402,9 @@ Available through the post-engagement operating rhythm (see [CIS CoE Operations 
 When an issue requires more than configuration-level intervention:
 
 -   **Microdelivery**: an incremental feature addition to an existing productized agent or workflow; LoB-led; shorter cycle than a full FDE sprint (typically 2–6 weeks). Used when a specific, well-scoped capability gap is identified post-productization and can be delivered without a full sprint scope. The trigger and scope must be agreed between the LoB, CIS T&O, and the customer before committing to a Microdelivery cycle.
--   **New FDE engagement**: for scope expansions, new use cases within the domain, or fundamental architectural changes
+-   **New FDE engagement**: for scope expansions, new use cases within the domain, or fundamental architectural changes.
 
-The continuous improvement loop (see [CIS CoE Operations Model](cis-coe-operations-model-cba3b4d.md)) is the mechanism by which production observations feed back into Microdelivery or sprint planning. CIS T&O must have a defined path to propose improvements, and the customer must have a defined path to accept or defer them.
+The continuous improvement loop defined in the [CIS CoE Operations Model](cis-coe-operations-model-07aa8f3.md) is the mechanism by which production observations feed back into Microdelivery or sprint planning.
 
 ### Tier 3 — Long-Horizon Governance (Customer IT + CIS CoE)
 
@@ -1374,19 +1412,20 @@ Beyond the first year, the agent enters steady-state governance:
 
 -   Annual eval suite review (update test cases to reflect evolved process conditions)
 -   Annual model suitability review (confirm the model selection is still appropriate)
--   Deprecation classification awareness (see [Production Operations](production-operations-e24808a.md))
+-   Deprecation classification awareness
 -   Roadmap alignment: confirm the agent's scope against upcoming SAP product releases
 
 
-<a name="loio318c7e2d95514e2a865a33d3e76bc520__section_enablement_artifacts"/>
+<a name="loiob8233b2e467d45089522a452a85f137d__section_enablement_artifacts"/>
 
 ## Enablement Artifacts Summary
 
-All Enable track artifacts must be present in the productization handover package:
+All Enable track artifacts must be present in the productization handover package.
 
-**Table: Enablement Artifacts Summary**
+**Enablement Handover Artifacts**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -1409,6 +1448,8 @@ Owner
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -1563,21 +1604,14 @@ Adoption Lead → Customer Adoption Lead
 
 </td>
 </tr>
+</tbody>
 </table>
 
 **Related Information**  
 
 
-[Introduction](introduction-cc824ed.md)
+[Joule Studio](https://help.sap.com/docs/JOULESTUDIO/7e496fe6f81f4975aec07d9c1cbd2aef/36d3e974446844a1b0ffb7af8fa9446c.html "SAP's AI-first development environment for building and deploying AI agents, intelligent apps, and automations.") :arrow_upper_right:
 
-[Agent Quality Framework](agent-quality-framework-5f15077.md)
+[SAP AI Agent Hub](https://help.sap.com/docs/AI_AGENT_HUB/225000cc2ce44a228b9534a0f1098a9b/8ebd704d35a746c180af003db1f5acb0.html "Introduction to SAP AI Agent Hub — discover, govern, and monitor AI agents across your enterprise landscape.") :arrow_upper_right:
 
-[CIS CoE Operations Model](cis-coe-operations-model-cba3b4d.md)
-
-[Agent Evaluation](agent-evaluation-bb08bc0.md)
-
-[Production Operations](production-operations-e24808a.md)
-
-[Joule Work – Develop](https://help.sap.com/docs/JOULE_WORK/621104a90a01407fbb2d1613db39a54d/9d86b3b7b9534915a0f542ea7ea9f839.html "Joule Work Develop — Joule Studio in the Joule Work experience for building and managing AI agent workflows.") :arrow_upper_right:
-
-[SAP AI Agent Hub](https://help.sap.com/docs/AI_AGENT_HUB/225000cc2ce44a228b9534a0f1098a9b/8ebd704d35a746c180af003db1f5acb0.html "SAP AI Agent Hub — plan, build, observe, and govern AI agents across their full lifecycle.") :arrow_upper_right:
+[SAP AI Agent Hub — Key Capabilities](https://help.sap.com/docs/AI_AGENT_HUB/225000cc2ce44a228b9534a0f1098a9b/3f7ceafb1eb24d00ac50bf3499f50688.html "Overview of SAP AI Agent Hub capabilities including agent discovery, verification, monitoring, and governance.") :arrow_upper_right:

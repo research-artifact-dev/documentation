@@ -1,13 +1,13 @@
-<!-- loioae75c89caef44fd9b0c97256532665be -->
+<!-- loioa116de6a80bf4f5dbbd1d7f69d4ce65a -->
 
 # Precision Guardrails
 
-Precision guardrails are a purpose-built protection stack for high-stakes numerical outputs produced by AI agents. They intercept quantitative decisions before they are committed to systems of record, addressing failure modes — unit confusion, magnitude errors, sign errors, and rounding drift — that generic output validation cannot reliably catch.
+Precision guardrails are a purpose-built protection stack for high-stakes quantitative agent decisions. They intercept numerical outputs before those outputs become committed business facts, addressing the specific failure modes — unit confusion, magnitude errors, sign errors — that LLMs produce systematically on numerical content.
 
 
-<a name="loioae75c89caef44fd9b0c97256532665be__section_numerical_risk"/>
+<a name="loioa116de6a80bf4f5dbbd1d7f69d4ce65a__section_risk"/>
 
-## Why Numerical Outputs Are the Highest-Risk Agent Output
+## Why Numerical Outputs Carry the Highest Risk
 
 Most AI agent failures are visible and recoverable: a wrong summary can be corrected, a misclassified ticket can be rerouted, a poorly worded draft can be rewritten. When an agent produces a wrong number and that number is committed to a system of record, the consequences are different in kind.
 
@@ -17,20 +17,19 @@ The risk is compounded by two properties of LLMs:
 
 **LLMs are not calculators.** They produce numerically plausible outputs — numbers that look correct, appear in the right range, and are formatted appropriately. But plausibility is not accuracy. An LLM can produce 12,500 kg when the correct figure is 1,250 kg, and the output will be formatted, labelled, and presented with the same confidence as a correct answer.
 
-**Errors are not uniformly distributed.** LLM numerical errors cluster around patterns that are hard to detect without a reference check: unit confusion (kg vs. metric ton), magnitude errors (10x, 100x), sign errors (positive vs. negative position), and rounding behavior that differs from the system of record's expected precision.
-
-Precision guardrails are the design layer that intercepts numerical outputs before they become committed business facts. They are not generic output validation from [Agent Quality Framework](agent-quality-framework-5f15077.md) applied to numbers — they are a purpose-built protection stack for high-stakes quantitative decisions.
+**Errors are not uniformly distributed.** LLM numerical errors cluster around patterns that are hard to detect without a reference check: unit confusion (kg vs. metric ton), magnitude errors (10×, 100×), sign errors (positive vs. negative position), and rounding behavior that differs from the system of record's expected precision.
 
 
-<a name="loioae75c89caef44fd9b0c97256532665be__section_domain_examples"/>
+<a name="loioa116de6a80bf4f5dbbd1d7f69d4ce65a__section_domain_examples"/>
 
 ## Domain Examples by Industry AI Domain
 
-The following table maps representative numerical outputs to their failure modes and downstream consequences for the most affected Industry AI domains.
+The following table maps representative numerical outputs to their failure modes and downstream consequences for the most affected Industry AI domains:
 
-**Numerical Output Failure Modes by Industry AI Domain**
+**Numerical Output Failure Modes by Domain**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -53,6 +52,8 @@ Consequence
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -132,7 +133,7 @@ Forward contract quantity
 </td>
 <td valign="top">
 
-10x magnitude error
+10× magnitude error
 
 </td>
 <td valign="top">
@@ -251,22 +252,24 @@ Incorrect budget forecast; contract exposure
 
 </td>
 </tr>
+</tbody>
 </table>
 
-Common thread: the errors that matter most are not random noise — they are systematic confusions about units, magnitude, and sign that a deterministic reference check can reliably detect.
+The common thread: the errors that matter most are not random noise — they are systematic confusions about units, magnitude, and sign that a deterministic reference check can reliably detect.
 
 
-<a name="loioae75c89caef44fd9b0c97256532665be__section_guardrail_stack"/>
+<a name="loioa116de6a80bf4f5dbbd1d7f69d4ce65a__section_guardrail_stack"/>
 
 ## The Guardrail Stack
 
 ### FAIL / WARN Guardrail Classification
 
-Guardrail checks use a two-tier classification that governs whether a failing check blocks the operation or merely flags it for review.
+Guardrail checks use a two-tier classification that governs whether a failing check blocks the operation or merely flags it for review:
 
 **Guardrail Classification Tiers**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -284,6 +287,8 @@ Used When
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -318,13 +323,14 @@ The condition is sub-optimal but does not prevent correct operation
 
 </td>
 </tr>
+</tbody>
 </table>
 
 This classification allows the guardrail system to catch hard blockers while still surfacing softer quality issues without blocking delivery. WARN findings accumulate in the deployment record and should be reviewed at the sprint retrospective.
 
 **Example FAIL conditions** (from the Project LightSpeed deploy guardrails):
 
--   Credential Secret not in the same namespace as the consuming pod
+-   Credential secret not in the same namespace as the consuming pod
 -   `spec_sha256` mismatch (generation drift — built artifact does not match the spec that was approved)
 -   Joule capability config schema violation
 -   Credential file not in `.gitignore`
@@ -334,17 +340,18 @@ This classification allows the guardrail system to catch hard blockers while sti
 -   Routing description below quality threshold (advisory — agent may route incorrectly under ambiguous user phrasing)
 -   Test coverage below target (advisory — does not block deploy but flags risk)
 
-This two-tier model applies to both deploy-time guardrail checks (see [Production Operations](production-operations-e24808a.md)) and to runtime output validation. The FAIL/WARN distinction is a design decision made during FDE Discovery for each check — not a property of the check framework itself.
+This two-tier model applies to both deploy-time guardrail checks (see [Production Operations](production-operations-168fd42.md)) and to runtime output validation. The FAIL/WARN distinction is a design decision made during FDE Discovery for each check.
 
 ### The Priority: Use Deterministic Tools Where They Exist
 
-The guardrail stack described below is the safety net for cases where LLM reasoning is unavoidable. Before reaching for the stack, apply the upstream design principle: **if a deterministic SAP service can compute the answer authoritatively, the agent should call that service as a tool and use its output — not ask the LLM to reason to the same number.**
+The guardrail stack is the safety net for cases where LLM reasoning is unavoidable. Before reaching for the stack, apply the upstream design principle: **if a deterministic SAP service can compute the answer authoritatively, the agent should call that service as a tool and use its output — not ask the LLM to reason to the same number.**
 
-The LLM's role in a well-designed numerical agent is to provide context, framing, and judgment ("does this price make sense given the customer relationship and current market conditions?"), not to perform the arithmetic. This maps directly to a Joule Studio build decision.
+The LLM's role in a well-designed numerical agent is to provide context, framing, and judgment ("does this price make sense given the customer relationship and current market conditions?"), not to perform the arithmetic.
 
-**Task Type to Node Mapping**
+**Tool Selection for Numerical Tasks**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -362,6 +369,8 @@ Do NOT Use
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -430,9 +439,10 @@ Rigid rule-based check
 
 </td>
 </tr>
+</tbody>
 </table>
 
-An agent that routes numerical computation to deterministic services will require a narrower, more reliable guardrail stack than one that relies on LLM arithmetic. The four layers below assume this tool-selection principle has already been applied — they are not a substitute for it.
+An agent that routes numerical computation to deterministic services requires a narrower, more reliable guardrail stack than one that relies on LLM arithmetic. The four layers below assume this tool-selection principle has already been applied.
 
 ### Input Data Quality Assumption
 
@@ -440,7 +450,7 @@ The four layers below validate agent *outputs*. They assume that the authoritati
 
 If the source system contains incorrect master data — wrong standard batch quantities, stale approved vendor lists, out-of-date pricing tiers — the agent will produce an output that is internally consistent with the bad input it received and may pass all four guardrail layers. The audit trail's `input_state` field records what the agent received for forensic purposes; it does not validate whether that input was accurate upstream.
 
-Source data quality is a prerequisite for guardrail effectiveness, not something the stack provides. During FDE Discovery, identify the `sapMcpClient` calls that retrieve authoritative constraints, confirm the currency and accuracy of the underlying master data with the process owner, and flag any known data quality risks as dependencies in the Draft Product Design Specs.
+Source data quality is a prerequisite for guardrail effectiveness. During FDE Discovery, identify the `sapMcpClient` calls that retrieve authoritative constraints, confirm the currency and accuracy of the underlying master data with the process owner, and flag any known data quality risks as dependencies in the Draft Product Design Specs.
 
 ### The Stack
 
@@ -468,7 +478,6 @@ The layers are cumulative, not alternative. A high-stakes numerical output shoul
 For agents that execute business-critical actions (batch releases, financial postings, purchase orders), business constraints should be encoded as explicit MUST rules in a `golden_scenarios.yaml` file. Each MUST rule is a natural-language business invariant that the agent must satisfy:
 
 ```yaml
-# golden_scenarios.yaml — example MUST rules
 must_rules:
   - id: MR-001
     description: "Agent must always display the quantity and unit of measure before
@@ -488,7 +497,7 @@ must_rules:
     severity: WARN
 ```
 
-MUST rules are evaluated as LLM-graded guardrails during post-build evaluation and can be included in the aeval offline test suite (see [Agent Evaluation](agent-evaluation-bb08bc0.md)). This transforms informal business requirements captured during FDE Discovery into machine-checkable constraints.
+MUST rules are evaluated as LLM-graded guardrails during post-build evaluation and can be included in the `aeval` offline test suite (see [Agent Evaluation in FDE Sprints](agent-evaluation-6150d04.md)). This transforms informal business requirements captured during FDE Discovery into machine-checkable constraints.
 
 Each MUST rule has an associated severity (`FAIL` or `WARN`). A `FAIL`-severity MUST rule whose condition is not satisfied in an eval test case blocks the deployment. A `WARN`-severity MUST rule produces an advisory finding.
 
@@ -496,14 +505,15 @@ The `golden_scenarios.yaml` file is a collaboration artifact: the Domain PM and 
 
 ### Input Compression — Unsafe for Numerical and Financial Content
 
-> ### Note:  
+> ### Caution:  
 > Input compression must not be applied to prompts containing numerical or financial content without explicit validation.
 
 ADR 011 (SAP-internal benchmark, 30 enterprise cases, 2026-07-26) provides the authoritative operating-point data for LLM-based input compression:
 
-**Input Compression Benchmark Results**
+**Input Compression Operating Points**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -531,6 +541,8 @@ Numeric Recall
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -612,6 +624,7 @@ Caveman
 
 </td>
 </tr>
+</tbody>
 </table>
 
 For batch release quantities, financial postings, or any prompt containing business-critical numbers: LLMLingua at 50% retention drops approximately 9% of numeric values. This loss rate is unacceptable for any use case covered by the precision guardrail stack. At 25% retention, LLMLingua quality falls to 0.882 — below any acceptable threshold for business-critical content.
@@ -620,10 +633,10 @@ For batch release quantities, financial postings, or any prompt containing busin
 
 **Caching incompatibility**: input compression defeats prompt caching if applied to cached prompt segments. Only apply compression to non-cached portions of the prompt. Applying compression to a cached prefix invalidates the cache entry on every call, eliminating the latency and cost benefits of caching.
 
-For further context on compression techniques and their cost-efficiency tradeoffs, see [Token Efficiency](token-efficiency-8449831.md).
+For further context on compression techniques and their cost-efficiency tradeoffs, see [Token Efficiency in Industry AI Delivery](token-efficiency-2cc8da2.md).
 
 
-<a name="loioae75c89caef44fd9b0c97256532665be__section_layer1"/>
+<a name="loioa116de6a80bf4f5dbbd1d7f69d4ce65a__section_layer1"/>
 
 ## Layer 1 — Pre-Check: Constraining the Agent's Input Space
 
@@ -652,19 +665,18 @@ For categorical numerical decisions (pricing tiers, discount bands, contract qua
 This is implemented as a structured output constraint in `sapOrchestration`: the output schema specifies that the recommendation must be one of the values in the approved list, not a free-form number.
 
 
-<a name="loioae75c89caef44fd9b0c97256532665be__section_layer2"/>
+<a name="loioa116de6a80bf4f5dbbd1d7f69d4ce65a__section_layer2"/>
 
 ## Layer 2 — Output Validation
 
-Layer 2 is the multi-stage verification pattern from [Agent Quality Framework](agent-quality-framework-5f15077.md), applied specifically to numerical outputs. The deterministic check is the primary mechanism here; the LLM critic plays a supporting role.
+Layer 2 is the multi-stage verification pattern from [Agent Quality Framework](agent-quality-framework-09082f8.md), applied specifically to numerical outputs. The deterministic check is the primary mechanism; the LLM critic plays a supporting role.
 
 ### Deterministic Checks for Numerical Outputs
-
-The following deterministic checks cover the most common failure modes.
 
 **Deterministic Check Types**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -682,6 +694,8 @@ Failure Modes Caught
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -784,6 +798,7 @@ Magnitude errors relative to ground truth
 
 </td>
 </tr>
+</tbody>
 </table>
 
 The tolerance band for the reference value comparison is a design parameter set during FDE Discovery and owned by the business process owner. A ±5% tolerance on a purchase order quantity is a different risk decision than a ±0.1% tolerance on a hedge ratio. The tolerance values should be documented in the Draft Product Design Specs and revisited during the EAC phase based on observed agent behavior.
@@ -804,34 +819,34 @@ For use cases where an authoritative calculation service exists in the SAP lands
     └── NO  → escalate to sapTaskCenter with both values and deviation percentage
 ```
 
-This pattern directly addresses a limitation in relying solely on LLM critics: the LLM critic is the right tool when no deterministic reference exists, but when one does exist, it should be used in preference to or in combination with the LLM check.
+When a deterministic reference exists, it should be used in preference to or in combination with the LLM critic check.
 
 ### LLM Critic for Contextual Plausibility
 
-The LLM critic (second `sapOrchestration` call with a critic system prompt) adds a check that deterministic rules cannot perform: does the output make sense in context? A quantity within the valid range and within ±5% of the reference calculation may still be wrong if it violates a contextual constraint the rules do not capture (e.g., "this customer's contract specifies quarterly minimums that make this weekly order quantity implausible").
+The LLM critic (second `sapOrchestration` call with a critic system prompt) adds a check that deterministic rules cannot perform: does the output make sense in context? A quantity within the valid range and within ±5% of the reference calculation may still be wrong if it violates a contextual constraint the rules do not capture.
 
 The LLM critic system prompt for numerical validation should be explicit:
 
 > "You are a numerical validation agent. You have received a proposed {output_type} of {value} {unit}. The authoritative reference value is {reference_value} {unit}. Your task is to determine whether the proposed value is plausible given the following context: {context}. Output a JSON object with fields: verdict (CONFIRM or REJECT), reason (one sentence), confidence (0.0–1.0)."
 
-The critic's structured output feeds directly into the routing logic: the downstream If node in the Joule Studio workflow branches on `verdict` — CONFIRM proceeds to Layer 3; REJECT escalates to `sapTaskCenter` with the critic's `reason` and `confidence` attached. No further parsing is needed between the critic call and the routing decision, which is why the output schema is fixed rather than free-form.
+The critic's structured output feeds directly into the routing logic: the downstream If node branches on `verdict` — CONFIRM proceeds to Layer 3; REJECT escalates to `sapTaskCenter` with the critic's `reason` and `confidence` attached.
 
 ### When No Deterministic Check Exists — the `UNAVAILABLE` Verdict
 
-Not every numerical output has an authoritative reference service or a codable deterministic rule. When the Layer 2 deterministic stage cannot be evaluated — no reference calculation service exists in the customer landscape, and no range / unit / sign / precision rule applies to this output type — the stage returns **`stage1_verdict = UNAVAILABLE`** (recorded in the audit trail), distinct from CONFIRM (checked and passed) and REJECT (checked and failed).
+Not every numerical output has an authoritative reference service or a codable deterministic rule. When the Layer 2 deterministic stage cannot be evaluated, the stage returns **`stage1_verdict = UNAVAILABLE`** (recorded in the audit trail), distinct from CONFIRM (checked and passed) and REJECT (checked and failed).
 
 `UNAVAILABLE` must never be treated as a pass. Routing on `UNAVAILABLE`:
 
 -   The LLM critic (if configured) still runs and provides the only automated signal.
--   Because the strongest check is absent, the output is routed to **Layer 3 human approval regardless of absolute value or deviation** — the missing deterministic reference is itself a reason for human oversight, the same posture used for low-confidence outputs.
+-   Because the strongest check is absent, the output is routed to **Layer 3 human approval regardless of absolute value or deviation** — the missing deterministic reference is itself a reason for human oversight.
 -   The gap is documented during Discovery so a rule-based Code node check or a reference service can be added over time, converting `UNAVAILABLE` into CONFIRM/REJECT coverage.
 
 ### Who Performs the Write — the Committer Pattern
 
-Throughout Layers 2–4, write-back is never performed by the worker agent. The worker is **read/recommend-only** and holds no system-of-record write scope — the Agent Gateway denies a direct worker write at the API-call level (the `min(user, agent)` intersection; see [Security and Data Protection](security-and-data-protection-a403094.md)). The write to the system of record is performed by a separate **supervisor/committer identity** after the output has cleared Layer 2 validation and any Layer 3 approval. "Proceed to write-back" means "hand the approved value to the committer," not "the worker writes." This makes the no-direct-write property architecturally enforced rather than a design convention (see [Supervisor Agent Pattern](supervisor-agent-pattern-67417bb.md)); an optional S/4HANA RAP instance-authorization backstop can additionally reject any write to a record not in an approved state. The audit trail attributes the committed write to the committer identity.
+Throughout Layers 2–4, write-back is never performed by the worker agent. The worker is **read/recommend-only** and holds no system-of-record write scope — the Agent Gateway denies a direct worker write at the API-call level (the `min(user, agent)` intersection described in [Security and Data Protection](security-and-data-protection-a6b66d5.md)). The write to the system of record is performed by a separate **supervisor/committer identity** after the output has cleared Layer 2 validation and any Layer 3 approval. An optional S/4HANA RAP instance-authorization backstop can additionally reject any write to a record not in an approved state. The audit trail attributes the committed write to the committer identity.
 
 
-<a name="loioae75c89caef44fd9b0c97256532665be__section_layer3"/>
+<a name="loioa116de6a80bf4f5dbbd1d7f69d4ce65a__section_layer3"/>
 
 ## Layer 3 — Human Approval Thresholds
 
@@ -851,6 +866,7 @@ Both dimensions can independently trigger a human approval requirement.
 **Illustrative Approval Thresholds by Domain**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -868,6 +884,8 @@ Deviation Threshold
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -953,9 +971,11 @@ Any order >500 units on first-time material
 
 </td>
 </tr>
+</tbody>
 </table>
 
-These thresholds are **illustrative order-of-magnitude examples only** and have not been validated against actual FDE engagement data or domain expert review. They are intended to show the structure of the decision (absolute value + deviation from reference, both independently triggering approval), not to prescribe specific values. The actual values are a business decision made during FDE Discovery in collaboration with the process owner. They should be captured in the Draft Product Design Specs and may be adjusted during EAC based on observed human override patterns.
+> ### Note:  
+> These thresholds are illustrative order-of-magnitude examples only and have not been validated against actual FDE engagement data or domain expert review. The actual values are a business decision made during FDE Discovery in collaboration with the process owner. They should be captured in the Draft Product Design Specs and may be adjusted during EAC based on observed human override patterns.
 
 ### Implementation via sapTaskCenter
 
@@ -978,42 +998,32 @@ sapTaskCenter parameters for Layer 3 approval:
 
 The `customAttributes` are the key: a human approver who receives only "Agent recommends 42.50 EUR" cannot make a good decision. A human approver who sees the proposed value, the reference value, the deviation, the agent's confidence, and the validation result has everything needed to approve or reject in seconds.
 
-**Task Center is the single mandatory HITL channel.** Per SAP's AI Golden Path (April 2026 architectural decision), all human-in-the-loop requests from agents must route through Task Center via Agent Gateway. Custom approval flows, email-based approvals, and ad-hoc webhook implementations are not compliant and must not be used in production agents. The `sapTaskCenter` node in Joule Studio implements this routing; no additional integration is needed.
+**Task Center is the single mandatory HITL channel.** Per SAP's AI Golden Path (April 2026 architectural decision), all human-in-the-loop requests from agents must route through Task Center via Agent Gateway. Custom approval flows, email-based approvals, and ad-hoc webhook implementations are not compliant and must not be used in production agents.
 
-**Current HITL capability state (as of mid-2026):** Only **Permission Elevation (PE)** is currently available — the agent provides the responsible user's global user ID, and Task Center creates an approval task on their behalf. Two additional HITL modes — Mandatory Approval and Request for Further Input — are on the roadmap but not yet released. Design all precision guardrail escalation flows within the PE constraint; do not plan approval patterns that depend on capability that is not yet in production.
-
-**Reconciling the Layer 3 design with PE-only availability.** The Layer 3 gate is a *blocking* approval that can also capture a human-*modified* value. Those semantics resemble the roadmap-only Mandatory Approval / Request-for-Further-Input modes, but they do **not** depend on them — they are delivered at the workflow / committer level under PE today:
-
--   **Blocking** is a property of the workflow, not of a platform HITL mode. The worker is read/recommend-only and never writes; the write is performed by the supervisor/committer step, which is sequenced *after* the `sapTaskCenter` task resolves. The workflow does not advance to the committer until the task is completed, so the system-of-record write is blocked until a human acts. This holds under PE.
--   **MODIFIED value** is captured from the Task Center task-completion payload: the approver can return an edited value in the task's output fields, which the workflow reads back and the committer writes as `committed_value` (recording `human_decision = MODIFIED` and `human_modified_value`). This uses the standard Task Center completion response, not the unreleased Mandatory-Approval mode.
-
-If a given customer's Task Center configuration cannot return a modified value in the task response (approve/reject only), treat the MODIFIED path as **roadmap-dependent** and design the flow as approve/reject-only until Mandatory Approval / Request-for-Further-Input ship.
+**Current HITL capability state (as of mid-2026):** Only **Permission Elevation (PE)** is currently available — the agent provides the responsible user's global user ID, and Task Center creates an approval task on their behalf. Two additional HITL modes — Mandatory Approval and Request for Further Input — are on the roadmap but not yet released. Design all precision guardrail escalation flows within the PE constraint.
 
 ### Threshold Governance
 
-Thresholds are configuration, not code — but there is no BAIP platform-level configuration store that injects them into a running agent. In the n8n-based workflow, thresholds live in one of two places: **workflow-level `$vars`** (resolved at execution, e.g. `{{$vars.approval_threshold_eur}}`) for values that are stable across invocations, or the **trigger payload** (`{{$json.config.approval_threshold_eur}}`) for values supplied per request by the calling context. They are never hardcoded in node parameters. Changing a `$vars` value does not require re-authoring the workflow logic, but it is a workflow-configuration change under version control — not a silent platform-config edit, and the Agent Hub does not expose a managed threshold parameter set. See [Production Operations](production-operations-e24808a.md) for the canonical threshold-configuration pattern.
+Thresholds are configuration, not code — but there is no BAIP platform-level configuration store that injects them into a running agent. In the n8n-based workflow, thresholds live in one of two places: **workflow-level `$vars`** (resolved at execution, e.g. `{{$vars.approval_threshold_eur}}`) for values that are stable across invocations, or the **trigger payload** (`{{$json.config.approval_threshold_eur}}`) for values supplied per request by the calling context. They are never hardcoded in node parameters. Changing a `$vars` value does not require re-authoring the workflow logic, but it is a workflow-configuration change under version control.
 
-Changes to thresholds should require approval from the process owner and be logged in the audit trail. A threshold that was silently lowered from €500K to €5M is a governance failure.
+Changes to thresholds should require approval from the process owner and be logged in the audit trail. A threshold that was silently lowered is a governance failure.
 
 ### Outcome-Backed Escalation
 
-Static guardrail thresholds should be supplemented by outcome-backed escalation. The mechanism:
-
-> When `outcome_confirmed_bad > 0` for a given guardrail check — i.e., a previously approved action that passed that check subsequently produced a confirmed bad outcome — the severity of that check escalates automatically.
+Static guardrail thresholds should be supplemented by outcome-backed escalation. When `outcome_confirmed_bad > 0` for a given guardrail check — i.e., a previously approved action that passed that check subsequently produced a confirmed bad outcome — the severity of that check escalates automatically.
 
 Escalation paths:
 
 -   WARN → FAIL: a check that was advisory becomes blocking
 -   Conditional → Blocking: a check that fired only above a threshold fires for all subsequent outputs of the same type until the root cause is resolved
 
-This ensures that repeated failure patterns are caught more aggressively over time, without requiring manual threshold updates after each incident. The escalation is driven by outcome data from the audit trail: the `human_decision = REJECTED` and `committed_value ≠ agent_output` fields, combined with downstream outcome confirmation, are the inputs to the escalation logic.
+This ensures that repeated failure patterns are caught more aggressively over time, without requiring manual threshold updates after each incident.
 
-**Design note**: outcome confirmation is not instantaneous. For many Industry AI use cases, the outcome of a committed action is only visible days or weeks later (batch quality results, financial close, production completion). The escalation mechanism must support configurable confirmation horizons — the time window after commitment within which an outcome signal is expected. If no outcome signal arrives within the horizon, the record is treated as inconclusive (neither confirming nor escalating).
+> ### Note:  
+> Outcome confirmation is not instantaneous. For many Industry AI use cases, the outcome of a committed action is only visible days or weeks later (batch quality results, financial close, production completion). The escalation mechanism must support configurable confirmation horizons — the time window after commitment within which an outcome signal is expected. The confirmation horizon is a domain-specific parameter set during FDE Discovery.
 
-The confirmation horizon is a domain-specific parameter set during FDE Discovery. For regulated manufacturing batch releases, a horizon of 1–5 working days is typical (time from release to in-process quality check result). For financial postings, the horizon aligns with the period-end close cycle.
 
-
-<a name="loioae75c89caef44fd9b0c97256532665be__section_layer4"/>
+<a name="loioa116de6a80bf4f5dbbd1d7f69d4ce65a__section_layer4"/>
 
 ## Layer 4 — Audit Trail
 
@@ -1024,6 +1034,7 @@ Every numerical decision that an agent commits to the system of record must have
 **Audit Trail Fields**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -1036,6 +1047,8 @@ Content
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -1228,6 +1241,7 @@ Difference between agent output and committed value (measures human override)
 
 </td>
 </tr>
+</tbody>
 </table>
 
 ### Storage and Immutability
@@ -1244,11 +1258,11 @@ The audit trail should be stored in a BAIP-managed data store (HANA Cloud is the
 The audit trail is not just a compliance artifact. Each record is a labeled data point: `(input_state, agent_output, reference_value, human_decision)`. Over time this dataset enables:
 
 -   **Calibration of tolerance bands**: if the deviation distribution shows agents consistently within ±1% of reference, the tolerance band can be tightened. If outliers cluster around a specific input pattern, targeted improvement is possible.
--   **Human override rate tracking**: the `delta` field aggregated over time is the direct measure of how often humans correct the agent — the most honest quality signal available.
+-   **Human override rate tracking**: the `delta` field aggregated over time is the direct measure of how often humans correct the agent — the most honest quality signal available (see [Agent Quality Framework](agent-quality-framework-09082f8.md)).
 -   **Model drift detection**: if the agent's accuracy degrades after a model version update, the audit trail captures this before it becomes a pattern in process KPIs.
 
 
-<a name="loioae75c89caef44fd9b0c97256532665be__section_confidence"/>
+<a name="loioa116de6a80bf4f5dbbd1d7f69d4ce65a__section_confidence"/>
 
 ## Confidence and Uncertainty Quantification
 
@@ -1286,10 +1300,10 @@ The confidence score integrates into the guardrail stack as a routing signal:
     └── Proceed to write-back + audit trail
 ```
 
-Confidence thresholds, like value thresholds, are configuration parameters owned by the process owner and are held in n8n `$vars` or the trigger payload (`{{$json.config.x}}`) under version control — not in a BAIP platform config store.
+Confidence thresholds, like value thresholds, are configuration parameters owned by the process owner and held in n8n `$vars` or the trigger payload under version control — not in a BAIP platform config store.
 
 
-<a name="loioae75c89caef44fd9b0c97256532665be__section_fde_delivery"/>
+<a name="loioa116de6a80bf4f5dbbd1d7f69d4ce65a__section_fde_delivery"/>
 
 ## Precision Guardrails in FDE Delivery
 
@@ -1310,16 +1324,17 @@ Confidence thresholds, like value thresholds, are configuration parameters owned
 
 -   Threshold configuration parameters must be in the production handover package with clear ownership: who can change them, via what mechanism, with what approval.
 -   The Sirius QPA test strategy must include precision guardrail boundary tests. A test that only verifies "agent produces a number" is insufficient; the test must verify "agent produces a number that passes the full guardrail stack."
--   The audit trail table structure and retention policy must be included in the DPCE data protection review (see [Security and Data Protection](security-and-data-protection-a403094.md)).
+-   The audit trail table structure and retention policy must be included in the DPCE data protection review (see [Security and Data Protection](security-and-data-protection-a6b66d5.md)).
 
 
-<a name="loioae75c89caef44fd9b0c97256532665be__section_summary"/>
+<a name="loioa116de6a80bf4f5dbbd1d7f69d4ce65a__section_summary"/>
 
 ## Summary
 
-**Guardrail Stack Summary**
+**Precision Guardrail Stack Summary**
 
 <table>
+<thead>
 <tr>
 <th valign="top">
 
@@ -1342,6 +1357,8 @@ When It Is Required
 
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td valign="top">
 
@@ -1452,92 +1469,16 @@ For any output where agent uncertainty is operationally significant
 
 </td>
 </tr>
+</tbody>
 </table>
 
-Key rule: **precision guardrails are not optional for write-back agents in regulated or high-value Industry AI use cases**. The choice is not whether to have them; the choice is how to configure them. The configuration (tolerances, thresholds, reference services, audit retention) is a business and regulatory decision made during Discovery.
-
-**Additional Design Principles**
-
-<table>
-<tr>
-<th valign="top">
-
-Addition
-
-</th>
-<th valign="top">
-
-Key Principle
-
-</th>
-</tr>
-<tr>
-<td valign="top">
-
-FAIL / WARN classification
-
-</td>
-<td valign="top">
-
-FAIL = blocking (deploy/operation aborted); WARN = advisory (proceed with logged finding); classification is a design decision per check, made in Discovery
-
-</td>
-</tr>
-<tr>
-<td valign="top">
-
-MUST rules
-
-</td>
-<td valign="top">
-
-Business invariants encoded in `golden_scenarios.yaml`; LLM-graded in eval suite; FAIL-severity MUST rule blocks deployment; authored jointly by Domain PM (content) and Dev Architect (severity + test case)
-
-</td>
-</tr>
-<tr>
-<td valign="top">
-
-Outcome-backed escalation
-
-</td>
-<td valign="top">
-
-`outcome_confirmed_bad > 0` auto-escalates severity; configurable confirmation horizons per domain; prevents silent accumulation of repeated failure patterns
-
-</td>
-</tr>
-<tr>
-<td valign="top">
-
-Input compression
-
-</td>
-<td valign="top">
-
-LLMLingua unsafe for numerical/financial prompts at any retention level (9% numeric drop at 50% retention); use Caveman (lossless, ~29% reduction) for all prompts containing business-critical numbers; compression defeats prompt caching on cached segments
-
-</td>
-</tr>
-</table>
+**Precision guardrails are not optional for write-back agents in regulated or high-value Industry AI use cases.** The choice is not whether to have them; the choice is how to configure them. The configuration (tolerances, thresholds, reference services, audit retention) is a business and regulatory decision made during Discovery.
 
 **Related Information**  
 
 
-[Agent Quality Framework](agent-quality-framework-5f15077.md)
+[SAP AI Core — Compliance and Security](https://help.sap.com/docs/AI_CORE/f7c0f89219354ee892aaec34a488d2e3/d0be812c81734355ade9dc94638870cf.html "SAP AI Core security measures including data protection, compliance standards, and cloud security certifications.") :arrow_upper_right:
 
-[Supervisor Agent Pattern](supervisor-agent-pattern-67417bb.md)
+[Generative AI Hub with SAP AI Core](https://help.sap.com/docs/AI_CORE/d5d03749687449ad9768e46ea9e32b1e/7db524ee75e74bf8b50c167951fe34a5.html "The generative AI hub enables access to and orchestration of generative AI models within a governed, enterprise-ready runtime on SAP AI Core.") :arrow_upper_right:
 
-[Security and Data Protection](security-and-data-protection-a403094.md)
-
-[Production Operations](production-operations-e24808a.md)
-
-[Agent Evaluation](agent-evaluation-bb08bc0.md)
-
-[Token Efficiency](token-efficiency-8449831.md)
-
-[Joule Studio Build Map](joule-studio-build-map-67ad030.md)
-
-[SAP AI Agent Hub](https://help.sap.com/docs/AI_AGENT_HUB/225000cc2ce44a228b9534a0f1098a9b/8ebd704d35a746c180af003db1f5acb0.html "Documentation for the SAP AI Agent Hub, covering agent registration, governance, and the Agent Gateway.") :arrow_upper_right:
-
-[Generative AI Hub in SAP AI Core](https://help.sap.com/docs/AI_CORE/d5d03749687449ad9768e46ea9e32b1e/7db524ee75e74bf8b50c167951fe34a5.html "Overview of the Generative AI Hub, including supported models, token consumption, and prompt configuration.") :arrow_upper_right:
+[Joule Studio](https://help.sap.com/docs/JOULESTUDIO/7e496fe6f81f4975aec07d9c1cbd2aef/36d3e974446844a1b0ffb7af8fa9446c.html "SAP's AI-first development environment for building and deploying AI agents, intelligent apps, and automations.") :arrow_upper_right:
