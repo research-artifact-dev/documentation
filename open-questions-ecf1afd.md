@@ -1,21 +1,19 @@
-<!-- loioab50037d19274510881da839d901b600 -->
+<!-- loioecf1afd72f8442d5a6fb9c810b445994 -->
 
 # Open Questions
 
-Unresolved questions that arose during concept development, each requiring external validation or input from legal, product, or domain experts outside the scope of this document. Each question includes context and references so it can be picked up and answered independently.
-
----
+Questions that arose during concept development where the answer is not yet known, requires external validation, or depends on legal/product/domain expertise outside the scope of this document. Each question includes context and references so it can be picked up and answered independently.
 
 
-<a name="loioab50037d19274510881da839d901b600__section_q1"/>
+<a name="loioecf1afd72f8442d5a6fb9c810b445994__section_q1"/>
 
-## Q1 — Workflow C (Support Relay): Collaboration Agreement Required for Sanitized Exports?
+## Q1 — Does Workflow C (Support Relay) Require a CA Even for Sanitized Exports?
 
 **Status:** Open — needs input from SAP legal / FDE legal team
 
 **Context:**
 
-[Security and Data Protection](security-and-data-protection-27868d4.md) defines a three-workflow supervisor pattern. Workflow C ("Support Relay") is triggered when a confirmed anomaly requires SAP support engagement. Its purpose is to export a minimal, sanitized trace extract from the customer's BAIP (Business AI Platform) tenant to SAP's support systems and create a support ticket automatically.
+[Security and Data Protection](security-and-data-protection-e8e4c85.md) defines a three-workflow supervisor pattern. Workflow C ("Support Relay") is triggered when a confirmed anomaly requires SAP support engagement. Its purpose is to export a minimal, sanitized trace extract from the customer's BAIP (Business AI Platform) tenant to SAP's support systems, and create a support ticket automatically.
 
 The technical design minimizes what leaves the tenant:
 
@@ -23,7 +21,7 @@ The technical design minimizes what leaves the tenant:
 -   SAP DPI entity masking is applied via `sapOrchestration (enableMasking=true)`
 -   Only structural anomaly evidence is retained: error codes, tool call names (not parameters), timing/latency, agent identity, agent version, correlation ID, tenant ID
 
-The legal question is whether this sanitized export still triggers a Collaboration Agreement (CA) requirement. The legal alignment table in that chapter contains:
+The legal question is whether this sanitized export still triggers a Collaboration Agreement (CA) requirement. The chapter's legal alignment table contains:
 
 > *"Support relay (Workflow C) exporting sanitized trace to SAP support → Assess with legal: CA may be required even for sanitized extracts"*
 
@@ -43,16 +41,13 @@ The CA approval gate requires Shardul Vikram's sign-off and is not a routine app
 
 **References:**
 
--   [Security and Data Protection](security-and-data-protection-27868d4.md) — Legal alignment per data flow table
--   [Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md) — Sanitization rules (what Workflow C strips vs. retains)
--   [Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md) — Support relay workflow design
+-   [Security and Data Protection](security-and-data-protection-e8e4c85.md) — Legal alignment per data flow table
+-   [Supervisor Agent Pattern](supervisor-agent-pattern-53ccc55.md) — Sanitization rules (what Workflow C strips vs. retains) and support relay workflow design
 
 **Who Can Answer This:** SAP legal / FDE legal team; alternatively, check whether the FDE Operating Model or the book-of-fde legal-agreements documentation addresses telemetry/metadata exports specifically.
 
----
 
-
-<a name="loioab50037d19274510881da839d901b600__section_q2"/>
+<a name="loioecf1afd72f8442d5a6fb9c810b445994__section_q2"/>
 
 ## Q2 — Are the Human Approval Threshold Examples in Precision Guardrails Valid for Their Domains?
 
@@ -60,43 +55,104 @@ The CA approval gate requires Shardul Vikram's sign-off and is not a routine app
 
 **Context:**
 
-[Precision Guardrails](precision-guardrails-c279f4e.md) includes a table of illustrative thresholds for the Layer 3 human approval gate — the point above which an agent's numerical output requires explicit human sign-off before write-back. The table covers five Industry AI domains:
-
-<br>
-
-**Human Approval Threshold Examples by Domain**
+[Precision Guardrails](precision-guardrails-0beada2.md) includes a table of illustrative thresholds for the Layer 3 human approval gate — the point above which an agent's numerical output requires explicit human sign-off before write-back. The table covers five Industry AI domains:
 
 <table>
-  <tr>
-    <th valign="top">Domain</th>
-    <th valign="top">Absolute Threshold</th>
-    <th valign="top">Deviation Threshold</th>
-  </tr>
-  <tr>
-    <td valign="top">Regulated Manufacturing — batch quantity</td>
-    <td valign="top">±10% of standard batch size</td>
-    <td valign="top">&gt;5% from batch classification service</td>
-  </tr>
-  <tr>
-    <td valign="top">Commodity Management — hedge ratio</td>
-    <td valign="top">&gt;€500K notional position change</td>
-    <td valign="top">&gt;2% from risk model</td>
-  </tr>
-  <tr>
-    <td valign="top">Revenue Growth Management — pricing</td>
-    <td valign="top">&gt;€100K contract value</td>
-    <td valign="top">&gt;3% from pricing engine</td>
-  </tr>
-  <tr>
-    <td valign="top">Asset Management — maintenance cost</td>
-    <td valign="top">&gt;€50K</td>
-    <td valign="top">&gt;15% from historical cost basis</td>
-  </tr>
-  <tr>
-    <td valign="top">Adaptive Production — production order</td>
-    <td valign="top">&gt;500 units on first-time material</td>
-    <td valign="top">&gt;10% from planning system</td>
-  </tr>
+<caption><b>Illustrative Layer 3 Human Approval Thresholds</b></caption>
+<thead>
+<tr>
+<th valign="top">Domain</th>
+<th valign="top">Absolute Threshold</th>
+<th valign="top">Deviation Threshold</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td valign="top">
+
+Regulated Manufacturing — batch quantity
+
+</td>
+<td valign="top">
+
+±10% of standard batch size
+
+</td>
+<td valign="top">
+
+>5% from batch classification service
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+Commodity Management — hedge ratio
+
+</td>
+<td valign="top">
+
+>€500K notional position change
+
+</td>
+<td valign="top">
+
+>2% from risk model
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+Revenue Growth Management — pricing
+
+</td>
+<td valign="top">
+
+>€100K contract value
+
+</td>
+<td valign="top">
+
+>3% from pricing engine
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+Asset Management — maintenance cost
+
+</td>
+<td valign="top">
+
+>€50K
+
+</td>
+<td valign="top">
+
+>15% from historical cost basis
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+Adaptive Production — production order
+
+</td>
+<td valign="top">
+
+>500 units on first-time material
+
+</td>
+<td valign="top">
+
+>10% from planning system
+
+</td>
+</tr>
+</tbody>
 </table>
 
 These values were constructed from first principles and general domain knowledge. The chapter already includes a disclaimer that they are illustrative order-of-magnitude examples only. However, before this concept is used in a customer conversation or as an FDE planning baseline, the values should be reviewed by someone with hands-on experience in each domain.
@@ -111,14 +167,12 @@ These values were constructed from first principles and general domain knowledge
 
 **References:**
 
--   [Precision Guardrails](precision-guardrails-c279f4e.md) — Layer 3 threshold table and governance design
+-   [Precision Guardrails](precision-guardrails-0beada2.md) — Layer 3 threshold table and governance design
 
 **Who Can Answer This:** CIS/FDE colleagues with Regulated Manufacturing, Commodity Management, or RGM engagement experience; alternatively, Industry AI domain PMs.
 
----
 
-
-<a name="loioab50037d19274510881da839d901b600__section_q3"/>
+<a name="loioecf1afd72f8442d5a6fb9c810b445994__section_q3"/>
 
 ## Q3 — Does sapMcpClient List Available Tools Dynamically at Runtime, or Does It Require Pre-Configuration?
 
@@ -132,92 +186,184 @@ The `mcpServers` hidden parameter description confirms this: *"MCP servers injec
 
 **Confirmed Parameters:**
 
-<br>
-
-**sapMcpClient Node Parameters**
-
 <table>
-  <tr>
-    <th valign="top">Parameter</th>
-    <th valign="top">Type</th>
-    <th valign="top">Default</th>
-    <th valign="top">Notes</th>
-  </tr>
-  <tr>
-    <td valign="top">`mcpServerName`</td>
-    <td valign="top">option</td>
-    <td valign="top">—</td>
-    <td valign="top">MCP server; list populated at design time from live instance</td>
-  </tr>
-  <tr>
-    <td valign="top">`toolMode`</td>
-    <td valign="top">option</td>
-    <td valign="top">`list`</td>
-    <td valign="top">`list` (design-time dropdown) or `id` (manual tool ID entry)</td>
-  </tr>
-  <tr>
-    <td valign="top">`toolFromList` / `toolById`</td>
-    <td valign="top">string</td>
-    <td valign="top">—</td>
-    <td valign="top">Tool to invoke; fixed at design time</td>
-  </tr>
-  <tr>
-    <td valign="top">`toolArguments`</td>
-    <td valign="top">JSON</td>
-    <td valign="top">`{}`</td>
-    <td valign="top">Arguments passed to the tool at runtime</td>
-  </tr>
-  <tr>
-    <td valign="top">`timeout`</td>
-    <td valign="top">number</td>
-    <td valign="top">30,000ms</td>
-    <td valign="top">Max 300,000ms — **note: default is 30s, not 180s** like `sapAgent`</td>
-  </tr>
-  <tr>
-    <td valign="top">`includeMetadata`</td>
-    <td valign="top">boolean</td>
-    <td valign="top">false</td>
-    <td valign="top">Include server info and tool details in response</td>
-  </tr>
+<caption><b>sapMcpClient Node Parameters</b></caption>
+<thead>
+<tr>
+<th valign="top">Parameter</th>
+<th valign="top">Type</th>
+<th valign="top">Default</th>
+<th valign="top">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td valign="top">
+
+`mcpServerName`
+
+</td>
+<td valign="top">
+
+option
+
+</td>
+<td valign="top">
+
+—
+
+</td>
+<td valign="top">
+
+MCP server; list populated at design time from live instance
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+`toolMode`
+
+</td>
+<td valign="top">
+
+option
+
+</td>
+<td valign="top">
+
+`list`
+
+</td>
+<td valign="top">
+
+`list` (design-time dropdown) or `id` (manual tool ID entry)
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+`toolFromList` / `toolById`
+
+</td>
+<td valign="top">
+
+string
+
+</td>
+<td valign="top">
+
+—
+
+</td>
+<td valign="top">
+
+Tool to invoke; fixed at design time
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+`toolArguments`
+
+</td>
+<td valign="top">
+
+JSON
+
+</td>
+<td valign="top">
+
+`{}`
+
+</td>
+<td valign="top">
+
+Arguments passed to the tool at runtime
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+`timeout`
+
+</td>
+<td valign="top">
+
+number
+
+</td>
+<td valign="top">
+
+30,000ms
+
+</td>
+<td valign="top">
+
+Max 300,000ms — **note: default is 30s, not 180s** like `sapAgent`
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+`includeMetadata`
+
+</td>
+<td valign="top">
+
+boolean
+
+</td>
+<td valign="top">
+
+false
+
+</td>
+<td valign="top">
+
+Include server info and tool details in response
+
+</td>
+</tr>
+</tbody>
 </table>
 
-**Impact on the Concept:** The original claim *"the node loads available tools from the connected SAP system at runtime"* was inaccurate. Tool discovery is a design-time activity in Joule Studio. At runtime, every tool call is deterministic. This aligns with the design rule already in [Joule Studio Build Map](joule-studio-build-map-7de243e.md) (hardcode tool calls for deterministic validation flows) — that rule is now the universal rule, not a special case.
+**Impact on the Concept:** The original claim *"the node loads available tools from the connected SAP system at runtime"* was inaccurate. Tool discovery is a design-time activity in Joule Studio. At runtime, every tool call is deterministic. This aligns with the design rule already in the chapter (hardcode tool calls for deterministic validation flows) — that rule is now the universal rule, not a special case.
 
 **Timeout Note:** The `sapMcpClient` timeout default (30s) is significantly shorter than `sapAgent` (180s). For MCP tool calls that hit SAP backend systems with non-trivial processing time, the timeout must be explicitly set — otherwise the workflow will fail silently on calls that would succeed with more time.
 
 **References:**
 
--   [Joule Studio Build Map](joule-studio-build-map-7de243e.md) — sapMcpClient node reference (updated)
--   [Joule Studio Build Map](joule-studio-build-map-7de243e.md) — Worker agent pattern
-
----
+-   [Joule Studio Build Map](joule-studio-build-map-8dcb5ea.md) — sapMcpClient node reference (updated) and worker agent pattern
 
 
-<a name="loioab50037d19274510881da839d901b600__section_q4"/>
+<a name="loioecf1afd72f8442d5a6fb9c810b445994__section_q4"/>
 
 ## Q4 — Concept Gaps Identified During Review: Four Topics to Add
 
-**Status:** Addressed — [Multi-Agent Orchestration](multi-agent-orchestration-2f6e92e.md) and [Production Operations](production-operations-f963579.md)
+**Status:** Addressed — [Multi-Agent Orchestration](multi-agent-orchestration-a4d6df6.md) and [Production Operations](production-operations-42850d6.md)
 
 The following topics were identified during an earlier concept review as gaps in the then five-chapter concept, ranked by importance:
 
-1.   **Multi-agent orchestration** *(most important)*: addressed in [Multi-Agent Orchestration](multi-agent-orchestration-2f6e92e.md). Covers three orchestration topologies (Flat, Per-Worker Supervised, Shared Supervisor), cross-worker consistency verification, authorization scope isolation, and FDE delivery implications.
+1.   **Multi-agent orchestration** *(most important)*: addressed in [Multi-Agent Orchestration](multi-agent-orchestration-a4d6df6.md). Covers three orchestration topologies (Flat, Per-Worker Supervised, Shared Supervisor), cross-worker consistency verification, authorization scope isolation, and FDE delivery implications.
 
-2.   **Agent versioning and rollback**: addressed in [Production Operations](production-operations-f963579.md). Covers the five-component version stack, rollback trigger criteria, rollback mechanics per component, state continuity (audit trail, shared state store, in-flight sessions), and rollback authorization.
+2.   **Agent versioning and rollback**: addressed in [Production Operations](production-operations-42850d6.md). Covers the five-component version stack, rollback trigger criteria, rollback mechanics per component, state continuity (audit trail, shared state store, in-flight sessions), and rollback authorization.
 
-3.   **Cost and token monitoring**: addressed in [Production Operations](production-operations-f963579.md). Covers token consumption as operational signal, what to monitor (per-invocation and trend metrics), runaway loop detection, max_tokens guardrail calibration, and the Workflow B extension.
+3.   **Cost and token monitoring**: addressed in [Production Operations](production-operations-42850d6.md). Covers token consumption as operational signal, what to monitor (per-invocation and trend metrics), runaway loop detection, max_tokens guardrail calibration, and the Workflow B extension.
 
-4.   **Agent migration between environments** (dev → test → production): addressed in [Production Operations](production-operations-f963579.md). Covers the four-environment sequence, the artifact migration table (what moves, what must be re-provisioned), three things never to copy between environments, and the environment-agnostic configuration pattern.
+4.   **Agent migration between environments** (dev → test → production): addressed in [Production Operations](production-operations-42850d6.md). Covers the four-environment sequence, the artifact migration table (what moves, what must be re-provisioned), three things never to copy between environments, and the environment-agnostic configuration pattern.
 
 **References:**
 
--   [Multi-Agent Orchestration](multi-agent-orchestration-2f6e92e.md)
--   [Production Operations](production-operations-f963579.md)
-
----
+-   [Multi-Agent Orchestration](multi-agent-orchestration-a4d6df6.md)
+-   [Production Operations](production-operations-42850d6.md)
 
 
-<a name="loioab50037d19274510881da839d901b600__section_q5"/>
+<a name="loioecf1afd72f8442d5a6fb9c810b445994__section_q5"/>
 
 ## Q5 — Does SAP Build Code Include Built-In Dependency/Security Scanning for Pro-Code Agents?
 
@@ -227,36 +373,85 @@ The following topics were identified during an earlier concept review as gaps in
 
 SAP Build Code does **not** include built-in SAST or SCA. The only native security scan is **malware scanning**, which is off by default (`malwareScan.scan: true` in `config.yaml` to enable).
 
-<br>
-
-**Security Scanning Capabilities in SAP Build Code**
-
 <table>
-  <tr>
-    <th valign="top">Capability</th>
-    <th valign="top">Native in Build Code?</th>
-    <th valign="top">Notes</th>
-  </tr>
-  <tr>
-    <td valign="top">Malware scanning</td>
-    <td valign="top">Off by default</td>
-    <td valign="top">`malwareScan.scan: true` in `config.yaml`</td>
-  </tr>
-  <tr>
-    <td valign="top">SAST</td>
-    <td valign="top">✗</td>
-    <td valign="top">Must be added externally</td>
-  </tr>
-  <tr>
-    <td valign="top">SCA (dependency/OSS scanning)</td>
-    <td valign="top">✗</td>
-    <td valign="top">Must be added externally</td>
-  </tr>
-  <tr>
-    <td valign="top">DAST</td>
-    <td valign="top">✗</td>
-    <td valign="top">Must be added externally</td>
-  </tr>
+<caption><b>SAP Build Code Security Scanning Capabilities</b></caption>
+<thead>
+<tr>
+<th valign="top">Capability</th>
+<th valign="top">Native in Build Code?</th>
+<th valign="top">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td valign="top">
+
+Malware scanning
+
+</td>
+<td valign="top">
+
+Off by default
+
+</td>
+<td valign="top">
+
+`malwareScan.scan: true` in `config.yaml`
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+SAST
+
+</td>
+<td valign="top">
+
+✗
+
+</td>
+<td valign="top">
+
+Must be added externally
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+SCA (dependency/OSS scanning)
+
+</td>
+<td valign="top">
+
+✗
+
+</td>
+<td valign="top">
+
+Must be added externally
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+DAST
+
+</td>
+<td valign="top">
+
+✗
+
+</td>
+<td valign="top">
+
+Must be added externally
+
+</td>
+</tr>
+</tbody>
 </table>
 
 Build Code's CI/CD provides a **Compliance stage** that accepts additional commands, credentials, and variables — this is the hook for external scanning tools, but nothing is pre-wired.
@@ -280,19 +475,17 @@ Build Code's CI/CD provides a **Compliance stage** that accepts additional comma
 
 **Impact on the Concept:**
 
-[Security and Data Protection](security-and-data-protection-27868d4.md) should be updated: the "SAP Build Code may include built-in scanning" option is incorrect — there is no built-in SCA/SAST. The section should note that external tools are required, with the Compliance stage integration hook as the recommended path.
+[Security and Data Protection](security-and-data-protection-e8e4c85.md) should be updated: the "SAP Build Code may include built-in scanning" option is incorrect — there is no built-in SCA/SAST. The section should note that external tools are required, with the Compliance stage integration hook as the recommended path.
 
 **References:**
 
--   [Security and Data Protection](security-and-data-protection-27868d4.md) — Pro-code path security risks and mitigations
-
----
+-   [Security and Data Protection](security-and-data-protection-e8e4c85.md) — Pro-code path security risks and mitigations
 
 > ### Note:  
 > Q6–Q9 were consolidated into other questions during earlier reviews and are intentionally not reused; the numbering jumps from Q5 to Q10.
 
 
-<a name="loioab50037d19274510881da839d901b600__section_q10"/>
+<a name="loioecf1afd72f8442d5a6fb9c810b445994__section_q10"/>
 
 ## Q10 — What Is CIS's Operational Mandate for SAP-Managed Tenant (Topology B) Deployments Post-Productization?
 
@@ -300,7 +493,7 @@ Build Code's CI/CD provides a **Compliance stage** that accepts additional comma
 
 **Context:**
 
-[CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md) describes two deployment topologies. Topology B is the SAP-managed tenant model: the agent runs in a SAP-managed BAIP environment and SAP/CIS is the operator. The concept notes that CIS operational responsibility is higher in this topology — because SAP operates the BAIP environment, CIS carries responsibility for both the platform and the agents running on it.
+[CIS CoE Operations Model](cis-coe-operations-model-b96eb95.md) describes two deployment topologies. Topology B is the SAP-managed tenant model: the agent runs in an SAP-managed BAIP environment and SAP/CIS is the operator. The concept notes that CIS operational responsibility is higher in this topology — because SAP operates the BAIP environment, CIS carries responsibility for both the platform and the agents running on it.
 
 However, the concept does not specify:
 
@@ -315,19 +508,16 @@ The T&O team within CIS has clear platform and tooling responsibilities. Whether
 
 **Practical Implication:**
 
-Before this concept is used in a customer engagement involving a SAP-managed tenant (Topology B), the operational mandate must be defined. A customer signing a SAP-managed Industry AI subscription will ask who is responsible for the agents, what the SLA is, and what happens when something goes wrong. Without a clear answer, committing to Topology B creates undefined post-delivery obligations.
+Before this concept is used in a customer engagement involving an SAP-managed tenant (Topology B), the operational mandate must be defined. A customer signing an SAP-managed Industry AI subscription will ask who is responsible for the agents, what the SLA is, and what happens when something goes wrong. Without a clear answer, committing to Topology B creates undefined post-delivery obligations.
 
 **References:**
 
--   [CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md) — Topology B description
--   [CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md) — Severity tiers and response targets (proposed SLA structure)
+-   [CIS CoE Operations Model](cis-coe-operations-model-b96eb95.md) — Topology B description and severity tiers / response targets (proposed SLA structure)
 
 **Who Can Answer This:** CIS leadership; FDE operating model owners; whoever is defining the commercial and operational model for SAP-managed Industry AI tenant deployments.
 
----
 
-
-<a name="loioab50037d19274510881da839d901b600__section_q11"/>
+<a name="loioecf1afd72f8442d5a6fb9c810b445994__section_q11"/>
 
 ## Q11 — Is the Two-Phase EAC Support Model (P&E → CS&D) Still Valid After the July 2026 Reorg?
 
@@ -335,7 +525,7 @@ Before this concept is used in a customer engagement involving a SAP-managed ten
 
 **Context:**
 
-[CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md) describes an EAC support model based on two phases: Phase 1 is led by the development team (P&E), Phase 2 transitions to CS&D once ticket volume and active customer count exceed a threshold.
+[CIS CoE Operations Model](cis-coe-operations-model-b96eb95.md) describes an EAC support model based on two phases: Phase 1 is led by the development team (P&E), Phase 2 transitions to CS&D once ticket volume and active customer count exceed a threshold.
 
 This description is sourced from the *FDE Operating Model at Scale* document (Version 1.0, October 2025). That document predates the July 1, 2026 organizational changes that:
 
@@ -353,20 +543,18 @@ The October 2025 document describes P&E as the team leading FDE execution and Ph
 
 **Practical Implication:**
 
-[CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md) uses this model to define when the CIS CoE operating rhythm kicks in ("from Phase 2 onward"). If the organizational model has changed, the phase boundary may be different, which affects how FDE engagements should plan the support handover.
+[CIS CoE Operations Model](cis-coe-operations-model-b96eb95.md) uses this model to define when the CIS CoE operating rhythm kicks in ("from Phase 2 onward"). If the organizational model has changed, the phase boundary may be different, which affects how FDE engagements should plan the support handover.
 
 **References:**
 
--   [CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md) — EAC support model and CIS CoE operating rhythm
+-   [CIS CoE Operations Model](cis-coe-operations-model-b96eb95.md) — EAC support model and CIS CoE operating rhythm
 -   Source: *FDE Operating Model at Scale*, v1.0, October 2025, slide "FDE — Development / Legal and Support Process"
--   Related: Q10 above — operational mandate for Topology B
+-   Related: Q10 — operational mandate for Topology B
 
 **Who Can Answer This:** FDE/Industry AI operating model owners; CIS leadership; check whether a post-reorg version of the FDE Operating Model document exists.
 
----
 
-
-<a name="loioab50037d19274510881da839d901b600__section_q12"/>
+<a name="loioecf1afd72f8442d5a6fb9c810b445994__section_q12"/>
 
 ## Q12 — Does sapAgent Support Non-Blocking Execution with a Callback URL?
 
@@ -376,61 +564,140 @@ The October 2025 document describes P&E as the team leading FDE execution and Ph
 
 **Confirmed Parameters:**
 
-<br>
-
-**sapAgent Node Parameters**
-
 <table>
-  <tr>
-    <th valign="top">Parameter</th>
-    <th valign="top">Type</th>
-    <th valign="top">Default</th>
-    <th valign="top">Notes</th>
-  </tr>
-  <tr>
-    <td valign="top">`blocking`</td>
-    <td valign="top">boolean</td>
-    <td valign="top">`true`</td>
-    <td valign="top">*"If false, you must provide a callback URL"* — confirmed</td>
-  </tr>
-  <tr>
-    <td valign="top">`callbackUrl`</td>
-    <td valign="top">string</td>
-    <td valign="top">—</td>
-    <td valign="top">Shown only when `blocking=false`; *"URL to receive push notifications when the agent responds"*</td>
-  </tr>
-  <tr>
-    <td valign="top">`sessionId`</td>
-    <td valign="top">string</td>
-    <td valign="top">—</td>
-    <td valign="top">For correlating callbacks when multiple workers are in flight</td>
-  </tr>
-  <tr>
-    <td valign="top">`customContext`</td>
-    <td valign="top">JSON</td>
-    <td valign="top">`{}`</td>
-    <td valign="top">Additional context passed to the agent — relevant to authorization scope discussion in Multi-Agent Orchestration</td>
-  </tr>
-  <tr>
-    <td valign="top">`timeout`</td>
-    <td valign="top">number</td>
-    <td valign="top">180,000ms</td>
-    <td valign="top">Max 300,000ms (5 min); applies in blocking mode</td>
-  </tr>
+<caption><b>sapAgent Node Parameters</b></caption>
+<thead>
+<tr>
+<th valign="top">Parameter</th>
+<th valign="top">Type</th>
+<th valign="top">Default</th>
+<th valign="top">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td valign="top">
+
+`blocking`
+
+</td>
+<td valign="top">
+
+boolean
+
+</td>
+<td valign="top">
+
+`true`
+
+</td>
+<td valign="top">
+
+*"If false, you must provide a callback URL"* — confirmed
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+`callbackUrl`
+
+</td>
+<td valign="top">
+
+string
+
+</td>
+<td valign="top">
+
+—
+
+</td>
+<td valign="top">
+
+Shown only when `blocking=false`; *"URL to receive push notifications when the agent responds"*
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+`sessionId`
+
+</td>
+<td valign="top">
+
+string
+
+</td>
+<td valign="top">
+
+—
+
+</td>
+<td valign="top">
+
+For correlating callbacks when multiple workers are in flight
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+`customContext`
+
+</td>
+<td valign="top">
+
+JSON
+
+</td>
+<td valign="top">
+
+`{}`
+
+</td>
+<td valign="top">
+
+Additional context passed to the agent — relevant to [Multi-Agent Orchestration](multi-agent-orchestration-a4d6df6.md) authorization scope discussion
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+`timeout`
+
+</td>
+<td valign="top">
+
+number
+
+</td>
+<td valign="top">
+
+180,000ms
+
+</td>
+<td valign="top">
+
+Max 300,000ms (5 min); applies in blocking mode
+
+</td>
+</tr>
+</tbody>
 </table>
 
-**Finding:** The supervisor pattern's worker-supervisor communication model is architecturally sound. The `blocking=false` + `callbackUrl` pattern is a first-class feature of the `sapAgent` node, not an assumption. The concept description in [Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md) is accurate.
+**Finding:** The supervisor pattern's worker-supervisor communication model (see [Supervisor Agent Pattern](supervisor-agent-pattern-53ccc55.md)) is architecturally sound. The `blocking=false` + `callbackUrl` pattern is a first-class feature of the `sapAgent` node, not an assumption. The concept description is accurate.
 
 **Secondary Finding:** The `timeout` default (180s) and max (300s) are relevant context for the 60-second Joule UI timeout noted in the CMJ/BYOA cheat sheet. The `sapAgent` node itself supports much longer execution windows than the Joule conversational interface does.
 
 **References:**
 
--   [Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md) — Worker-supervisor communication (verified accurate)
-
----
+-   [Supervisor Agent Pattern](supervisor-agent-pattern-53ccc55.md) — Worker-supervisor communication (verified accurate)
 
 
-<a name="loioab50037d19274510881da839d901b600__section_q13"/>
+<a name="loioecf1afd72f8442d5a6fb9c810b445994__section_q13"/>
 
 ## Q13 — Does the BAIP Cloud Logging API Support Intra-Tenant Query from n8n Workflows?
 
@@ -438,13 +705,13 @@ The October 2025 document describes P&E as the team leading FDE execution and Ph
 
 **Complete Architecture Picture:**
 
-*Step 1 — Telemetry ingest (confirmed):*  
+*Step 1 — Telemetry ingest (confirmed):*
 BAIP agent runtime instruments with OTEL and pushes to Cloud ALM inbound APIs (`/calm-traces/traces`, `/calm-metrics/metrics`). Cloud ALM is the BAIP Govern pillar's observability layer.
 
-*Step 2 — Where it lands:*  
+*Step 2 — Where it lands:*
 Agent telemetry lands under `hm` (Health Monitoring) and `exm`/`im` providers via the standard OTEL path. No dedicated "BAIP" or "AI Agent" content provider exists yet.
 
-*Step 3 — Outbound query (verified):*  
+*Step 3 — Outbound query (verified):*
 Cloud ALM Pull APIs (`/api/calm-traces/v1/traces`, `/api/calm-metrics/v1/metrics`, `/api/calm-analytics/v1/analytics`) can query this data. Agent data is accessible via the `hm` metrics provider — but only after manual service registration (Step 4 below).
 
 *Step 4 — serviceId and registration (new finding, 2026-10-22):*
@@ -457,21 +724,19 @@ Cloud ALM Pull APIs (`/api/calm-traces/v1/traces`, `/api/calm-metrics/v1/metrics
 4.   **Instrument Workflow B with OTEL**: push metrics to `/calm-metrics/metrics`. The `serviceId` **must be passed as the interface parameter** (not in the OTel payload): `POST /calm-metrics/metrics?serviceId=<your-lms-id>`. Note: `service.name` in the OTel resource attributes is ignored by Cloud ALM — only the `serviceId` query parameter counts.
 5.   **At query time**: Workflow B uses the same `serviceId` to query metrics back via the `hm` provider.
 
-**Key Deployment Constraint:**  
-The `serviceId` is **tenant-specific and opaque** — it cannot be hardcoded in the workflow. It must be injected at deployment time via `{{$env.CALM_SERVICE_ID}}` (environment variable on Kyma/self-hosted) or via trigger-payload config (`{{$json.config.calmServiceId}}`). This aligns with the environment-agnostic pattern in [Production Operations](production-operations-f963579.md).
+**Key Deployment Constraint:**
+The `serviceId` is **tenant-specific and opaque** — it cannot be hardcoded in the workflow. It must be injected at deployment time via `{{$env.CALM_SERVICE_ID}}` (environment variable on Kyma/self-hosted) or via trigger-payload config (`{{$json.config.calmServiceId}}`). This aligns with the environment-agnostic pattern in [Production Operations](production-operations-42850d6.md).
 
-**Conclusion:**  
+**Conclusion:**
 Workflow B's approach is architecturally valid and implementable — but requires a one-time Cloud ALM LMS registration step as part of the deployment runbook. The concept's HTTP Request node can call Cloud ALM's `hm` metrics provider. The concept should document this registration prerequisite in the production handover checklist.
 
 **References:**
 
--   [Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md) — Workflow B design
--   [Production Operations](production-operations-f963579.md) — Workflow B cost monitoring extension
-
----
+-   [Supervisor Agent Pattern](supervisor-agent-pattern-53ccc55.md) — Workflow B design
+-   [Production Operations](production-operations-42850d6.md) — Workflow B cost monitoring extension
 
 
-<a name="loioab50037d19274510881da839d901b600__section_q14"/>
+<a name="loioecf1afd72f8442d5a6fb9c810b445994__section_q14"/>
 
 ## Q14 — Does the SAP Prompt Registry Exist as a Named, Versioned Store Referenceable from sapOrchestration?
 
@@ -487,9 +752,9 @@ A `promptTemplate` source value is referenced in the node's `displayOptions` con
 
 **Impact on the Concept:**
 
-[Production Operations](production-operations-f963579.md) prompt versioning model — store prompts in the Registry, reference by name, update without redeployment — is not currently achievable. The concept's versioning section and environment-specific configuration pattern both depend on this capability.
+[Production Operations](production-operations-42850d6.md) prompt versioning model — store prompts in the Registry, reference by name, update without redeployment — is not currently achievable.
 
-**Current Fallback Approach** (documented in [Production Operations](production-operations-f963579.md)):
+**Current Fallback Approach** (documented in [Production Operations](production-operations-42850d6.md)):
 
 -   Store prompt text as a workflow-level string parameter, configurable per environment via BAIP configuration rather than hardcoded in the node
 -   Maintain prompt text in the engagement Git repository alongside the workflow definition
@@ -500,14 +765,12 @@ When `promptTemplate` source becomes available, migrating to it will restore the
 
 **References:**
 
--   [Production Operations](production-operations-f963579.md) — updated with fallback path; environment-agnostic configuration pattern
+-   [Production Operations](production-operations-42850d6.md) — Versioning in Joule Studio (updated with fallback path) and environment-agnostic configuration pattern
 
 **Who Can Answer This:** Joule Studio product team; SAP Prompt Management documentation (if it exists); generative AI hub developer documentation.
 
----
 
-
-<a name="loioab50037d19274510881da839d901b600__section_q15"/>
+<a name="loioecf1afd72f8442d5a6fb9c810b445994__section_q15"/>
 
 ## Q15 — Does BAIP Provide a Runtime Governance Parameter Store Accessible from n8n Workflow Expressions?
 
@@ -519,35 +782,76 @@ When `promptTemplate` source becomes available, migrating to it will restore the
 
 Valid root-level objects in n8n expressions:
 
-<br>
-
-**Valid n8n Expression Root Objects**
-
 <table>
-  <tr>
-    <th valign="top">Expression</th>
-    <th valign="top">What It Gives You</th>
-  </tr>
-  <tr>
-    <td valign="top">`{{$json.x}}`</td>
-    <td valign="top">Data from the current/previous node output</td>
-  </tr>
-  <tr>
-    <td valign="top">`{{$vars.x}}`</td>
-    <td valign="top">Instance-level custom variables (string-only, set in UI)</td>
-  </tr>
-  <tr>
-    <td valign="top">`{{$env.X}}`</td>
-    <td valign="top">Host environment variables (set at deployment)</td>
-  </tr>
-  <tr>
-    <td valign="top">`{{$node["Name"].json.x}}`</td>
-    <td valign="top">Data from a specific named node</td>
-  </tr>
-  <tr>
-    <td valign="top">`{{$workflow.id}}`, `{{$execution.id}}`</td>
-    <td valign="top">Workflow/execution metadata</td>
-  </tr>
+<caption><b>Valid n8n Expression Root Objects</b></caption>
+<thead>
+<tr>
+<th valign="top">Expression</th>
+<th valign="top">What It Gives You</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td valign="top">
+
+`{{$json.x}}`
+
+</td>
+<td valign="top">
+
+Data from the current/previous node output
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+`{{$vars.x}}`
+
+</td>
+<td valign="top">
+
+Instance-level custom variables (string-only, set in UI)
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+`{{$env.X}}`
+
+</td>
+<td valign="top">
+
+Host environment variables (set at deployment)
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+`{{$node["Name"].json.x}}`
+
+</td>
+<td valign="top">
+
+Data from a specific named node
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+`{{$workflow.id}}`, `{{$execution.id}}`
+
+</td>
+<td valign="top">
+
+Workflow/execution metadata
+
+</td>
+</tr>
+</tbody>
 </table>
 
 **What BAIP/Joule Studio Actually Provides at Configuration Time:**
@@ -560,97 +864,193 @@ None of these create an injectable `config` object in the expression engine.
 
 **Three Viable Alternatives:**
 
-<br>
-
-**Configuration Injection Options**
-
 <table>
-  <tr>
-    <th valign="top">Option</th>
-    <th valign="top">Mechanism</th>
-    <th valign="top">Works in Managed n8n?</th>
-    <th valign="top">Per-Invocation Flexibility?</th>
-  </tr>
-  <tr>
-    <td valign="top">**Option 1 — Trigger payload**</td>
-    <td valign="top">Pass config in webhook/trigger JSON body; reference as `{{$json.config.x}}`</td>
-    <td valign="top">Yes — fully supported</td>
-    <td valign="top">Yes — caller sets values each invocation</td>
-  </tr>
-  <tr>
-    <td valign="top">**Option 2 — n8n `$vars`**</td>
-    <td valign="top">Set static values in n8n Variables UI; reference as `{{$vars.myParam}}`</td>
-    <td valign="top">Possibly restricted to what SAP exposes in UI</td>
-    <td valign="top">No — static per instance</td>
-  </tr>
-  <tr>
-    <td valign="top">**Option 3 — Env vars (`$env`)**</td>
-    <td valign="top">Inject env vars into n8n container at deployment; reference as `{{$env.MY_PARAM}}`</td>
-    <td valign="top">Only on self-hosted n8n (Kyma path)</td>
-    <td valign="top">No — static per deployment</td>
-  </tr>
+<caption><b>Configuration Injection Options</b></caption>
+<thead>
+<tr>
+<th valign="top">Option</th>
+<th valign="top">Mechanism</th>
+<th valign="top">Works in Managed n8n?</th>
+<th valign="top">Per-Invocation Flexibility?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td valign="top">
+
+**Option 1 — Trigger payload**
+
+</td>
+<td valign="top">
+
+Pass config in webhook/trigger JSON body; reference as `{{$json.config.x}}`
+
+</td>
+<td valign="top">
+
+Yes — fully supported
+
+</td>
+<td valign="top">
+
+Yes — caller sets values each invocation
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+**Option 2 — n8n `$vars`**
+
+</td>
+<td valign="top">
+
+Set static values in n8n Variables UI; reference as `{{$vars.myParam}}`
+
+</td>
+<td valign="top">
+
+Possibly restricted to what SAP exposes in UI
+
+</td>
+<td valign="top">
+
+No — static per instance
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+**Option 3 — Env vars (`$env`)**
+
+</td>
+<td valign="top">
+
+Inject env vars into n8n container at deployment; reference as `{{$env.MY_PARAM}}`
+
+</td>
+<td valign="top">
+
+Only on self-hosted n8n (Kyma path)
+
+</td>
+<td valign="top">
+
+No — static per deployment
+
+</td>
+</tr>
+</tbody>
 </table>
 
-**Recommended Approach:** Option 1 — pass config in the trigger/webhook payload as `{{$json.config.x}}`. This works in both managed and self-hosted n8n and gives per-invocation flexibility. BAIP doesn't provide a platform-level equivalent.
+**Recommended Approach (Joule):** Option 1 — pass config in the trigger/webhook payload as `{{$json.config.x}}`. This works in both managed and self-hosted n8n and gives per-invocation flexibility. BAIP doesn't provide a platform-level equivalent.
 
 **Impact on the Concept:**
 
-[Precision Guardrails](precision-guardrails-c279f4e.md) and [Production Operations](production-operations-f963579.md) reference `{{config.approval_threshold}}` as a "BAIP governance parameter store" enabling IT admins to adjust thresholds without redeployment. This pattern **does not exist** as described. The chapters need revision:
+[Precision Guardrails](precision-guardrails-0beada2.md) and [Production Operations](production-operations-42850d6.md) reference `{{config.approval_threshold}}` as a "BAIP governance parameter store" enabling IT admins to adjust thresholds without redeployment. This pattern **does not exist** as described. The chapters need revision:
 
 -   Replace `{{config.x}}` with `{{$json.config.x}}` (trigger-payload pattern) or `{{$vars.x}}` ($vars pattern)
 -   Acknowledge that true "change without redeployment" requires either the trigger-payload pattern (caller supplies config per invocation) or `$vars` (static, requires UI edit but no redeployment)
 
 **References:**
 
--   [Precision Guardrails](precision-guardrails-c279f4e.md) — Threshold governance
--   [Production Operations](production-operations-f963579.md) — Environment-agnostic workflow pattern
-
----
+-   [Precision Guardrails](precision-guardrails-0beada2.md) — Threshold governance
+-   [Production Operations](production-operations-42850d6.md) — Environment-agnostic workflow pattern
 
 
-<a name="loioab50037d19274510881da839d901b600__section_q16"/>
+<a name="loioecf1afd72f8442d5a6fb9c810b445994__section_q16"/>
 
 ## Q16 — Can Hyperspace LLM Proxy Costs Be Tracked Per FDE Engagement or Project?
 
-**Status:** Partially answered — see [Token Efficiency](token-efficiency-54fe998.md) for full analysis and recommended approach. Structural solution (Option B) requires HAI proxy roadmap input; near-term workaround (Option C sidecar) is feasible without proxy changes.
+**Status:** Partially answered — see [Token Efficiency](token-efficiency-2d8ea45.md) for full analysis and recommended approach. Structural solution (Option B) requires HAI proxy roadmap input; near-term workaround (Option C sidecar) is feasible without proxy changes.
 
 **Context:**
 
-[Token Efficiency](token-efficiency-54fe998.md) proposes build-time token efficiency measurement as an engagement-level practice. SAP's Token Consumption Governance Framework (live August 17, 2026) provides individual developer consumption tracking via the HAI proxy (Hyperspace LLM Proxy). The proxy has no project grouping today.
+[Token Efficiency](token-efficiency-2d8ea45.md) proposes build-time token efficiency measurement as an engagement-level practice. SAP's Token Consumption Governance Framework (live August 17, 2026) provides individual developer consumption tracking via the HAI proxy (Hyperspace LLM Proxy). The proxy has no project grouping today.
 
 **Analysis Summary (Based on HAI Proxy Documentation Review):**
 
 The proxy backend already captures per-request data (user, model, token counts, EUR cost) but attributes it exclusively to the individual SSO identity. No project identifier is attached to requests. No programmatic spending API exists. Shared keys and shared proxies are prohibited. Three options were evaluated:
 
-<br>
-
-**HAI Proxy Cost Tracking Options**
-
 <table>
-  <tr>
-    <th valign="top">Option</th>
-    <th valign="top">Approach</th>
-    <th valign="top">Feasibility</th>
-    <th valign="top">Timeline</th>
-  </tr>
-  <tr>
-    <td valign="top">A — Project API key (shared)</td>
-    <td valign="top">One key per engagement used by all engineers</td>
-    <td valign="top">Not feasible — auth is SSO-bound, not key-bound; shared proxies prohibited</td>
-    <td valign="top">Not on roadmap</td>
-  </tr>
-  <tr>
-    <td valign="top">B — Project tracking in HAI proxy backend</td>
-    <td valign="top">Add project/team entities + attribution + management API to proxy</td>
-    <td valign="top">Requires backend work; aligned with planned workspace features</td>
-    <td valign="top">Medium-term (roadmap)</td>
-  </tr>
-  <tr>
-    <td valign="top">C — Local accounting sidecar</td>
-    <td valign="top">Lightweight local HTTP middleware intercepts responses, reads token counts from Anthropic API response body, logs with project context</td>
-    <td valign="top">Feasible now; project ID auto-detected from repo</td>
-    <td valign="top">Near-term (CIS tooling initiative)</td>
-  </tr>
+<caption><b>Hyperspace Cost Attribution Options</b></caption>
+<thead>
+<tr>
+<th valign="top">Option</th>
+<th valign="top">Approach</th>
+<th valign="top">Feasibility</th>
+<th valign="top">Timeline</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td valign="top">
+
+A — Project API key (shared)
+
+</td>
+<td valign="top">
+
+One key per engagement used by all engineers
+
+</td>
+<td valign="top">
+
+Not feasible — auth is SSO-bound, not key-bound; shared proxies prohibited
+
+</td>
+<td valign="top">
+
+Not on roadmap
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+B — Project tracking in HAI proxy backend
+
+</td>
+<td valign="top">
+
+Add project/team entities + attribution + management API to proxy
+
+</td>
+<td valign="top">
+
+Requires backend work; aligned with planned workspace features
+
+</td>
+<td valign="top">
+
+Medium-term (roadmap)
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+C — Local accounting sidecar
+
+</td>
+<td valign="top">
+
+Lightweight local HTTP middleware intercepts responses, reads token counts from Anthropic API response body, logs with project context
+
+</td>
+<td valign="top">
+
+Feasible now; project ID auto-detected from repo
+
+</td>
+<td valign="top">
+
+Near-term (CIS tooling initiative)
+
+</td>
+</tr>
+</tbody>
 </table>
 
 **Recommended Actions:**
@@ -660,15 +1060,18 @@ The proxy backend already captures per-request data (user, model, token counts, 
 
 **References:**
 
--   [Token Efficiency](token-efficiency-54fe998.md) — Full three-option analysis
--   [Token Efficiency](token-efficiency-54fe998.md) — Known gaps
+-   [Token Efficiency](token-efficiency-2d8ea45.md) — Full three-option analysis and known gaps
 
 **Who Can Answer / Action This:** CIS T&O (Option C implementation); HAI proxy / DTS tooling team (Option B roadmap input).
 
----
+**External Links:**
+
+-   Submit feature request: `hAIperspace/hai-requests` GitHub Issues — use "Submit Feature Request" template
+-   HAI proxy FAQ — workspace roadmap: search "workspace" for the planned workspace-level dashboards and rate limits
+-   HAI proxy What's New: search "Simplified Authentication" for the February 2026 entry documenting why workspace selection was removed and what's coming
 
 
-<a name="loioab50037d19274510881da839d901b600__section_q17"/>
+<a name="loioecf1afd72f8442d5a6fb9c810b445994__section_q17"/>
 
 ## Q17 — AI Units vs. Hyperspace: Separate Cost Streams? Any Runtime Proxy Available?
 
@@ -682,7 +1085,7 @@ The two-cost-stream assumption in the concept (build-time via Hyperspace, runtim
 
 **Context:**
 
-[Production Operations](production-operations-f963579.md) and [Token Efficiency](token-efficiency-54fe998.md) distinguish two cost streams:
+[Production Operations](production-operations-42850d6.md) and [Token Efficiency](token-efficiency-2d8ea45.md) distinguish two cost streams:
 
 -   **Build-time (Hyperspace)**: tracks LLM token consumption for FDE engineers using Claude Code and coding tools; SAP-internal only
 -   **Runtime (AI Units)**: commercial billing unit for deployed Industry AI agents; visible in the customer's SAP subscription; measured per agent step at three tiers (Basic / Standard / Advanced)
@@ -693,23 +1096,21 @@ The two-cost-stream assumption in the concept (build-time via Hyperspace, runtim
 
 2.   Is there any operator-side tool equivalent to Hyperspace for monitoring deployed agent token costs from SAP's perspective — outside of the customer-visible AI Units billing? For example, an SAP-internal view of AI Core usage across customer tenants, accessible to the operating CIS team?
 
-3.   The current concept assumes no such tool exists for runtime (SAP-internal only constraint). If a runtime equivalent exists, [Token Efficiency](token-efficiency-54fe998.md) would need updating.
+3.   The current concept assumes no such tool exists for runtime (SAP-internal only constraint). If a runtime equivalent exists, [Token Efficiency](token-efficiency-2d8ea45.md) would need updating.
 
 **Practical Implication:**
 
-If a runtime-side operator view exists (even read-only), CIS could potentially monitor runtime token efficiency across deployed agents without requiring per-customer Topology A consent. This would significantly simplify the operational monitoring model described in [Production Operations](production-operations-f963579.md) and [Token Efficiency](token-efficiency-54fe998.md).
+If a runtime-side operator view exists (even read-only), CIS could potentially monitor runtime token efficiency across deployed agents without requiring per-customer Topology A consent. This would significantly simplify the operational monitoring model described in [Production Operations](production-operations-42850d6.md) and [Token Efficiency](token-efficiency-2d8ea45.md).
 
 **References:**
 
--   [Production Operations](production-operations-f963579.md) — AI Units billing model
--   [Token Efficiency](token-efficiency-54fe998.md) — Runtime efficiency measurement; Known gaps
+-   [Production Operations](production-operations-42850d6.md) — AI Units billing model
+-   [Token Efficiency](token-efficiency-2d8ea45.md) — Runtime efficiency measurement and known gaps
 
 **Who Can Answer This:** BAIP commercial team; SAP AI Core product team; DTS/Hyperspace team; CIS T&O team responsible for BAIP subscription management.
 
----
 
-
-<a name="loioab50037d19274510881da839d901b600__section_q18"/>
+<a name="loioecf1afd72f8442d5a6fb9c810b445994__section_q18"/>
 
 ## Q18 — Is Model Availability Consistent Across All Industry AI Customer Regions?
 
@@ -727,51 +1128,136 @@ The concept references GPT-4o and Claude 3.5 Sonnet — both are **deprecated** 
 
 SAP explicitly states model availability is **not uniform** across BTP regions:
 
-<br>
-
-**Model Availability by BTP Region**
-
 <table>
-  <tr>
-    <th valign="top">Region Group</th>
-    <th valign="top">Frontier Model Coverage</th>
-    <th valign="top">Notes</th>
-  </tr>
-  <tr>
-    <td valign="top">eu10 (EU Frankfurt), us10 (US East)</td>
-    <td valign="top">Broadest</td>
-    <td valign="top">Core hyperscaler regions — most models available</td>
-  </tr>
-  <tr>
-    <td valign="top">ap10 (Sydney), ap11 (Singapore), jp10 (Tokyo)</td>
-    <td valign="top">Strong</td>
-    <td valign="top">AP regions documented as broad-coverage</td>
-  </tr>
-  <tr>
-    <td valign="top">eu11 (EU Frankfurt EU Access)</td>
-    <td valign="top">Partial</td>
-    <td valign="top">EU data residency enforced — models must run on EU Azure/AWS; not all providers comply</td>
-  </tr>
-  <tr>
-    <td valign="top">eu20, eu30</td>
-    <td valign="top">Unconfirmed</td>
-    <td valign="top">Likely partial; not explicitly confirmed in public docs</td>
-  </tr>
-  <tr>
-    <td valign="top">us21, us30</td>
-    <td valign="top">Unconfirmed</td>
-    <td valign="top">Not mapped to model entitlements in public sources</td>
-  </tr>
-  <tr>
-    <td valign="top">br10 (Brazil), in30 (India)</td>
-    <td valign="top">Likely partial</td>
-    <td valign="top">Secondary regions; sources flag as potentially having reduced catalogs</td>
-  </tr>
-  <tr>
-    <td valign="top">China</td>
-    <td valign="top">Not available</td>
-    <td valign="top">SAP AI Core / GenAI Hub not available in China BTP regions</td>
-  </tr>
+<caption><b>SAP BTP Region Model Coverage</b></caption>
+<thead>
+<tr>
+<th valign="top">Region Group</th>
+<th valign="top">Frontier Model Coverage</th>
+<th valign="top">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td valign="top">
+
+eu10 (EU Frankfurt), us10 (US East)
+
+</td>
+<td valign="top">
+
+Broadest
+
+</td>
+<td valign="top">
+
+Core hyperscaler regions — most models available
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+ap10 (Sydney), ap11 (Singapore), jp10 (Tokyo)
+
+</td>
+<td valign="top">
+
+Strong
+
+</td>
+<td valign="top">
+
+AP regions documented as broad-coverage
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+eu11 (EU Frankfurt EU Access)
+
+</td>
+<td valign="top">
+
+Partial
+
+</td>
+<td valign="top">
+
+EU data residency enforced — models must run on EU Azure/AWS; not all providers comply
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+eu20, eu30
+
+</td>
+<td valign="top">
+
+Unconfirmed
+
+</td>
+<td valign="top">
+
+Likely partial; not explicitly confirmed in public docs
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+us21, us30
+
+</td>
+<td valign="top">
+
+Unconfirmed
+
+</td>
+<td valign="top">
+
+Not mapped to model entitlements in public sources
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+br10 (Brazil), in30 (India)
+
+</td>
+<td valign="top">
+
+Likely partial
+
+</td>
+<td valign="top">
+
+Secondary regions; sources flag as potentially having reduced catalogs
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+China
+
+</td>
+<td valign="top">
+
+Not available
+
+</td>
+<td valign="top">
+
+SAP AI Core / GenAI Hub not available in China BTP regions
+
+</td>
+</tr>
+</tbody>
 </table>
 
 **What Drives the Gaps:**
@@ -787,18 +1273,16 @@ SAP explicitly states model availability is **not uniform** across BTP regions:
 
 **Practical Implication:**
 
-For Industry AI customer conversations in eu11, br10, in30, or China: **do not assume eu10/us10 model availability**. Build a region compatibility check into the onboarding flow.
+For Industry AI customer conversations in eu11, br10, in30, or China: **do not assume eu10/us10 model availability**. Build a region compatibility check into the onboarding flow ([Joule Studio Build Map](joule-studio-build-map-8dcb5ea.md) and [Agent Evaluation](agent-evaluation-f940c93.md) eval setup may need model substitutions requiring re-calibration).
 
 **References:**
 
--   [Security and Data Protection](security-and-data-protection-27868d4.md) — Sovereign AI constraints
--   [Joule Studio Build Map](joule-studio-build-map-7de243e.md) — FDE build sequence
--   SAP Note 3437766 — per-region model availability matrix
-
----
+-   [Security and Data Protection](security-and-data-protection-e8e4c85.md) — Sovereign AI constraints
+-   [Joule Studio Build Map](joule-studio-build-map-8dcb5ea.md) — FDE build sequence
+-   SAP Note 3437766 — per-region model availability matrix (also referenced in [Production Operations](production-operations-42850d6.md) for model deprecation)
 
 
-<a name="loioab50037d19274510881da839d901b600__section_q19"/>
+<a name="loioecf1afd72f8442d5a6fb9c810b445994__section_q19"/>
 
 ## Q19 — Is the Week-by-Week Build Sequence Realistic for a Standard FDE Sprint?
 
@@ -806,7 +1290,7 @@ For Industry AI customer conversations in eu11, br10, in30, or China: **do not a
 
 **Context:**
 
-[Joule Studio Build Map](joule-studio-build-map-7de243e.md) describes a 12-week build sequence: from scaffold in week 1 to production readiness in week 12. *(Note: was restructured in the November 2026 Wave 2/3 pass into a Minimum-Viable / Full-Stack two-path sequence; this summary predates that and should be re-synced when Q19 is actioned.)* The sequence covers: environment setup, local agent scaffold, JS2.0/SMJ (default) or CMJ wiring, Workflow A (supervisor), Workflow B (telemetry), Workflow C (support relay), multi-agent patterns, TR1–TR14 compliance, and Enable track delivery.
+[Joule Studio Build Map](joule-studio-build-map-8dcb5ea.md) describes a 12-week build sequence: from scaffold in week 1 to production readiness in week 12. *(Note: this section was restructured in the November 2026 Wave 2/3 pass into a Minimum-Viable / Full-Stack two-path sequence; this summary predates that and should be re-synced when Q19 is actioned.)* The sequence covers: environment setup, local agent scaffold, JS2.0/SMJ (default) or CMJ wiring, Workflow A (supervisor), Workflow B (telemetry), Workflow C (support relay), multi-agent patterns, TR1–TR14 compliance, and Enable track delivery.
 
 **The Specific Uncertainty:**
 
@@ -820,14 +1304,12 @@ A clarifying note about which items are mandatory (core agent + Workflow A + TR1
 
 **References:**
 
--   [Joule Studio Build Map](joule-studio-build-map-7de243e.md) — FDE build sequence
+-   [Joule Studio Build Map](joule-studio-build-map-8dcb5ea.md) — FDE build sequence
 
 **Who Can Answer This:** FDE practitioners with Joule Studio engagement experience; CIS T&O team.
 
----
 
-
-<a name="loioab50037d19274510881da839d901b600__section_q20"/>
+<a name="loioecf1afd72f8442d5a6fb9c810b445994__section_q20"/>
 
 ## Q20 — How Should Inter-Agent Structured-Output Contracts Be Managed in Multi-Agent Rollbacks?
 
@@ -835,13 +1317,13 @@ A clarifying note about which items are mandatory (core agent + Workflow A + TR1
 
 **Context:**
 
-[Production Operations](production-operations-f963579.md) notes that in multi-agent deployments, rolling back one worker agent may break interface contracts with other agents if the rolled-back version produces different structured output than the version the other agents were designed to consume.
+[Production Operations](production-operations-42850d6.md) notes that in multi-agent deployments, rolling back one worker agent may break interface contracts with other agents if the rolled-back version produces different structured output than the version the other agents were designed to consume.
 
-The CIS T&O runbook should include a dependency map of inter-agent structured-output contracts. However, no concrete tooling for tracking these contracts exists in the current BAIP harness or Joule Studio environment.
+The CIS T&O runbook (see [CIS CoE Operations Model](cis-coe-operations-model-b96eb95.md)) should include a dependency map of inter-agent structured-output contracts. However, no concrete tooling for tracking these contracts exists in the current BAIP harness or Joule Studio environment.
 
 **The Specific Uncertainty:**
 
--   Should inter-agent contracts be tracked manually (e.g., a dependency map document maintained alongside the workflow versions) or can they be inferred from the workflow configuration?
+-   Should inter-agent contracts be tracked manually (for example, a dependency map document maintained alongside the workflow versions) or can they be inferred from the workflow configuration?
 -   When the BAIP harness records a version event, does it capture the interface schema of the agent's A2A output, enabling automated contract compatibility checking?
 -   Is there a recommended versioning pattern (semver for structured outputs?) that would make breaking vs. non-breaking changes detectable without full integration testing?
 
@@ -851,31 +1333,20 @@ Until tooling exists, the CIS T&O operational runbook for multi-agent deployment
 
 **References:**
 
--   [Multi-Agent Orchestration](multi-agent-orchestration-2f6e92e.md) — Multi-agent versioning considerations
--   [Production Operations](production-operations-f963579.md) — Rollback mechanics
--   [CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md) — CIS T&O runbooks
+-   [Multi-Agent Orchestration](multi-agent-orchestration-a4d6df6.md) — Multi-agent versioning considerations
+-   [Production Operations](production-operations-42850d6.md) — Rollback mechanics
+-   [CIS CoE Operations Model](cis-coe-operations-model-b96eb95.md) — CIS T&O runbooks
 
 **Who Can Answer This:** BAIP/Joule Studio platform team; CIS T&O; FDE architects with multi-agent delivery experience.
 
----
-
 **Related Information**  
 
-[Supervisor Agent Pattern](supervisor-agent-pattern-3b166f3.md)
+[Joule Studio](https://help.sap.com/docs/JOULESTUDIO/7e496fe6f81f4975aec07d9c1cbd2aef/36d3e974446844a1b0ffb7af8fa9446c.html) :arrow_upper_right:
 
-[Security and Data Protection](security-and-data-protection-27868d4.md)
+[Compliance and Security — SAP AI Core](https://help.sap.com/docs/AI_CORE/f7c0f89219354ee892aaec34a488d2e3/d0be812c81734355ade9dc894638870cf.html) :arrow_upper_right:
 
-[Precision Guardrails](precision-guardrails-c279f4e.md)
+[Supervisor Agent Pattern](supervisor-agent-pattern-53ccc55.md)
 
-[Joule Studio Build Map](joule-studio-build-map-7de243e.md)
+[Security and Data Protection](security-and-data-protection-e8e4c85.md)
 
-[CIS CoE Operations Model](cis-coe-operations-model-57b29ae.md)
-
-[Multi-Agent Orchestration](multi-agent-orchestration-2f6e92e.md)
-
-[Production Operations](production-operations-f963579.md)
-
-[Token Efficiency](token-efficiency-54fe998.md)
-
-[SAP Generative AI Hub](https://help.sap.com/docs/sap-ai-core/generative-ai/generative-ai-hub "SAP Generative AI Hub: managed LLM integration within SAP AI Core for enterprise-grade model execution.") :arrow_upper_right:
-rise-grade model execution.") :arrow_upper_right:
+[Production Operations](production-operations-42850d6.md)
