@@ -1,0 +1,18 @@
+# CIS Agent Development Concept
+
+-   [Introduction: Why Agent Governance Matters for Industry AI](introduction-3dc8a03.md)
+    -   [Agent Quality Framework](agent-quality-framework-86a2b10.md)
+    -   [Supervisor Agent Pattern](supervisor-agent-pattern-b40ee37.md)
+    -   [Security and Data Protection](security-and-data-protection-e20205c.md)
+    -   [Precision Guardrails](precision-guardrails-3841e39.md)
+    -   [Joule Studio Build Map](joule-studio-build-map-265de70.md)
+    -   [CIS CoE Operations Model](cis-coe-operations-model-9406fa3.md)
+    -   [Multi-Agent Orchestration](multi-agent-orchestration-13725ca.md)
+    -   [Production Operations](production-operations-324bb02.md)
+    -   [Reusable Components](reusable-components-560fb10.md)
+    -   [Token Efficiency](token-efficiency-f8f90a7.md)
+    -   [Agent Evaluation](agent-evaluation-8cabb2d.md)
+    -   [Customer Enablement and Adoption](customer-enablement-and-adoption-f7c118f.md)
+-   [Context Layer Overview](context-layer-overview-1392cf5.md)
+-   [Open Questions and Design Backlog](open-questions-3a2265d.md)
+-   [Proof of Concept Plan](proof-of-concept-plan-4d864ac.md)
