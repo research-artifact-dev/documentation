@@ -1,547 +1,589 @@
-[//]: # (loio: b40ee37)
+<!-- loiob40ee37fcbff446f93525cfe976502ce -->
 
-# Chapter 2: The Supervisor Agent Pattern
+# Supervisor Agent Pattern
 
-## 2.1 Motivation: Why a Supervision Tier
+The supervisor agent is the CIS implementation of SAP's Supervision tier for Industry AI FDE engagements. It enforces business-logic quality and safety through three distinct workflows — inline quality relay, telemetry monitor, and support relay — operating architecturally outside and above the worker agent rather than as a design convention within it.
 
-A well-built worker agent handles the nominal path reliably. The cases that break
-well-built agents are not nominal: unexpected data quality, edge-case inputs, compound
-errors that individually pass validation but collectively produce a wrong result, gradual
-drift in model behavior. These failure modes share a property — they are hard to detect
-from inside the worker agent's own execution loop.
 
-A supervision tier adds an external vantage point. Where the worker agent reasons about
-"what is the correct answer to this task", the supervisor reasons about "is this worker
-agent behaving correctly". These are different questions, and assigning them to the same
-reasoning loop creates a conflict of interest.
+<a name="loiob40ee37fcbff446f93525cfe976502ce__section_supervision_tier"/>
 
-The supervisor pattern also provides the mechanism for the escalation path in Chapter 1
-section 1.6: Levels 2 and 3 (supervised and blocked) require a component that can
-intercept output, enforce thresholds, and route to `sapTaskCenter` or SAP AI Agent Hub
-independently of the worker's own self-assessment.
+## The Supervision Tier and Why It Exists
 
----
+SAP's AI-Native North Star Architecture defines a three-tier AI defense model for enterprise-grade agentic systems:
 
-## 2.2 Alternatives Considered
+1.  **Foundation tier** — zero-trust authentication, traffic inspection, prompt-injection detection, behavioral analytics, cryptographic agent credentials. Provided by the BAIP platform; always on.
+2.  **Supervision tier** — deterministic control agents that monitor, sanitize, and authorize other AI agents. Input validation, output filtering, anomaly detection, human oversight for high-risk decisions. Must be explicitly designed and deployed.
+3.  **Automation tier** — AI agents scaling security operations; continuous policy audits, risk assessment, identity management.
 
-Before committing to the supervisor pattern, consider whether a simpler option suffices:
+The Foundation tier handles platform-level threats. The Automation tier handles organizational-scale security operations. The Supervision tier handles the gap between the two: **business-logic-level quality and safety for individual agent workflows**, within the customer's own environment, without requiring external data movement.
 
-| Option | When it is sufficient | Limitation |
-|---|---|---|
-| Self-verification only (Ch1 §1.4.3) | Low-risk, read-only, single-step outputs | Same model generates and verifies; no independence; no cross-invocation monitoring |
-| Output schema validation (guardrails Ch4) | Numerical bounds, unit consistency, range checks | Deterministic checks only; cannot evaluate semantic correctness or inter-invocation patterns |
-| Supervisor pattern (this chapter) | High-risk write-back, compound outputs, production-monitored multi-agent | Additional node overhead; requires shared state store for multi-agent deployments |
+The supervisor agent is the CIS implementation of the Supervision tier for Industry AI FDE engagements. It is not a replacement for the Foundation tier (which the BAIP (Business AI Platform) harness provides automatically) or for the Agent Hub's governance capabilities (which operate at IT-admin level). It is the layer that has visibility into business-logic correctness in a way that neither the platform nor the IT admin can provide.
 
-The supervisor pattern is appropriate when at least one of the following applies:
+**The supervisor also serves as an autonomous CIS proxy on the customer tenant — in the deployments where CIS has no default access.** This rationale applies specifically to **BYOA runtimes on the customer's own BTP subaccount and to sovereign-cloud deployments**: there, the agent runs in the customer's own environment and CIS has no default access for monitoring. The supervisor bridges this gap: it performs the monitoring and intervention that CIS would otherwise need direct access to do — and only escalates to CIS when it has exhausted what it can handle autonomously. This design reduces the need for permanent CIS access to customer tenants to genuinely exceptional cases, without sacrificing operational visibility.
 
-1. The agent writes back to a SAP system of record (creates or modifies transactional data)
-2. The output is a numerical commitment with regulatory or financial consequences
-3. Multiple agents must produce consistent, mutually non-contradictory outputs
-4. The deployment requires ongoing quality monitoring by an external party (CIS T&O, customer compliance)
-5. The agent's behavior must be auditable independently of the worker's own logs
+Under the **SMJ default** for new engagements (the SAP-managed orchestrator, typically paired with a low-code Joule Studio 2.0 runtime), the picture differs: the agent runs on SAP-managed infrastructure, so telemetry and governance are already reachable through the SAP AI Agent Hub and the managed harness, and the "no default CIS access" premise is weaker. The supervisor's proxy function is therefore most load-bearing for BYOA and sovereign runtimes; on the SMJ-managed path it is primarily a business-logic quality and write-gate layer rather than an access bridge. See [CIS CoE Operations Model](cis-coe-operations-model-9406fa3.md) for the full CIS CoE operations model that builds on this pattern.
 
----
 
-## 2.3 The Three Supervisor Functions
+<a name="loiob40ee37fcbff446f93525cfe976502ce__section_alternatives"/>
 
-The supervisor is not a single workflow; it is three separate functions implemented
-as separate Joule Studio workflows. Each function has a distinct trigger, a distinct
-purpose, and distinct data protection requirements. They share a state store (see §2.4).
+## Alternative Approaches and When Each Is Sufficient
 
-### 2.3.1 Workflow A — Output Verification and Approval Routing
+Before committing to a supervisor agent, it is worth understanding the full range of design alternatives — what each covers, where it falls short, and under what conditions it is genuinely sufficient. This section covers nine alternatives in order of increasing capability, then explains why the supervisor pattern is the correct choice for most Industry AI FDE deployments operating beyond the initial EAC (Early Adopter Care) phase.
 
-**What it does**: receives every high-risk worker output before it is written to any
-SAP system of record. Applies deterministic checks (Code node), LLM-based semantic
-critique (second `sapOrchestration` call with a critic system prompt), and routes
-the result to one of four paths: direct commit (both checks confirm), human review
-(one or both checks reject or disagree), or autonomous rejection.
+The organizing question for each alternative: *what failure mode does it prevent, and how late is too late to catch it?* For irreversible writes — batch release quantities committed to a regulated system of record, financial postings, physical dispatches — post-hoc detection is not acceptable. The design must prevent the wrong output from being committed in the first place.
 
-**Trigger**: webhook from the worker agent's `sapAgent` callback node — or via
-`sapOrchestration` callback pattern when `sapAgent` is not available.
+### Alternative A: Inline Self-Verification Only
 
-**Four routing outcomes:**
+A second validation step within the worker agent's own workflow, before write-back. The worker runs a Code node check and a second `sapOrchestration` critic call, then routes itself to write-back or Task Center based on the result.
 
-| Outcome | Condition | Action |
-|---|---|---|
-| BOTH CONFIRM | Deterministic Code node passes AND LLM critic approves | Write output to system of record via `sapMcpClient`; write to audit trail |
-| BOTH REJECT | Deterministic Code node fails AND LLM critic rejects | Autonomous rejection; `sapTaskCenter` task with reject reason; write to audit trail |
-| DISAGREE | Deterministic Code node and LLM critic produce different verdicts | Human review required; `sapTaskCenter` approval task with both verdicts visible; write to audit trail; suspend output until human decides |
-| LOW CONFIDENCE | Worker agent's `outputSchema` confidence field below threshold | Human review required; same routing as DISAGREE |
+**What it covers**: output validation for a single invocation at the write-back moment.
 
-The DISAGREE state is the most valuable case: it surfaces outputs where the deterministic rule and the
-semantic check do not agree, which is exactly the case where human judgment adds the most value.
-A supervisor that routes DISAGREE outputs to humans is not failing — it is functioning correctly.
+**What it does NOT cover**:
+-   Cross-invocation patterns, drift over time, or repeated failure modes
+-   Platform-level anomalies (error rate spikes, latency outliers)
+-   Any issue that occurs after write-back
+-   The CIS proxy function — the worker still controls the write-back decision
 
-**Why DISAGREE is a signal, not a failure**: the deterministic rule and the LLM critic have different
-failure modes. The deterministic rule can pass a semantically wrong output that happens to be
-numerically within range; the LLM critic can reject a correct output because the phrasing is unusual.
-When they disagree, the overlap of their respective blind spots is exactly the region that benefits from human judgment. Over time, DISAGREE patterns surface systematic misalignments between the
-deterministic rules and the actual domain semantics — inputs to both rule refinement and critic
-prompt improvement.
+**Critical limitation**: the worker *can* be modified to bypass the verification step — it is code inside the same workflow. The quality gate is a design convention, not an architectural enforcement. For regulated outputs or high-value transactions, this distinction matters.
 
-### 2.3.2 Workflow B — Telemetry Monitoring and Anomaly Detection
-
-**What it does**: on a scheduled basis (not per-invocation), retrieves operational telemetry
-from SAP Cloud ALM and the AI Core usage API, applies a rule set to detect anomalies
-in the worker agent's behavior patterns, and routes alerts to the appropriate human.
+**Sufficient when**: the risk is concentrated at the write-back moment, the output can be verified inline, cross-invocation monitoring is not required, and the consequences of a bypassed gate are acceptable.
 
-**Trigger**: Joule Studio `Schedule Trigger` node — configurable interval; typically
-hourly for production, daily for EAC.
+### Alternative B: SAP AI Agent Hub Governance Only
 
-**Six anomaly rule types (domain-agnostic, deploy-as-is from Starter Kit):**
+The Agent Hub's Observe & Analyze and Secure & Govern capabilities provide IT-admin-level visibility: agent registry, access control, lifecycle management, usage telemetry, policy enforcement.
 
-| Rule type | Signal | Threshold approach |
-|---|---|---|
-| Error rate spike | Tool call error rate exceeds baseline | Rolling 24h rate vs. p95 baseline; alert if > 2× baseline |
-| Tool call count per invocation | Average tool calls per invocation exceeds baseline | Rolling 7-day average vs. EAC-calibrated baseline; alert if > 1.5× |
-| Response latency | p95 latency exceeds baseline | Rolling 24h p95 vs. EAC-calibrated p95; alert if > 2× |
-| Human override rate | Fraction of Workflow A outputs that humans override | Rolling 7-day rate vs. target; alert if > configured threshold |
-| Verification rejection rate | Fraction of Workflow A outputs rejected (both BOTH REJECT and human rejects) | Rolling 7-day rate vs. target; alert if > configured threshold |
-| Identical input pattern | Same or structurally identical inputs repeating at abnormal frequency | Duplicate detection with configurable window; alert if same input appears > N times in window |
-| Token anomaly (cost extension) | Per-invocation tokens vs. rolling baseline | Runaway detection: single invocation > 5× p99 baseline; daily budget threshold; rising cost per committed output trend |
-
-The token anomaly rule (last row) is the cost monitoring extension from Chapter 8
-section 8.5. It is structurally part of Workflow B but serves as the connection
-between operational monitoring and the token efficiency framework in Chapter 10.
-
-**Threshold calibration**: all threshold values are Layer 2 parameters — the rule
-structure is fixed (Layer 1), the threshold values are set after EAC baseline
-observation and documented in the production handover package. The EAC period is
-specifically the calibration window: Workflow B runs in monitoring mode (alerts
-suppressed or routed to FDE team only) for the first EAC period, establishing the
-behavioral baseline before production thresholds are armed.
-
-### 2.3.3 Workflow C — Support Relay and IT Admin Notification
-
-**What it does**: when Workflow A produces a human review task that an end user cannot
-resolve, or when Workflow B detects an anomaly that requires IT attention, Workflow C
-sanitizes the operational data (strip personal data, retain technical signals), creates
-an incident via the SAP Cloud ALM ITSM Adapter API, and notifies the designated IT
-admin role.
-
-**Trigger**: webhook from Workflow A (high-severity rejection that bypasses normal
-Task Center flow) or from Workflow B (anomaly alert requiring IT action).
-
-**Key properties:**
-
-- **Full deploy-as-is from Starter Kit**: zero per-engagement content. The sanitization
-  rules (see §2.5.3) and the Cloud ALM ITSM API call are the same in every engagement.
-  Customer tenant ID is injected from the environment configuration; it is not hardcoded.
-- **Data protection is built in**: Workflow C is the layer where the sanitization rules
-  are applied — it never receives unsanitized personal or business data because Workflows
-  A and B only pass operational signals (counts, rates, error codes) to Workflow C.
+**What it covers**: who is running which agents, with what permissions, at what frequency; policy enforcement and lifecycle events (deactivation, version rollback).
 
----
+**What it does NOT cover**: whether individual agent outputs are correct for the business process; whether the agent's outputs are drifting — a batch release agent that is systematically recommending quantities 15% below correct values will not trigger any Agent Hub alert; business-logic quality of any kind.
 
-## 2.4 Architecture Design
+**Critical limitation**: the Agent Hub operates at the IT-governance layer. It is authoritative for "is this agent authorized to run and does it comply with policy?" It has no visibility into "is this agent producing the right answer for this business process?"
 
-### 2.4.0 One Agent Per Actor, One Supervisor Per Output Type
+**Sufficient when**: the primary concern is IT governance and access control, not business-logic quality. Can be used in combination with Alternative A for a lightweight two-layer approach.
 
-The CIS topology design rule is:
+### Alternative C: Human-in-the-Loop on Every Output
 
-- **One worker sub-agent per business Actor** (from the domain primitive vocabulary, Chapter 1 §1.3.4). An Actor maps to a customer persona — procurement officer, plant manager, compliance reviewer. Each Actor's scope is distinct; keeping them in separate agents maintains clear reasoning boundaries and simplifies authorization scoping.
-- **One Workflow A instance per output type** (not per worker agent). Two workers that produce structurally similar output — same units, same validation logic, same reference calculation — share one Workflow A. If verification logic diverges significantly between workers, create separate instances.
+Every agent output goes through a `sapTaskCenter` approval step before write-back. Humans review and approve or reject each output individually.
 
-This topology produces a many-to-one relationship between workers and Workflow A in some deployments (multiple workers, one shared Workflow A differentiated by `agent_identity`), and a one-to-one relationship when output types are distinct. Chapter 7 (Multi-Agent Orchestration) extends this to three formal topologies for multi-agent deployments.
+**What it covers**: all errors — humans catch everything, by definition.
 
-### 2.4.1 Worker-to-Supervisor Communication
+**What it does NOT cover**: the business case for AI automation. If every output requires human approval, the agent adds latency without reducing effort. The value-based contract (10–30% of yearly customer benefit) is premised on the agent reducing human work — not on routing every decision through a human faster.
 
-Worker agents communicate with the supervisor through one of two patterns. The
-choice depends on BAIP platform availability:
+**Critical limitation**: this is not a quality pattern for a mature deployment; it is a safe mode for situations where confidence in the agent has not yet been established.
 
-**Pattern 1 — sapAgent callback (preferred when available):**
-The worker's Joule Studio workflow includes a `sapAgent` callback node. After the
-LLM generates an output, the worker pauses execution and posts the output via the
-`sapAgent` node to the supervisor's webhook. The supervisor executes Workflow A and
-posts an approval or rejection signal back via the `sapAgent` callback. The worker
-resumes with the supervisor's decision.
+**Sufficient when**: during the first weeks of a deployment before the behavioral baseline is established, or for specific output categories where regulatory requirements mandate human sign-off on every decision regardless of agent confidence.
 
-```
-[Worker: sapOrchestration: generate output]
-        ↓
-[Worker: sapAgent: post to Workflow A webhook; wait for callback]
-        ↓ (async)
-[Supervisor: Workflow A]
-  ├── Code node: deterministic checks
-  ├── sapOrchestration: LLM critic
-  └── [route: BOTH CONFIRM / BOTH REJECT / DISAGREE / LOW CONFIDENCE]
-        ↓ (approval signal back to worker)
-[Worker: continue if approved; abort if rejected; await human if DISAGREE]
-```
-
-**Pattern 2 — sapOrchestration callback (interim pattern):**
-When `sapAgent` is not available (EAC-gated; not broadly GA), the worker makes an
-explicit HTTP call to Workflow A's webhook (`HTTP Request` node) and polls for the
-result or uses a webhook response pattern. This achieves the same logical flow but
-requires an additional polling loop in the worker. The worker should implement a
-configurable timeout (default: 30 seconds) and fall back to the supervisor fail-safe
-rule (§2.7) if no response is received.
+### Alternative D: Asynchronous Batch Evaluation
 
-The bidirectional A2A protocol resolves this in the longer term: once bidirectional
-A2A is GA (H1 2027 target per Chapter 0 constraints), all inter-agent communication
-including supervisor callbacks will use standard A2A message passing rather than
-webhook/polling patterns. Plan for this migration in the productization package.
-
-### 2.4.2 Supervisor Agent Identity and Separation
-
-The supervisor must have a distinct agent identity from the worker agents it governs:
-
-- **Separate Joule capability bundle**: the supervisor registers as a distinct agent in the
-  SAP AI Agent Hub with its own capability name, agent card, and version history.
-- **Separate authorization scope**: the supervisor has read access to the BAIP telemetry
-  API and write access to `sapTaskCenter`; it does NOT have the worker agent's tool
-  access (the worker's SAP system connections). This is the least-privilege principle
-  applied to supervisor design — the supervisor cannot accidentally trigger the operations
-  it is overseeing.
-- **Independent BAIP harness telemetry**: the supervisor's execution traces and the worker's
-  execution traces are separate streams in SAP Cloud ALM, with separate agent IDs. This
-  makes it possible to audit the supervisor independently of the worker.
-
-### 2.4.3 Shared State Store
-
-Workflows A, B, and C require persistent state to function:
-
-- Workflow A: audit trail of every output decision (committed, rejected, human-overridden)
-- Workflow B: rolling metrics baseline (the reference against which anomalies are detected)
-- Multi-agent (Chapter 7, Topology 3): the Pending Set table (tracks which workers have
-  delivered verified outputs; gates the orchestrator until all workers complete)
-
-This state is stored in a **HANA Cloud database** provisioned in the engagement's BTP
-sub-account. Two tables:
-
-| Table | Purpose | Schema |
-|---|---|---|
-| `SUPERVISOR_AUDIT_TRAIL` | Append-only record of every Workflow A decision | See Chapter 4 §4.7 for full field set + Chapter 8 §8.5 for cost extension fields |
-| `SUPERVISOR_BASELINE` | Rolling metrics snapshot for Workflow B anomaly detection | Per-agent-id, per-metric: rolling mean, p95, last-updated timestamp |
-
-For multi-agent deployments (Chapter 7, Topology 3), a third table:
-
-| Table | Purpose |
-|---|---|
-| `SUPERVISOR_PENDING_SET` | Tracks which worker callbacks have arrived for a given orchestration invocation; gates release to orchestrator until all workers verified |
-
-The shared state store DDL is a Starter Kit artifact (see Chapter 9 §9.4 for status). The audit trail table is the same table required by Chapter 4's precision guardrail design — these are not two separate tables; the audit trail from Chapter 4 and the supervisor's state store audit trail are the same HANA Cloud table, written by Workflow A.
-
----
-
-## 2.5 Data Protection Design
-
-The supervisor pattern creates a monitoring channel — Workflow B — that must observe
-agent behavior without observing personal or business data. This section defines the
-three-tier approach.
-
-### 2.5.1 Tier 1: Telemetry Separation by Design
-
-The BAIP managed agent runtime separates execution telemetry from inference content
-by design:
-
-- **Business data and LLM reasoning** remain in the customer's BAIP tenant, governed by
-  the BAIP tenant isolation model and the customer's data processing agreement with SAP.
-- **Operational telemetry** (OpenTelemetry traces, error codes, latency metrics, tool
-  call counts) is routed to SAP Cloud ALM — an SAP-operated service, region-bound to
-  the customer's contracted data-residency region.
-
-Workflow B queries SAP Cloud ALM for operational telemetry only. It does not access
-the LLM inference logs, the content of tool call inputs/outputs, or the user session
-content. This is a structural property of the BAIP architecture, not a configuration
-choice the FDE team makes.
-
-**Data residency clarification**: operational telemetry stays within the customer's
-SAP-operated data-residency boundary (not strictly "within the tenant", but within the
-boundary of the customer's contracted SAP Cloud ALM region). Business data and LLM
-inference stay local to the BAIP tenant. For sovereign deployments (CN40, NS2, KSA),
-confirm that SAP Cloud ALM is available in the sovereign boundary before relying on
-Workflow B's telemetry queries — see §3.12 and Chapter 6 §6.8.
-
-### 2.5.2 Tier 2: sapDPI for Personal Data in Tool Call Outputs
-
-For tool calls that may return personal data (customer names, employee IDs, any
-personally identifiable information from SAP system of record reads), the BAIP
-`sapDPI` (Data Privacy Integration) capability provides automatic detection and
-masking before data is processed by the LLM or logged.
-
-FDE teams must configure `sapDPI` explicitly for any tool that reads personal data.
-The configuration specifies which fields are personal and what masking rule applies
-(hash, redact, generalize). `sapDPI` integration does not happen automatically — it
-is a workflow node configuration the FDE Application Engineer must add.
-
-For the supervisor specifically: Workflow A receives output from the worker, which
-may already contain personal data passed through from tool call results. The correct
-design is to apply `sapDPI` at the worker level (before the output is posted to Workflow A's
-webhook), not at the supervisor level. Personal data that reaches Workflow A's input
-has already left the worker's controlled environment.
-
-### 2.5.3 Tier 3: Sanitization Rules for Workflow C (Support Relay)
-
-Workflow C relays operational signals to IT admin and potentially to SAP T&O for
-support escalations. The sanitization rules define what may be included:
-
-**RETAIN (operational signals — no personal or business data):**
-- Timestamp
-- Agent ID and version
-- Error code and category
-- Anomaly type and rule that fired
-- Tool call count and latency metrics
-- Workflow A routing decision (BOTH CONFIRM / BOTH REJECT / DISAGREE / LOW CONFIDENCE)
-- Verification stage verdicts (pass/fail per stage)
-- Correlation ID (for trace linking only — not linkable to a customer or user without additional data held in the customer's tenant)
-
-**STRIP (personal and business data — never relay to Workflow C):**
-- Input data from the user session
-- LLM-generated output content (the agent's recommendation text)
-- Tool call inputs and outputs (which contain business data from SAP systems)
-- User identifiers (user ID, employee ID, customer number)
-- Any field that is a primary or foreign key to a business entity in the customer's
-  system of record
-
-The sanitization rules are the Layer 1 component of Workflow C — they are the same
-in every engagement and must not be relaxed per-engagement, regardless of customer
-preference. Workflow C's value as a support escalation channel depends on its data
-protection properties being unconditional.
-
-**Legal basis for Workflow C**: relaying even sanitized operational telemetry to SAP T&O
-(CIS, FDE team, support) may require an explicit legal basis under GDPR article 28 (data
-processing agreement) depending on the customer's jurisdiction and the nature of the
-engagement. The legal team has flagged this — confirm the applicable legal basis during
-FDE Discovery for any engagement where Workflow C is in scope, before the engagement
-contract is signed. See open question Q7 in `open-questions-3a2265d.md`.
-
----
-
-## 2.6 Escalation Thresholds
-
-The supervisor escalation thresholds are the per-engagement parameters that govern
-when Workflow A routes to human review and when Workflow B triggers an alert.
-They must be configured before EAC and documented in the production handover package.
-
-### Workflow A Thresholds
-
-| Threshold | What it governs | Who sets it | When |
-|---|---|---|---|
-| Approval threshold (absolute) | Outputs above this value require human approval regardless of verification results | Process owner, confirmed in Discovery | Discovery sub-phase 3 (Define) |
-| Approval threshold (deviation) | Outputs that deviate more than this percentage from a reference value require human approval | Process owner, confirmed in Discovery | Discovery sub-phase 3 (Define) |
-| Confidence threshold | Outputs below this confidence level route to human review | FDE team, calibrated from EAC evaluation | EAC calibration period |
-
-The absolute and deviation thresholds are Layer 3 parameters — engagement-specific,
-agreed with the process owner, documented in the Draft Product Design Specs. The
-confidence threshold is calibrated from EAC evaluation data: the FDE team observes
-the confidence distribution during EAC and sets the threshold at the value that
-distinguishes high-confidence correct outputs from low-confidence potentially incorrect ones.
-
-### Workflow B Thresholds
-
-All Workflow B threshold values are calibrated from the EAC baseline:
-
-```
-1. Deploy agent to EAC environment.
-2. Run Workflow B in monitoring mode (alerts suppressed; FDE team receives reports).
-3. Observe agent behavior over the EAC period (target: 2 weeks minimum).
-4. Record baseline statistics per metric: mean, p95, distribution shape.
-5. Set production thresholds at 2× p95 for rate-based metrics; at 1.5× mean for
-   count-based metrics; daily budget threshold agreed with customer IT admin.
-6. Document all threshold values in the production handover package.
-7. After production go-live, re-calibrate if behavior changes materially within
-   the first 30 days.
+Rather than intercepting outputs in real-time, run a periodic evaluation job (nightly or weekly) that scores a sample of *already committed* outputs against defined quality criteria. The SAP AI Agent Hub's Agent Evals & Assessment capability supports this pattern.
+
+**What it covers**: quality trend analysis over time across many invocations; ground-truth dataset construction; model drift detection at the population level; low operational overhead.
+
+**What it does NOT cover**: prevention — by definition, outputs have already been committed when the eval runs.
+
+**Critical limitation**: too late for irreversible writes. A batch release quantity that was wrong when committed cannot be corrected by a nightly eval.
+
+**Where it genuinely adds value**: as a *complement* to the supervisor pattern, not a replacement. Running async batch eval alongside the supervisor builds the ground-truth dataset that the continuous improvement loop ([CIS CoE Operations Model](cis-coe-operations-model-9406fa3.md)) consumes.
+
+### Alternative E: Rule-Based Policy Engine Only
+
+Implement only the deterministic verification layer — a code-based gate the output must pass before write-back — without the LLM critic and without any telemetry monitoring.
+
+**What it covers**: detectable, enumerable failure modes: out-of-range values, wrong units, sign errors, precision violations, cross-field arithmetic inconsistency. Fully auditable and explainable verdicts.
+
+**What it does NOT cover**: contextual plausibility that rules cannot express; any failure mode not explicitly anticipated; drift detection; cross-invocation monitoring; CIS proxy function.
+
+**Interesting regulatory angle**: in some regulated contexts (GxP, financial controls), a pure rule-based gate may be *preferred* over an LLM critic precisely because it is fully auditable. A quality engineer can read and sign off on `value >= min && value <= max`; they cannot do the same for an LLM's internal reasoning.
+
+**Sufficient when**: all meaningful failure modes can be enumerated and expressed as rules, or as a starting point before the LLM critic is added during the EAC calibration phase.
+
+### Alternative F: Confidence Gating Only
+
+Rely entirely on the agent's own confidence score — above threshold → write-back, below threshold → escalate. No independent verification stage.
+
+**Critical limitation**: LLM confidence scores are unreliable as a sole quality gate. Large language models are well-documented to produce high-confidence incorrect outputs. An agent that produces 12,500 kg when the correct figure is 1,250 kg may do so with 0.94 confidence.
+
+Confidence is a useful *supplementary* routing signal within a multi-stage verification stack (see [Precision Guardrails](precision-guardrails-3841e39.md)) — a low confidence score adds a reason to escalate even when deterministic checks pass. It is not a standalone quality gate.
+
+**Sufficient when**: advisory outputs only, where the human reading the output exercises their own judgment anyway.
+
+### Alternative G: Downstream Reconciliation
+
+The agent writes optimistically — without a quality gate — and a reconciliation job runs periodically to detect anomalies in committed data, flagging them for correction.
+
+**Critical limitation**: this pattern assumes errors are reversible and cheap to correct. For the Industry AI domains this concept covers — Regulated Manufacturing, Commodity Management, Revenue Growth Management — that assumption does not hold. A wrong hedge ratio that propagates for 24 hours before detection creates real financial exposure.
+
+**Sufficient when**: outputs are advisory (no automatic write-back), or write-back actions are genuinely reversible with low correction cost, in non-regulated contexts.
+
+### Alternative H: Multi-Model Consensus
+
+Run the same task through N independent LLMs or agent configurations simultaneously. Commit only when their outputs agree within a defined tolerance; escalate on disagreement.
+
+**What it covers**: reduces the probability of confident-but-wrong outputs; disagreement between models is itself informative.
+
+**Cost constraint**: the AI Units billing model (see [Production Operations](production-operations-324bb02.md)) makes the cost implication concrete. Three Advanced-tier LLM calls per invocation instead of one changes the cost-per-committed-output metric significantly — and the FDE value case depends on agent cost being substantially lower than the cost reduction generated.
+
+**Where it genuinely adds value**: for extremely high-stakes, low-frequency decisions — a major financial commitment, a one-off regulatory submission.
+
+### Alternative I: Asynchronous Human Review
+
+The agent writes back immediately; a queue of recent decisions is routed to human reviewers asynchronously. Reviewers work through the queue and can flag corrections after the fact.
+
+**What it covers**: human oversight without adding latency to the agent's critical path.
+
+**Critical limitation**: the output is committed before human review — if the write is irreversible, post-hoc review cannot undo the consequences.
+
+**Sufficient when**: the agent handles high-volume advisory outputs or easily reversible writes where throughput matters more than prevention.
+
+### Summary: Comparison Across All Alternatives
+
+<table>
+<tr><th valign="top">Alternative</th><th valign="top">Prevents Wrong Commits?</th><th valign="top">Detects Drift?</th><th valign="top">CIS Proxy?</th><th valign="top">Key Constraint</th></tr>
+<tr><td valign="top">A: Inline self-verification</td><td valign="top">Partially (worker controlled)</td><td valign="top">No</td><td valign="top">No</td><td valign="top">Worker can bypass gate</td></tr>
+<tr><td valign="top">B: Agent Hub governance only</td><td valign="top">No</td><td valign="top">No (IT-level only)</td><td valign="top">No</td><td valign="top">No business-logic quality visibility</td></tr>
+<tr><td valign="top">C: Human on every output</td><td valign="top">Yes</td><td valign="top">No</td><td valign="top">No</td><td valign="top">Eliminates automation efficiency</td></tr>
+<tr><td valign="top">D: Async batch eval</td><td valign="top">No (post-hoc only)</td><td valign="top">Yes (trend)</td><td valign="top">No</td><td valign="top">Too late for irreversible writes</td></tr>
+<tr><td valign="top">E: Rule-based engine only</td><td valign="top">Yes (known failure modes)</td><td valign="top">No</td><td valign="top">No</td><td valign="top">Cannot catch contextual errors</td></tr>
+<tr><td valign="top">F: Confidence gating only</td><td valign="top">No (confident errors pass)</td><td valign="top">No</td><td valign="top">No</td><td valign="top">LLM confidence scores are unreliable</td></tr>
+<tr><td valign="top">G: Downstream reconciliation</td><td valign="top">No (optimistic write)</td><td valign="top">Partially</td><td valign="top">No</td><td valign="top">Irreversible writes cannot be corrected</td></tr>
+<tr><td valign="top">H: Multi-model consensus</td><td valign="top">Yes (for enumerable disagreements)</td><td valign="top">No</td><td valign="top">No</td><td valign="top">N× token cost; shared systematic failures</td></tr>
+<tr><td valign="top">I: Async human review</td><td valign="top">No (post-hoc)</td><td valign="top">No</td><td valign="top">No</td><td valign="top">Does not prevent committed errors</td></tr>
+<tr><td valign="top"><strong>Supervisor pattern</strong></td><td valign="top"><strong>Yes (architecturally enforced)</strong></td><td valign="top"><strong>Yes</strong></td><td valign="top"><strong>Yes</strong></td><td valign="top"><strong>Build complexity; Workflow A per output type</strong></td></tr>
+</table>
+
+### The Supervisor Agent: When It Is Needed
+
+The supervisor pattern is the right choice when:
+-   The agent is deployed at production scale with significant autonomy (not every output reviewed by a human)
+-   Business-logic quality cannot be fully captured by inline self-verification alone
+-   Cross-invocation patterns matter (drift, anomalies, repeated failure modes)
+-   Data protection requires that telemetry monitoring stays within the customer's tenant
+-   Selective escalation to SAP support — with customer-controlled data sanitization — is a design requirement
+-   Write-back actions are irreversible or regulated — the cost of a committed error exceeds the cost of building and governing the supervisor
+
+In practice this describes most Industry AI FDE scenarios operating beyond the initial EAC phase. Alternatives A and D are the most viable complements: Alternative A as the lightweight path for advisory or lower-stakes outputs within the same engagement, and Alternative D (async batch eval) as a continuous improvement mechanism running alongside the supervisor — not instead of it.
+
+**Mixed-stakes engagements**: a realistic FDE engagement typically contains agents with different risk profiles — one or two high-stakes write-back agents (batch release quantities, hedge ratios, financial postings) alongside several advisory or reporting agents. The supervisor pattern is warranted for write-back agents where errors are irreversible. For advisory agents in the same engagement whose outputs are reviewed by a human before any action is taken, Alternative A (inline self-verification) is often sufficient. Scope the supervisor to the write-back risk surface within the engagement, not to every agent uniformly.
+
+
+<a name="loiob40ee37fcbff446f93525cfe976502ce__section_three_functions"/>
+
+## The Supervisor Agent: Three Functions
+
+The supervisor is not a single monolithic agent. It is a set of three distinct functions, each with a different trigger, execution frequency, and escalation path. Decomposing them into separate Joule Studio workflows makes each function independently deployable, testable, and governed.
+
+### Function 1: Inline Quality Relay
+
+**Purpose**: receive the worker agent's output before it is committed to the system of record, run multi-stage verification, and route to write-back or escalation.
+
+**Trigger**: each worker agent invocation (via callback from async worker call).
+
+**Execution pattern**:
+
+```mermaid
+flowchart TD
+    A["Worker agent invoked (sapAgent, blocking=false, callbackUrl=supervisor/callback)"] --> B["Supervisor Workflow A receives callback"]
+    B --> C["Stage 1 — Deterministic check: Code node or sapMcpClient calculation"]
+    C --> D["Stage 2 — LLM critic: sapOrchestration with critic system prompt"]
+    D --> E{Decision routing (If/Switch node)}
+    E -->|BOTH CONFIRM| F["Commit: supervisor/committer identity writes (sapMcpClient / OData)"]
+    E -->|BOTH REJECT| G["Escalate: sapTaskCenter with full context"]
+    E -->|DISAGREE| H["Escalate: sapTaskCenter (uncertainty requires human judgment)"]
+    E -->|DETERMINISTIC UNAVAILABLE| I["LLM verdict only: route on LLM-critic confidence threshold (default 0.7, calibrated during EAC)"]
 ```
 
-Thresholds set without an EAC baseline — borrowed from a prior engagement or guessed —
-generate false positives or miss genuine anomalies. The EAC calibration step is not
-optional.
+The worker agent cannot write to the system of record directly — it holds no write scope at all. It is scoped **read/recommend-only** and returns a **structured proposal** (JSON: the proposed values, the supporting context, and the worker's own confidence) to the supervisor callback. On BOTH CONFIRM, the **supervisor/committer identity** — which holds the write scope the worker lacks — performs the write itself (via `sapMcpClient` or a direct OData call); the worker is never re-invoked to write. On any other verdict the supervisor escalates without a write.
+
+This is the **committer pattern**, and it is what makes the gate *architecturally enforced* rather than a design convention:
+
+-   The worker's effective permission is `min(user, agent)`; with no write scope on the agent identity, the **SAP Agent Gateway denies a direct worker write at the API-call level** — the worker cannot bypass the supervisor even if its own workflow were modified.
+-   The write is attributed in the audit trail to the **committer identity**, not the worker: the system of record records which identity actually committed the value.
+-   An optional **S/4HANA RAP instance-authorization backstop** rejects the write unless the target record is in an approved state — a third independent gate behind the Gateway scope denial and the committer-held write scope.
+
+This inversion of control is the core of the supervisor pattern, and it aligns with least privilege (SEC-374): the worker produces a proposal, the supervisor decides, and the committer identity — not the worker — writes.
+
+### Function 2: Telemetry Monitor
+
+**Purpose**: continuously monitor the BAIP managed runtime harness telemetry within the customer's tenant, detect anomalies and drift across invocations, and trigger escalation when patterns exceed defined thresholds.
+
+**Trigger**: Schedule Trigger (e.g., every 5–15 minutes depending on agent call volume).
+
+**Execution pattern**:
+
+```mermaid
+flowchart TD
+    A["Supervisor Workflow B fires on schedule"] --> B["HTTP Request → SAP Cloud ALM pull APIs (hm provider; SAP-operated, region-bound tenant)"]
+    B --> C["Code node: rule-based anomaly classification\n- Error rate vs. rolling baseline\n- Tool call count deviation\n- Response time percentile drift\n- Repeated identical inputs (possible loop)\n- Unusual output distribution"]
+    C --> D{Decision routing}
+    D -->|No anomaly| E["Log baseline update, no action"]
+    D -->|Anomaly — internal| F["sapTaskCenter: alert customer IT admin"]
+    D -->|Anomaly — SAP support needed| G["Trigger Workflow C (Support Relay)"]
+```
+
+**Critical design constraint**: the anomaly classifier in Workflow B must be **rule-based, not LLM-based**. Sending raw BAIP traces to an LLM for classification would route business data through a model, which re-introduces the exact privacy concern the intra-tenant design was meant to prevent. Rules, thresholds, and code-based pattern matching are the correct tools here.
+
+### Function 3: Support Relay
+
+**Purpose**: when Workflow B identifies an anomaly that requires SAP support engagement, sanitize the relevant trace extract, create a support ticket, and notify the customer's IT team — without exporting raw operational data.
+
+**Trigger**: event published by Workflow B when anomaly severity exceeds the external engagement threshold.
+
+**Execution pattern**:
+
+```mermaid
+flowchart TD
+    A["Supervisor Workflow C receives anomaly event from Workflow B"] --> B["Retrieve specific trace from SAP Cloud ALM (the anomalous invocation only)"]
+    B --> C["Sanitization pass (Code node or sapOrchestration with enableMasking):\n- Remove PII via DPI entity masking\n- Remove operational business data (order IDs, material numbers, quantities)\n- Retain: agent ID, tool call sequence, error codes, timing, exception messages"]
+    C --> D["SAP Cloud ALM ITSM Adapter API → create support ticket\n(attachment: sanitized trace extract, severity, agent identity, customer tenant ID)"]
+    D --> E["HTTP notification → customer IT admin (email / SAP BAIP notification service)"]
+```
+
+The customer controls what gets exported by defining the sanitization rules in Workflow C. The raw trace is never attached to the outbound support ticket. Only the structural anomaly evidence — what sequence of steps failed, which error codes appeared — is included.
+
+
+<a name="loiob40ee37fcbff446f93525cfe976502ce__section_architecture"/>
+
+## Supervisor Architecture in Joule Studio
+
+### Topology Rule: One Actor, One Agent
+
+When deriving agent topology from customer discovery, a single deterministic rule governs the initial topology:
+
+**Each customer persona (Actor) gets its own dedicated specialist agent. No merging, no sharing.**
+
+A single MasterSupervisorAgent (or equivalent orchestration supervisor) routes between specialist agents based on user intent and routing descriptions. This rule enforces separation of concerns: each specialist agent handles only the domain its Actor works in, making routing deterministic and avoiding mixed-context responses.
+
+**Rationale**: merged agents — where one agent handles the responsibilities of two or more Actors — require complex routing logic embedded within the agent itself and tend to produce responses that mix contexts from different Actor domains. One Actor per agent keeps routing descriptions distinct, agent behavior predictable, and specialist prompts tightly scoped.
+
+**Important distinction**: the orchestration supervisor (routes intent to the correct specialist) is distinct from the governance supervisor described in this chapter (monitors, guards, validates). A production deployment typically has both:
+
+<table>
+<tr><th valign="top">Supervisor Type</th><th valign="top">Function</th><th valign="top">Position in Architecture</th></tr>
+<tr><td valign="top">Orchestration supervisor (MasterSupervisorAgent)</td><td valign="top">Routes user intent to the correct specialist agent</td><td valign="top">Entry point; upstream of all specialist agents</td></tr>
+<tr><td valign="top">Governance supervisor (this chapter)</td><td valign="top">Monitors output quality, guards write-backs, validates results</td><td valign="top">Workflow A: per write-back agent (1:1); Workflow B: system-wide across all agents (1:N)</td></tr>
+</table>
+
+The governance supervisor's three workflows have different scoping rules:
+
+<table>
+<tr><th valign="top">Workflow</th><th valign="top">Natural Scope</th><th valign="top">Relationship</th></tr>
+<tr><td valign="top"><strong>Workflow A</strong> — Inline quality relay</td><td valign="top">Per write-back agent (or output type)</td><td valign="top"><strong>1:1</strong> — each agent doing irreversible write-backs has its own Workflow A</td></tr>
+<tr><td valign="top"><strong>Workflow B</strong> — Telemetry monitor</td><td valign="top">Entire topology</td><td valign="top"><strong>1:N</strong> — one monitoring loop watches all agents' telemetry</td></tr>
+<tr><td valign="top"><strong>Workflow C</strong> — Support relay</td><td valign="top">Triggered by Workflow B</td><td valign="top">On-demand; inherits Workflow B's system-wide scope</td></tr>
+</table>
+
+The resulting topology for a multi-agent engagement:
+
+```mermaid
+flowchart TD
+    WB["Workflow B — Telemetry monitor (1:N, watches all)"]
+    MSA["MasterSupervisorAgent"]
+    SA1["SpecialistAgent_Actor1 (irreversible write-backs)"]
+    SA2["SpecialistAgent_Actor2 (advisory / read-only)"]
+    WA1["Workflow A_1 — Quality gate (1:1, write-back agents only)"]
+
+    WB --> MSA
+    WB --> SA1
+    WB --> SA2
+    WA1 --> SA1
+    MSA --> SA1
+    MSA --> SA2
+```
+
+The one-actor-one-agent rule applies to the specialist agents. The governance supervisor is external to the routing chain and does not participate in routing decisions — Workflow B can therefore monitor the MasterSupervisorAgent itself (detecting mis-routing, loops, or anomalous routing patterns) in addition to the specialist agents.
+
+Scope the supervisor to the write-back risk surface within the engagement, not to every agent uniformly. In most multi-agent FDE engagements, only one or two specialist agents perform irreversible write-backs. The remaining agents are advisory or read-only and do not require Workflow A.
+
+This rule is enforced automatically in Project LightSpeed's topology generation phase (Stage 5), which maps each discovered Actor primitive ([Agent Quality Framework](agent-quality-framework-86a2b10.md)) to a dedicated agent specification.
+
+### Worker-Supervisor Communication
+
+The `CUSTOM.sapAgent` node provides the mechanism for inter-agent communication. The key parameter is `blocking`:
+
+-   `blocking: true` — the calling workflow waits for the worker agent to complete. Simple, but ties up the calling workflow thread for the full duration of the worker.
+-   `blocking: false` — the calling workflow fires the worker and immediately releases. The worker sends its result to the `callbackUrl` when complete. The supervisor Workflow A registers a `Webhook` node as the callback endpoint.
+
+For the supervisor pattern, `blocking: false` is the correct choice. It decouples the worker's execution time from the supervisor's evaluation time, and allows multiple workers to run concurrently with a single supervisor receiving their callbacks.
+
+**Verified node parameters** (`CUSTOM.sapAgent` v1.4.9, verified 2026-10-21):
+
+<table>
+<tr><th valign="top">Parameter</th><th valign="top">Type</th><th valign="top">Default</th><th valign="top">Purpose</th></tr>
+<tr><td valign="top"><code>agentName</code></td><td valign="top">options</td><td valign="top">—</td><td valign="top">Select the SAP Agent to invoke</td></tr>
+<tr><td valign="top"><code>blocking</code></td><td valign="top">boolean</td><td valign="top"><code>true</code></td><td valign="top"><code>false</code> = fire-and-release; requires <code>callbackUrl</code></td></tr>
+<tr><td valign="top"><code>callbackUrl</code></td><td valign="top">string</td><td valign="top">—</td><td valign="top">Webhook URL for async result delivery (non-blocking only)</td></tr>
+<tr><td valign="top"><code>sessionId</code></td><td valign="top">string</td><td valign="top">—</td><td valign="top">Correlates callbacks when multiple workers are in flight</td></tr>
+<tr><td valign="top"><code>customContext</code></td><td valign="top">JSON</td><td valign="top"><code>{}</code></td><td valign="top">Additional context passed to the agent</td></tr>
+<tr><td valign="top"><code>timeout</code></td><td valign="top">number</td><td valign="top">180,000ms</td><td valign="top">Max 300,000ms (5 min); applies in blocking mode only</td></tr>
+</table>
+
+```mermaid
+flowchart TD
+    A["Initiating workflow"] --> B["sapAgent: agentName=worker, blocking=false, callbackUrl={{supervisor_webhook_url}}\n(fires and releases; does not wait)"]
+    B --> C["Worker agent executes autonomously"]
+    C --> D["Worker completes; sends result to callbackUrl"]
+    D --> E["Supervisor Workflow A: Webhook trigger\nreceives worker output → runs multi-stage verification → routes decision"]
+```
+
+The `sessionId` parameter in `sapAgent` is used to correlate the callback to the original request. This is essential when multiple concurrent worker invocations are in flight — the supervisor must know which verification result belongs to which request.
+
+### Decomposition into Three Workflows
+
+The three functions map to three independent Joule Studio n8n workflows:
+
+<table>
+<tr><th valign="top">Workflow</th><th valign="top">Trigger</th><th valign="top">Primary Nodes</th><th valign="top">Execution Frequency</th></tr>
+<tr><td valign="top">A — Inline Quality Relay</td><td valign="top">Webhook (worker callback)</td><td valign="top">Code / sapMcpClient (verify), sapOrchestration (LLM critic), If, sapTaskCenter, sapMcpClient / OData (committer write)</td><td valign="top">Per worker invocation</td></tr>
+<tr><td valign="top">B — Telemetry Monitor</td><td valign="top">Schedule Trigger</td><td valign="top">HTTP Request (SAP Cloud ALM pull APIs, <code>hm</code> provider), Code (rule-based classifier), If, sapTaskCenter, n8n workflow call (→ Workflow C)</td><td valign="top">Periodic (5–15 min)</td></tr>
+<tr><td valign="top">C — Support Relay</td><td valign="top">Called by Workflow B</td><td valign="top">Code (sanitize), HTTP Request (SAP Cloud ALM ITSM Adapter API), HTTP Request (notification)</td><td valign="top">On demand (anomaly events only)</td></tr>
+</table>
+
+Decomposing into three workflows has practical advantages beyond clean separation of concerns: each workflow can be versioned, tested, and governed independently in the SAP AI Agent Hub. If Workflow B needs a threshold adjustment, it can be updated without touching the inline quality logic in Workflow A. Each workflow also has its own agent identity and scoped authorizations in the BAIP harness.
+
+### Shared State
+
+The three workflows need a common data store for:
+-   The rolling baseline used by Workflow B's anomaly classifier (invocation counts, error rates, tool call distributions)
+-   Pending escalations from Workflow A (Task Center tasks that have not yet been resolved by a human)
+-   Correlation between worker `sessionId` and verification status
+
+In BAIP, this shared state can be held in:
+-   A SAP HANA Cloud table (persistent, queryable, supports concurrent writes)
+-   A SAP Build Process Automation work item store (if the process automation module is part of the BAIP subscription)
+-   A BAIP Key-Value store (for lightweight, ephemeral state)
+
+The choice is a deployment decision that depends on the customer's BAIP entitlements. For FDE engagements, SAP HANA Cloud is the most consistently available option across Industry AI target customers.
+
+### LoopCraft — KG-Enriched Execution Cycle
+
+For agents with access to a Knowledge Graph (HANA KG, EKX, or the CIS Context Layer KG), the recommended execution pattern is a three-step enriched cycle:
+
+**Query KG → Execute Action → Verify Result**
+
+```mermaid
+flowchart TD
+    A["Query KG\nRetrieve entity attributes, constraints, prior decisions, related processes"] --> B["Execute Action\nTool call or decision with full KG context"]
+    B --> C["Verify Result\nCheck result against KG constraints or expected values"]
+    C --> D{Passes?}
+    D -->|Passes| E["Surface to user or write to system of record"]
+    D -->|Fails| F["Retry with enriched context or escalate to supervisor"]
+```
+
+Each step in detail:
+
+-   **Query KG**: before executing, the agent retrieves relevant context from the knowledge graph — entity attributes, business constraints, prior decisions about related entities, and related process state. This grounds the execution in verified facts rather than model-generated inference.
+-   **Execute Action**: the agent executes the tool call or decision with full KG context available. The context from the KG reduces the probability of hallucinated values and provides the agent with the expected range of correct outputs.
+-   **Verify Result**: the agent checks the result against KG constraints or expected values before surfacing it to the user or writing it back to the system of record. This is the agent's own internal quality gate.
+
+This cycle is the agentic equivalent of the self-verification loop in the North Star Architecture Layer 2 (see also [Agent Quality Framework](agent-quality-framework-86a2b10.md)). It operates as an **internal quality gate within the agent's own execution** — distinct from the governance supervisor pattern (which monitors from outside). The supervisor remains the architectural enforcement layer; LoopCraft is the agent's own discipline during execution.
+
+The KG-enriched cycle is most valuable for agents handling Entities and BusinessObjects where SAP canonical attributes and constraints are already encoded in the knowledge graph, particularly for numerical outputs subject to precision guardrails.
+
+
+<a name="loiob40ee37fcbff446f93525cfe976502ce__section_data_protection"/>
+
+## Data Protection Design
+
+### What Stays in the Tenant
+
+The following data never leaves the customer's BAIP tenant under normal operation:
+
+-   Raw BAIP harness traces (agent execution traces, tool call inputs/outputs)
+-   Worker agent output before verification approval
+-   LLM call history (prompts, responses) from both worker and supervisor
+-   Business data used as grounding context (order data, material data, etc.)
+-   Intermediate verification results (stage 1 and stage 2 verdicts)
+-   Human decisions from SAP Task Center
+
+Intra-tenant data movement (between workflows, to the shared state store) is not "export" — it stays within the customer's tenant boundary. The one exception is the telemetry pull path to **SAP Cloud ALM**: it moves data out of the customer's BTP subaccount into the SAP-operated Cloud ALM tenant. The accurate statement is therefore not "telemetry does not leave the tenant" but that this telemetry is **stored in the SAP Cloud ALM tenant provisioned in your contracted data-residency region (SAP-operated, region-bound)**.
+
+### What Can Leave the Tenant (and Under What Conditions)
+
+Data leaves the tenant in exactly two cases:
+
+1.  **Sanitized trace extract** — only when Workflow C fires, only for invocations where an anomaly was confirmed, only after the sanitization pass. The customer's IT admin can review and block Workflow C if they choose not to permit any export.
+
+2.  **Escalation metadata** — `sapTaskCenter` tasks are within the SAP Task Center service, which may be multi-tenant infrastructure. The task subject, description, and custom attributes should not contain business-specific data; they should contain agent identity, severity, and the verification verdict only.
+
+### Sanitization Rules
+
+Workflow C's sanitization pass should be governed by explicit rules, not LLM judgment:
+
+<table>
+<tr><th valign="top">Trace Field</th><th valign="top">Rule</th></tr>
+<tr><td valign="top">Error message / exception text</td><td valign="top">Retain as-is (structural, not business data)</td></tr>
+<tr><td valign="top">Tool call name (e.g., <code>get_purchase_order</code>)</td><td valign="top">Retain as-is (reveals capability, not data)</td></tr>
+<tr><td valign="top">Tool call parameters (e.g., PO number, vendor ID)</td><td valign="top"><strong>Strip</strong> — replace with <code>[REDACTED]</code></td></tr>
+<tr><td valign="top">LLM response content</td><td valign="top"><strong>Strip</strong> — may contain business data, reasoning</td></tr>
+<tr><td valign="top">LLM system prompt</td><td valign="top"><strong>Strip</strong> — may reveal internal business logic</td></tr>
+<tr><td valign="top">Agent session ID / correlation ID</td><td valign="top">Retain (needed for support investigation)</td></tr>
+<tr><td valign="top">Timing / latency data</td><td valign="top">Retain (needed for performance diagnosis)</td></tr>
+<tr><td valign="top">Agent identity (agent name, version)</td><td valign="top">Retain</td></tr>
+<tr><td valign="top">Tenant ID</td><td valign="top">Retain (SAP support needs this)</td></tr>
+</table>
+
+These rules should be reviewed and approved by the customer's data protection officer before Workflow C is deployed. The FDE Collaboration Agreement (CA) — which is required if any operational data leaves the customer's environment — may apply to the support relay function even though the data is sanitized. This is a legal question, not a technical one: the legal review for Workflow C must be completed during the FDE Discovery phase as part of the legal agreement planning deliverable (see [Security and Data Protection](security-and-data-protection-e20205c.md)). The responsible party for initiating this review is the FDE Delivery Lead, in coordination with CIS Legal. Do not defer this to the Development phase — CA approval can take 10–20 business days, and a late CA blocks Workflow C deployment without a workaround.
+
+
+<a name="loiob40ee37fcbff446f93525cfe976502ce__section_escalation_thresholds"/>
+
+## Escalation Thresholds and Decision Logic
+
+The supervisor must have clearly defined thresholds to avoid two failure modes: **over-escalation** (humans overwhelmed by false alarms, stop trusting the system) and **under-escalation** (real issues pass undetected because the threshold was too permissive).
+
+Thresholds should be calibrated per agent, not globally. A procurement agent handling €10M orders requires tighter thresholds than a reporting assistant.
+
+### Inline Quality Relay (Workflow A)
+
+<table>
+<tr><th valign="top">Condition</th><th valign="top">Action</th></tr>
+<tr><td valign="top">Both stages confirm</td><td valign="top">Approve write-back; log to baseline</td></tr>
+<tr><td valign="top">Both stages reject</td><td valign="top">Block write-back; escalate to named process owner via sapTaskCenter</td></tr>
+<tr><td valign="top">Stages disagree</td><td valign="top">Block write-back; escalate with both verdicts visible to reviewer</td></tr>
+<tr><td valign="top">LLM critic confidence below threshold (default 0.7)</td><td valign="top">Treat as DISAGREE; escalate. Calibrate the threshold during the EAC phase</td></tr>
+<tr><td valign="top">Deterministic check unavailable</td><td valign="top">Proceed on LLM verdict alone; log the gap</td></tr>
+<tr><td valign="top">Worker timed out / error</td><td valign="top">Block write-back; escalate with error context</td></tr>
+</table>
+
+### Telemetry Monitor (Workflow B)
+
+<table>
+<tr><th valign="top">Signal</th><th valign="top">Threshold</th><th valign="top">Action</th></tr>
+<tr><td valign="top">Error rate</td><td valign="top">&gt; 3× rolling 7-day average for 3 consecutive periods</td><td valign="top">IT admin alert</td></tr>
+<tr><td valign="top">Tool call count per invocation</td><td valign="top">&gt; 2× p95 baseline for 5 consecutive invocations</td><td valign="top">IT admin alert + log investigation flag</td></tr>
+<tr><td valign="top">Response latency</td><td valign="top">&gt; 5× p95 baseline for 2 consecutive invocations</td><td valign="top">IT admin alert</td></tr>
+<tr><td valign="top">Human override rate (from Task Center)</td><td valign="top">&gt; 40% over 7-day window</td><td valign="top">Process owner review request</td></tr>
+<tr><td valign="top">Verification rejection rate (from Workflow A)</td><td valign="top">&gt; 20% over 24-hour window</td><td valign="top">Process owner review + Workflow C candidate</td></tr>
+<tr><td valign="top">Repeated identical input pattern</td><td valign="top">Same input parameters 3× within 5 minutes</td><td valign="top">Possible loop — immediate IT admin alert</td></tr>
+</table>
+
+These thresholds are starting points. They should be calibrated during the EAC phase using observed baseline behavior before GA deployment.
+
+### Day-1 Cold-Start Guidance
+
+Every threshold above references rolling baselines and p95 values that require historical data to be meaningful. A new deployment has none.
+
+**For the initial observation period — Day 1 through the first 50+ invocations:**
+
+-   **Workflow A (Inline Quality Relay)**: active from day one. It makes per-invocation decisions without requiring a baseline.
+-   **Workflow B (Telemetry Monitor)**: use static absolute thresholds rather than baseline-relative ones. Example starting values for the observation period: error rate > 15% absolute, human override rate > 60% absolute. Switch to baseline-relative thresholds once the observation period is complete.
+-   **Anomaly detection alerts**: disabled until 50+ invocations have been recorded, or 5+ business days of operation — whichever is longer for low-frequency agents.
+
+**Low-frequency agents and baseline fragility**: for agents processing one or two invocations per hour, 72 hours of observation yields ~72–144 data points. A p95 computed from 72 points is dominated by noise; a single outlier early on can permanently skew the rolling baseline. For agents with fewer than ~200 weekly invocations, extend the initial observation period to 2–3 weeks before enabling baseline-relative thresholds.
+
+Document the observation period and the static starting thresholds in the production handover package as a planned configuration transition — so the customer IT admin and process owner understand that anomaly detection is calibrating, not broken, during the first weeks of operation.
+
+
+<a name="loiob40ee37fcbff446f93525cfe976502ce__section_supervisor_governance"/>
+
+## The Supervisor's Own Governance
+
+The supervisor agent is itself a BAIP-managed agent with a first-class identity, scoped authorizations, and its own telemetry. This is important: a malfunctioning supervisor is a systemic failure, not just an individual transaction failure.
+
+The supervisor's governance requirements:
+
+-   **Agent identity**: separate application registration in BAIP for each supervisor workflow (A, B, C). Each has its own service credentials and authorization policies.
+-   **Least-privilege**: the supervisor/committer identity holds read access to the SAP Cloud ALM telemetry pull path, write access to SAP Task Center, **and** the system-of-record write scope needed to commit approved outputs. The **worker** holds no system-of-record write scope at all (committer pattern): it is read/recommend-only, so the SAP Agent Gateway denies any direct worker write. This inverts the naive arrangement — the write scope lives with the governed committer identity, not with the worker — which is exactly what makes the gate enforceable and what aligns the design with least privilege (SEC-374).
+-   **Supervisor observability**: the supervisor's own telemetry is visible in the SAP AI Agent Hub, just like the worker's. If the supervisor itself is malfunctioning (failing to receive callbacks, not triggering escalations), the Agent Hub's IT-admin layer detects this.
+-   **Supervisor deactivation**: if the supervisor becomes unavailable, the default behavior of the worker should be to route all outputs to human review (`sapTaskCenter`), not to write-back autonomously. The fail-safe is always toward more human oversight, not less.
+
+
+<a name="loiob40ee37fcbff446f93525cfe976502ce__section_limitations"/>
+
+## Limitations and Honest Constraints
+
+### Deterministic Verification Requires That the Algorithm Exists
+
+The multi-stage verification pattern assumes a deterministic check can be implemented. For some use cases this is not possible: if the agent's task is genuinely open-ended or judgment-based (e.g., summarizing a maintenance report, drafting a customer communication), there is no algorithmic ground truth. In these cases, the LLM critic remains the only automated check, and its independence limitation applies.
+
+### The Supervisor Cannot Verify What It Cannot Observe
+
+The supervisor sees the agent's inputs, outputs, and tool call traces. It cannot observe what the agent "thinks" — the internal LLM reasoning steps are not exposed in the trace unless the agent is explicitly designed to log them. Implicit reasoning failures (where the agent produces a plausible-but-wrong output via an internally flawed reasoning chain) may pass both verification stages if neither the deterministic check nor the LLM critic is designed to catch that specific failure mode.
+
+### Callback Architecture Adds Latency
+
+The non-blocking worker-supervisor pattern introduces a round-trip: worker proposes → supervisor verifies → committer identity writes. For high-frequency, low-stakes operations this latency may be unacceptable. In those cases, inline self-verification ([Agent Quality Framework](agent-quality-framework-86a2b10.md)) is the right choice, and the supervisor monitors telemetry in the background without being on the critical path.
+
+### LLM Critic Quality Depends on Prompt Engineering
+
+The LLM critic in Workflow A (Stage 2 verification) is only as good as its system prompt and the examples provided. A poorly designed critic prompt can systematically approve wrong outputs or systematically reject correct ones. The critic prompt is itself a quality artifact that requires its own test suite.
+
+### LLM Critic Non-Determinism
+
+LLM outputs are probabilistic. Given identical inputs, the critic can return different verdicts across invocations — particularly for outputs near the plausibility boundary where the correct verdict is genuinely ambiguous.
+
+Mitigations:
+-   Set temperature to 0 (or the lowest available setting) in the critic's `sapOrchestration` call. This reduces but does not eliminate variance.
+-   Design the critic prompt to require explicit reasoning before the verdict field: "First state what you observe about the value, then output your verdict." Anchoring the critic in observable facts before it declares a verdict increases consistency.
+-   The critic's own eval suite should test borderline cases across multiple runs — not just single-run pass/fail — to characterize variance at the decision boundary.
+
+### Building the LLM Critic's Eval Suite
+
+The critic prompt requires its own test suite. Practical approaches:
+-   *Audit trail retrospective* (available after first weeks of production): each record where a human overrode or approved an output provides a labeled example. Retrospectively score the critic against these to identify systematic false-negatives (wrong outputs approved) and false-positives (correct outputs rejected).
+-   *Synthetic adversarial examples* (before production): manufacture outputs with known failure modes — unit confusion, magnitude errors, contextually implausible values — and verify the critic catches them.
+-   *Near-threshold boundary cases*: construct outputs that pass deterministic checks but are contextually wrong, and outputs that are plausible but slightly outside tolerance.
+
+Track both false-negative rate and false-positive rate. A critic that is too aggressive reduces throughput; a critic that is too permissive defeats its purpose.
+
+### The Support Relay Requires Contractual Alignment
+
+Workflow C creates a data flow from the customer's tenant to SAP support systems. Even with sanitization, this may trigger obligations under the CA (Collaboration Agreement) or require explicit consent in the Cloud Contract + SAP AI Terms. The technical architecture supports data minimization; the legal alignment must happen separately before Workflow C is activated.
+
+
+<a name="loiob40ee37fcbff446f93525cfe976502ce__section_fde_implications"/>
+
+## FDE Implications
+
+**Discovery (Phases 3–4):**
+
+-   The TO-BE process flow should explicitly mark where the supervisor intercepts the worker's output. This is a visible step in the process design, not a background implementation detail.
+-   The supervisor's three functions should be scoped explicitly: does this FDE engagement require all three, or only Workflow A (inline quality relay)? Workflows B and C add complexity and governance overhead; they are not always warranted for the MVP.
+-   Data protection requirements for Workflow C (support relay) should be identified during Discovery and included in the legal agreement planning. If the customer cannot consent to sanitized trace export, Workflow C must be excluded from scope.
+
+**Develop (MVP Build):**
+
+-   The supervisor workflows should be built in parallel with the worker agent, not after. The callback mechanism (worker → supervisor via `sapAgent` non-blocking) is a fundamental workflow design decision that cannot be retrofitted cleanly.
+-   The shared state store should be provisioned as part of the BAIP environment setup (FDE Develop step 4: Environment Setup and MVP Build). The one-time **Cloud ALM LMS `serviceId` registration** (Landscape Management) that enables the Workflow B / Workflow C telemetry pull path is a prerequisite of the same step — provision it before the Telemetry Monitor is wired up.
+-   During Internal Testing and Checkpoint (FDE Develop step 5), the supervisor's behavior should be tested explicitly: does it correctly block invalid outputs, does it escalate via Task Center, does Workflow B fire anomalies on injected test data?
+
+**Productization:**
+
+-   The Sirius tasks for security validation include DPCE (Data Protection and Compliance Engineering) threat modelling and security concept documentation. The supervisor architecture — its agent identities, authorization policies, data flows, and sanitization rules — must be included in the security concept.
+-   The production handover includes threshold configuration as a documented parameter set. The customer's IT team should understand every threshold and be able to adjust them via the Agent Hub governance interface.
+-   The production handover must also confirm that the one-time **Cloud ALM LMS `serviceId` registration** for the telemetry pull path is in place, and record the Cloud ALM tenant's data-residency region.
+-   The supervisor's own telemetry and the shared baseline state are part of the production system. They require the same backup, recovery, and support model as the worker agent.
+
+
+<a name="loiob40ee37fcbff446f93525cfe976502ce__section_summary"/>
+
+## Summary
+
+<table>
+<tr><th valign="top">Aspect</th><th valign="top">Key Principle</th></tr>
+<tr><td valign="top">Architectural position</td><td valign="top">SAP's Supervision tier — between platform governance and individual agent transactions</td></tr>
+<tr><td valign="top">Three functions</td><td valign="top">Inline quality relay (Workflow A), telemetry monitor (Workflow B), support relay (Workflow C)</td></tr>
+<tr><td valign="top">Worker-supervisor communication</td><td valign="top">sapAgent non-blocking + Webhook callback; sessionId for correlation</td></tr>
+<tr><td valign="top">Verification stages</td><td valign="top">Deterministic first (if available), LLM critic second; disagreement → escalate</td></tr>
+<tr><td valign="top">Data protection</td><td valign="top">Business data and reasoning stay in tenant; agent telemetry is stored in SAP Cloud ALM (SAP-operated, region-bound); sanitized extracts only leave via Workflow C on confirmed anomalies</td></tr>
+<tr><td valign="top">Anomaly classifier</td><td valign="top">Rule-based only — no LLM on raw trace data</td></tr>
+<tr><td valign="top">Supervisor governance</td><td valign="top">Separate agent identity per workflow; least-privilege; fail-safe toward human review</td></tr>
+<tr><td valign="top">Fail-safe default</td><td valign="top">If supervisor unavailable, worker routes all outputs to sapTaskCenter</td></tr>
+<tr><td valign="top">Key limitation</td><td valign="top">Latency on critical path; LLM critic quality requires its own test suite</td></tr>
+<tr><td valign="top">FDE integration</td><td valign="top">Supervisor scope decided in Discovery; built in parallel with worker; included in security concept</td></tr>
+</table>
 
 ---
 
-## 2.7 Fail-Safe Rule
+**Related Information**  
 
-When the supervisor is unavailable — Workflow A's webhook is unreachable, Workflow B
-fails to retrieve telemetry, or the approval callback times out — the fail-safe rule
-governs what the worker agent does:
+[Agent Quality Framework](agent-quality-framework-86a2b10.md)
 
-> **If the supervisor is unavailable, the worker agent routes all outputs that would
-> normally go through Workflow A directly to `sapTaskCenter` for human review. The
-> worker agent does NOT write any output to a system of record until either Workflow A
-> approves or a human approves via Task Center.**
+[Security and Data Protection](security-and-data-protection-e20205c.md)
 
-The fail-safe is a Joule Studio workflow pattern:
+[CIS CoE Operations Model](cis-coe-operations-model-9406fa3.md)
 
-```
-[Worker: post to Workflow A webhook]
-        ↓
-[If: Workflow A response received within timeout?]
-    ├── YES → [follow Workflow A routing decision]
-    └── NO  → [sapTaskCenter: escalate with reason "supervisor unavailable"]
-              [Worker: suspend write-back; await Task Center decision]
-```
+[SAP Managed n8n Workflows](https://help.sap.com/docs/JOULESTUDIO/7e496fe6f81f4975aec07d9c1cbd2aef/5f16a77e21d047dc968de9f7e83bca54.html "Visual automation that orchestrates multi-step business processes using the SAP-managed n8n workflow engine in Joule Studio.") :arrow_upper_right:
 
-The fail-safe must be in the worker workflow from the first deployment. Adding it
-retrospectively (after a production incident where the supervisor was unavailable and
-the worker wrote unsupervised outputs) is a remediation step, not a design choice.
+[What Is SAP AI Agent Hub](https://help.sap.com/docs/AI_AGENT_HUB/225000cc2ce44a228b9534a0f1098a9b/8ebd704d35a746c180af003db1f5acb0.html "SAP AI Agent Hub is the single entry point for AI agent governance and discovery across SAP's Business AI Platform.") :arrow_upper_right:
 
----
-
-## 2.8 LLM Critic Quality: Testing the Supervisor
-
-The LLM critic in Workflow A is the engagement-specific component of the supervisor
-(Layer 3). It is also the component most likely to introduce silent quality degradation:
-a critic system prompt that approves wrong outputs or rejects correct ones is worse than
-no critic at all, because it creates false confidence in the supervision layer.
-
-### What Must Be Tested
-
-| Test type | What to verify |
-|---|---|
-| Happy path with correct output | Critic returns APPROVE with appropriate reasoning |
-| Out-of-range output (numerical) | Critic returns REJECT; reasoning references the specific violation |
-| Plausible-but-wrong output (semantically incorrect but numerically in range) | Critic returns REJECT; reasoning explains why the semantic content is wrong |
-| Novel edge case (input type not in training) | Critic returns APPROVE (if output is correct) or REJECT (if wrong); reasoning should not hallucinate a constraint that does not exist |
-| Adversarial input (prompt injection in worker output) | Critic follows its instructions; does not follow injected instructions; returns APPROVE or REJECT on the actual output |
-
-### Test Cadence
-
-The critic test suite should be run:
-- Once, before the supervisor is deployed to EAC (verify the critic prompt works as designed)
-- After any change to the critic system prompt
-- After any model version change that affects the `sapOrchestration` configuration used in Workflow A
-- When Workflow B detects an anomalous DISAGREE rate (unusual disagreement between Code node and critic may indicate critic drift)
-
-### Critic Prompt Design Rules
-
-1. **State the domain explicitly in the opening.** The critic must know what it is evaluating.
-   "You are a quality reviewer for [specific domain] outputs in an SAP [specific Industry AI]
-   context." Generic system prompts produce generic verdicts.
-
-2. **List the specific constraints the critic enforces.** Do not ask the critic to "evaluate
-   quality generally". Enumerate the specific rules: "Output must include [X]. Output must
-   not recommend [Y]. If the output references [Z], it must include [reference]."
-
-3. **Define the output format strictly.** The routing logic in Workflow A depends on
-   parsing the critic's output. Use a fixed-structure format: `{"verdict": "APPROVE" | "REJECT",
-   "reason": "...", "specific_violation": "..." | null}`.
-
-4. **Include few-shot examples for the boundary cases.** The DISAGREE cases — where the
-   critic's verdict will differ from the Code node's — are the most important to cover with
-   examples. Without examples, the critic may systematically agree with the deterministic rule
-   even in cases where it should not.
-
-5. **Test the critic prompt as a unit, separately from the full Workflow A.** Run the critic
-   prompt against a fixed set of inputs (correct, wrong, edge case) and verify the verdicts
-   before integrating it into the workflow. A critic that cannot be unit-tested is not
-   production-ready.
-
----
-
-## 2.9 Supervisor in Multi-Agent Deployments
-
-Multi-agent orchestration is covered in detail in Chapter 7. The supervisor pattern
-extends to multi-agent deployments in two ways.
-
-### Worker-Level Supervision (Topology 2)
-
-Each worker has its own dedicated supervisor (Workflow A). The orchestrator receives
-only supervisor-approved outputs. The supervisor is not in the orchestrator's execution
-loop — it is in each worker's execution loop.
-
-```
-Orchestrator
-├── Worker 1 → Supervisor A1 → (approved outputs only) → back to Orchestrator
-├── Worker 2 → Supervisor A2 → (approved outputs only) → back to Orchestrator
-└── Worker 3 → Supervisor A3 → (approved outputs only) → back to Orchestrator
-```
-
-This topology provides maximum isolation: a supervisor failure on one worker does not
-affect the others. It is also the most resource-intensive: three separate Workflow A
-instances, each calibrated for its worker's specific output type.
-
-### Shared Supervision (Topology 3)
-
-A single supervisor governs all workers. The supervisor tracks which workers have
-completed verification using the Pending Set table in the shared state store, and
-releases the combined result to the orchestrator only when all workers have been verified.
-
-```
-Orchestrator
-├── Worker 1 ──┐
-├── Worker 2 ──┤─→ Shared Supervisor → (all approved) → back to Orchestrator
-└── Worker 3 ──┘
-```
-
-The key property: the orchestrator never receives a partial set of approved outputs.
-If Worker 2's output is rejected or requires human review, the orchestrator does not
-receive Workers 1 and 3's approved outputs independently — it receives nothing until
-the full set is resolved. This is the atomic commit principle for multi-agent outputs:
-partial approval is not approval.
-
-The shared supervisor also enforces cross-worker consistency checks (Chapter 7 §7.5):
-after all workers have submitted verified individual outputs, the supervisor checks
-mutual consistency (do the outputs from different workers add up? are units consistent?
-are timelines compatible?) before releasing to the orchestrator.
-
-### Supervision at Scale: What Does Not Change
-
-Regardless of topology, the following properties are invariant:
-
-- Workflow A routing logic (BOTH CONFIRM / BOTH REJECT / DISAGREE / LOW CONFIDENCE) applies
-  per worker output — the supervisor never aggregates before verifying individually
-- Fail-safe rule applies per worker: if the supervisor is unavailable for Worker 2, all
-  three workers' outputs route to Task Center
-- Audit trail writes are per-output: every worker output decision is independently recorded
-- Workflow B monitoring operates at the worker level (agent_id distinguishes workers)
-
----
-
-## 2.10 Relationship to Joule Studio Implementation
-
-Chapter 5 provides the concrete Joule Studio (n8n) build map for the full supervisor
-pattern. The key cross-reference points:
-
-| Design element (this chapter) | Joule Studio implementation (Ch5) |
-|---|---|
-| Worker-to-supervisor communication | `sapAgent` callback node or `HTTP Request` to webhook |
-| Workflow A — Code node verification | `Code` node (JS/Python sandbox); range checks, unit checks, arithmetic cross-checks |
-| Workflow A — LLM critic | `sapOrchestration` node with critic system prompt; `outputSchema` with `verdict`, `reason`, `specific_violation` fields |
-| Workflow A — human review routing | `sapTaskCenter` node with `customAttributes` mapping |
-| Workflow B — scheduled monitoring | `Schedule Trigger` node; `HTTP Request` to SAP Cloud ALM API; `HTTP Request` to AI Core usage API; `Code` node with anomaly rule set |
-| Workflow C — support relay | `HTTP Request` to Cloud ALM ITSM Adapter API; `Function` node for sanitization |
-| Shared state store | `PostgreSQL` node or `MySQL` node connecting to HANA Cloud; DDL from Starter Kit |
-| Supervisor fail-safe | `If` node on timeout condition; `sapTaskCenter` fallback path |
-
-The build sequence (Chapter 5 §5.10) specifies when each workflow element is built
-in the FDE sprint: Workflow A skeleton in Week 3–4, Code node verification rules
-in Week 5, Workflow B in Week 7–8, Workflow C (if in scope) in Week 9. The sequence
-is designed so the supervisor is never deployed before the worker is stable —
-calibrating a supervisor against an unstable worker generates noise rather than signal.
-
----
-
-## 2.11 Data Protection Summary
-
-| Data type | Where it lives | Who can access it | Supervisor access? |
-|---|---|---|---|
-| User session content (prompts, dialogue) | BAIP tenant | Only within tenant; masked by DPI | No — Workflow B queries operational telemetry only |
-| LLM inference outputs (agent reasoning) | BAIP tenant | Only within tenant | No — Workflow A receives worker-processed output only |
-| Tool call inputs/outputs (business data) | BAIP tenant | Only within tenant | No — sanitization rules strip these before Workflow C |
-| Operational telemetry (error rates, latencies, tool call counts) | SAP Cloud ALM — SAP-operated, within customer's contracted data-residency region | CIS T&O with appropriate access | Yes — Workflow B's monitoring function |
-| Audit trail (verification decisions, approval records) | HANA Cloud in customer's BTP sub-account | Customer IT admin; CIS T&O with consent | Yes — Workflow A writes this; it is the supervisor's record |
-| Support escalation signals (sanitized operational data) | Cloud ALM ITSM system | Customer IT admin; SAP support with legal basis | Yes — Workflow C creates these records |
-
-**Sovereign deployment note**: in CN40, NS2, and KSA deployments, SAP Cloud ALM
-availability within the sovereign boundary must be confirmed before Workflow B can
-function. If Cloud ALM is not available in the sovereign region, Workflow B's
-telemetry queries must target an alternative endpoint (or Workflow B is deferred).
-See Chapter 3 §3.12 and Chapter 6 §6.8 for the sovereign deployment decision guide.
-
----
-
-## 2.12 Summary
-
-| Design element | Key principle |
-|---|---|
-| When to use supervisor | High-risk write-back; numerical commitments; multi-agent consistency; auditable governance |
-| Three workflows | A (per-output verification) + B (scheduled telemetry monitoring) + C (support relay); each with distinct trigger, purpose, data protection |
-| Worker-to-supervisor communication | sapAgent callback (preferred) or sapOrchestration callback pattern; HTTP polling as interim; A2A as long-term standard |
-| Supervisor identity | Separate agent identity, separate authorization scope, separate telemetry |
-| DISAGREE routing | Most valuable case — surfaces outputs where deterministic rule and semantic critic disagree; route all DISAGREE cases to human review |
-| Fail-safe | Supervisor unavailable → ALL outputs to Task Center; never to system of record |
-| Data protection tiers | 1: telemetry separation by BAIP architecture; 2: sapDPI at worker level; 3: sanitization rules in Workflow C |
-| Threshold calibration | EAC baseline observation → production thresholds; not borrowed from prior engagements |
-| Critic prompt quality | Unit-test the critic independently; enumerate specific constraints; use fixed output format; cover boundary cases with examples |
-| Multi-agent | Worker-level supervision (Topology 2) or shared supervision (Topology 3); atomic commit principle: partial approval is not approval |
+[Joule Studio](https://help.sap.com/docs/JOULESTUDIO/7e496fe6f81f4975aec07d9c1cbd2aef/36d3e974446844a1b0ffb7af8fa9446c.html "SAP's AI-first development environment for agents, apps, and workflows built on the Business AI Platform.") :arrow_upper_right:
